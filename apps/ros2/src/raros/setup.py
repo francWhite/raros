@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'hello = raros.hello_node:main',
+            'simple_publisher = raros.simple_publisher:main',
         ],
     },
 )
