@@ -1,0 +1,34 @@
+@startuml
+
+actor user
+cloud internet
+
+frame raspberry-pi as pi {
+  node web_api as api
+  node ros_bridge
+  package ROS2 #line.dotted {
+    node led_node
+    node motor_node #line.dashed
+    node servo_node #line.dashed
+  }
+  node micro_ros_agent
+}
+
+frame arduino as arduino {
+  node micro_ros_node
+}
+
+user -> internet : HTTP
+internet -> api : HTTP
+
+api -right-> ros_bridge : websocket
+
+ros_bridge <--> led_node : ROS2
+led_node <-[dashed]-> motor_node : ROS2
+led_node <-[dashed]> servo_node : ROS2
+motor_node <-[dashed]> servo_node : ROS2
+
+led_node <-right-> micro_ros_agent : ROS2
+micro_ros_agent <-down--> micro_ros_node : serial
+
+@enduml
