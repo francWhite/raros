@@ -22,7 +22,7 @@ jobs:
           
       - name: Cache node modules
         id: cache-nodemodules
-        uses: actions/cache@v3.2.4
+        uses: actions/cache@v3.3.2
         env:
           cache-name: cache-node-modules-api
         with:
