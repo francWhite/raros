@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  api:
+    uses: ./.github/workflows/api_ci.yaml
+  client:
+    uses: ./.github/workflows/client_ci.yaml
+  example-client:
+    uses: ./.github/workflows/example_client_ci.yaml
