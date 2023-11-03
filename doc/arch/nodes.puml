@@ -1,0 +1,29 @@
+@startuml nodes
+
+frame "Raspberry Pi" as pi{
+    node navigation
+    node magnet    
+    node camera
+    node color_sensor
+    node ultrasonic_sensors
+
+    queue "motor_cmd"
+    queue "motor_status"
+    queue "color"
+    queue "distance"
+}
+
+frame "Arduino" as arduino{
+    node motor_control
+}
+
+
+color_sensor -down-> color
+ultrasonic_sensors --> distance
+distance -right-> navigation
+navigation --> motor_cmd
+motor_cmd -down-> motor_control
+motor_control -> motor_status
+
+
+@enduml
