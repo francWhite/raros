@@ -7,6 +7,8 @@
   <maintainer email="francisco.metzger@gmail.com">Francisco Metzger</maintainer>
   <license>MIT</license>
 
+  <depend>raros_interfaces</depend>
+
   <depend>rclpy</depend>
   <depend>std_msgs</depend>
   <depend>python-rpi.gpio-pip</depend>

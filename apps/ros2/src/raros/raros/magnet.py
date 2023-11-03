@@ -2,23 +2,25 @@ import rclpy
 import RPi.GPIO as GPIO
 
 from rclpy.node import Node
-from std_msgs.msg import Bool
+from raros_interfaces.srv import SetMagnetState
 
 
 class Magnet(Node):
     def __init__(self):
         super().__init__('magnet')
         self.get_logger().info('magnet node started')
-        self.subscriber = self.create_subscription(Bool, 'magnet', self.listener_callback, 10)
+        self.service = self.create_service(SetMagnetState, 'set_magnet', self.set_magnet_state_callback)
         self.pin = 22
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.pin, GPIO.OUT)
 
-    def listener_callback(self, msg):
-        self.get_logger().info(f'received: "{msg.data}"')
-        GPIO.output(self.pin, GPIO.HIGH if msg.data else GPIO.LOW)
+    def set_magnet_state_callback(self, request, response):
+        # TODO: add error handling
+        self.get_logger().info(f'received: "{request.state}"')
+        GPIO.output(self.pin, GPIO.HIGH if request.state else GPIO.LOW)
+        return response
 
 
 def main(args=None):
@@ -27,8 +29,13 @@ def main(args=None):
     node = Magnet()
     node.setup_gpio()
 
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
-
-    GPIO.cleanup()
+    try:
+        rclpy.spin(node)
+        rclpy.shutdown()
+    except KeyboardInterrupt:
+        pass
+    except Exception as e:
+        node.get_logger().error(f'Error: {e}')
+        raise e
+    finally:
+        GPIO.cleanup()
