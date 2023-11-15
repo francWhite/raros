@@ -23,6 +23,7 @@ class MagnetApiService implements MagnetService {
 
     HttpRequest request = HttpRequest.newBuilder(apiUri)
       .POST(HttpRequest.BodyPublishers.ofString(JsonSerializer.serialize(magnetState)))
+      .header("Content-Type", "application/json")
       .build();
 
     try (HttpClient httpClient = HttpClient.newHttpClient()) {
