@@ -1,5 +1,6 @@
 plugins {
   id("java")
+  application
 }
 
 group = "ch.hslu.raros.example"
@@ -17,4 +18,8 @@ dependencies {
 
 tasks.test {
   useJUnitPlatform()
+}
+
+application {
+  mainClass.set("ch.hslu.raros.example.App")
 }
