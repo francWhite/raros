@@ -5,15 +5,15 @@ import { rosService } from './ros.service';
 export const magnetRouter = express.Router();
 magnetRouter.use(express.json());
 
-magnetRouter.post('/', async (req: Request<undefined, undefined, MagnetStateModel>, res: Response) => {
+magnetRouter.post('/', async (req: Request<undefined, undefined, MagnetState>, res: Response) => {
   console.log('body: ', req.body);
   const payload = {
-    state: req.body.active,
+    data: req.body.active,
   };
-  rosService.callService('/set_magnet', 'raros_interfaces/srv/SetMagnetState', payload, () => {});
+  rosService.callService('/magnet/set_state', 'std_srvs/srv/SetBool', payload, () => {});
   res.send();
 });
 
-type MagnetStateModel = {
+type MagnetState = {
   active: boolean;
 };

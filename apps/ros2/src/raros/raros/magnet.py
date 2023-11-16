@@ -2,14 +2,14 @@ import rclpy
 import RPi.GPIO as GPIO
 
 from rclpy.node import Node
-from raros_interfaces.srv import SetMagnetState
+from std_srvs.srv import SetBool
 
 
 class Magnet(Node):
     def __init__(self):
         super().__init__('magnet')
         self.get_logger().info('magnet node started')
-        self.service = self.create_service(SetMagnetState, 'set_magnet', self.set_magnet_state_callback)
+        self.service = self.create_service(SetBool, 'magnet/set_state', self.set_magnet_state_callback)
         self.pin = 22
 
     def setup_gpio(self):
@@ -17,9 +17,11 @@ class Magnet(Node):
         GPIO.setup(self.pin, GPIO.OUT)
 
     def set_magnet_state_callback(self, request, response):
-        # TODO: add error handling
-        self.get_logger().info(f'received: "{request.state}"')
-        GPIO.output(self.pin, GPIO.HIGH if request.state else GPIO.LOW)
+        self.get_logger().info(f'received: "{request.data}"')
+        GPIO.output(self.pin, GPIO.HIGH if request.data else GPIO.LOW)
+
+        response.success = True
+        response.message = 'Magnet is on' if request.data else 'Magnet is off'
         return response
 
 
