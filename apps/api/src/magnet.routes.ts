@@ -6,7 +6,7 @@ export const magnetRouter = express.Router();
 magnetRouter.use(express.json());
 
 magnetRouter.post('/', async (req: Request<undefined, undefined, MagnetState>, res: Response) => {
-  console.log('body: ', req.body);
+  console.log(req.originalUrl, req.body);
   const payload = {
     data: req.body.active,
   };
