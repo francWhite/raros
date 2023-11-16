@@ -8,6 +8,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
+record MagnetState(Boolean active) {
+}
+
 class MagnetApiService implements MagnetService {
 
   private final URI apiUri;
@@ -18,8 +21,7 @@ class MagnetApiService implements MagnetService {
 
   @Override
   public CompletableFuture<Void> SetMagnetState(Boolean active) {
-    var magnetState = new MagnetState();
-    magnetState.active = active;
+    var magnetState = new MagnetState(active);
 
     HttpRequest request = HttpRequest.newBuilder(apiUri)
       .POST(HttpRequest.BodyPublishers.ofString(JsonSerializer.serialize(magnetState)))
@@ -34,6 +36,3 @@ class MagnetApiService implements MagnetService {
   }
 }
 
-class MagnetState {
-  public Boolean active;
-}

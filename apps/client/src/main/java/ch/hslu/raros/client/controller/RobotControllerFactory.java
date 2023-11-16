@@ -6,7 +6,9 @@ import java.net.URI;
 
 public class RobotControllerFactory {
   public static RobotController create(URI apiBaseUri) {
-    var magnetService = ServiceFactory.createMagnetService(apiBaseUri);
-    return new RobotControllerImpl(magnetService);
+    return new RobotControllerImpl(
+      ServiceFactory.createMagnetService(apiBaseUri),
+      ServiceFactory.createBuzzerService(apiBaseUri)
+    );
   }
 }
