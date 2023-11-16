@@ -1,10 +1,9 @@
 package ch.hslu.raros.client.connector;
 
-import ch.hslu.raros.client.util.JsonSerializer;
+import ch.hslu.raros.client.util.HttpRequestBuilder;
 
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,12 +30,9 @@ class BuzzerApiService implements BuzzerService {
   }
 
   private CompletableFuture<Void> PlayTone(Tone tone) {
-    HttpRequest request = HttpRequest.newBuilder(apiUri.resolve("./tone"))
-      .POST(HttpRequest.BodyPublishers.ofString(JsonSerializer.serialize(tone)))
-      .header("Content-Type", "application/json")
-      .build();
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./tone"), tone);
 
-    try (HttpClient httpClient = HttpClient.newHttpClient()) {
+    try (var httpClient = HttpClient.newHttpClient()) {
       return httpClient
         .sendAsync(request, HttpResponse.BodyHandlers.discarding())
         .thenApply(HttpResponse::body);
