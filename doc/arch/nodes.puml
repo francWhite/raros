@@ -2,10 +2,11 @@
 
 frame "Raspberry Pi" as pi{
     node navigation
-    node magnet    
+    node magnet
     node camera
     node color_sensor
     node ultrasonic_sensors
+    node buzzer
 
     queue "motor_cmd"
     queue "motor_status"

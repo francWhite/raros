@@ -20,11 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'simple_publisher = raros.simple_publisher:main',
-            'simple_subscriber = raros.simple_subscriber:main',
-            'led_controller = raros.led_controller:main',
-            'led_api_endpoint = raros.led_api_endpoint:main',
             'magnet = raros.magnet:main',
+            'buzzer = raros.buzzer:main',
         ],
     },
 )
