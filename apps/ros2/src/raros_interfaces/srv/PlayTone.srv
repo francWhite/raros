@@ -1,0 +1,4 @@
+int32 frequency   # in Hz
+int32 duration    # in ms
+---
+bool success
