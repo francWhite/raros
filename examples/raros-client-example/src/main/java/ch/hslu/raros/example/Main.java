@@ -8,16 +8,36 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
     var robotController = RobotControllerFactory.create(URI.create("http://eee-03300:8000"));
+    var scanner = new Scanner(System.in);
 
-    System.out.println("Press 'e' to enable the magnet, 'd' to disable it, or 'q' to quit.");
+    System.out.println("Press");
+    System.out.println("  e to enable magnet");
+    System.out.println("  d to disable magnet");
+    System.out.println("  b to beep");
+    System.out.println("  t to play tone");
+
     while (true) {
-      var input = new Scanner(System.in).nextLine();
+      var input = scanner.next();
       switch (input) {
         case "e":
+          System.out.println("Enabling magnet...");
           robotController.EnableMagnet();
           break;
         case "d":
+          System.out.println("Disabling magnet...");
           robotController.DisableMagnet();
+          break;
+        case "b":
+          System.out.println("Beeping...");
+          robotController.Beep();
+          break;
+        case "t":
+          System.out.print("Enter frequency: ");
+          var frequency = scanner.nextInt();
+          System.out.print("Enter duration: ");
+          var duration = scanner.nextInt();
+          System.out.println("Playing tone...");
+          robotController.PlayTone(frequency, duration);
           break;
         case "q":
           return;
