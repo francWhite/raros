@@ -10,7 +10,7 @@ magnetRouter.post('/', async (req: Request<undefined, undefined, MagnetState>, r
   const requestData = {
     data: req.body.active,
   };
-  rosService.callService('/magnet/set_state', 'std_srvs/srv/SetBool', requestData, () => {});
+  rosService.callService('/raros/magnet/set_state', 'std_srvs/srv/SetBool', requestData, () => {});
   res.send();
 });
 

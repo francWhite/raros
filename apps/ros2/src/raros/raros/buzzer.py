@@ -52,6 +52,7 @@ def main(args=None):
     try:
         node.setup_gpio()
         rclpy.spin(node)
+        node.destroy_node()
         rclpy.shutdown()
     except KeyboardInterrupt:
         pass

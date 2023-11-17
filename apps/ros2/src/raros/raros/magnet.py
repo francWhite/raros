@@ -29,10 +29,11 @@ def main(args=None):
     rclpy.init(args=args)
 
     node = Magnet()
-    node.setup_gpio()
 
     try:
+        node.setup_gpio()
         rclpy.spin(node)
+        node.destroy_node()
         rclpy.shutdown()
     except KeyboardInterrupt:
         pass

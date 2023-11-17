@@ -1,0 +1,6 @@
+# service to interact with the PlayTone action. See action_api node for more details.
+
+int32 frequency                         # in Hz
+int32 duration                          # in ms
+---
+unique_identifier_msgs/UUID goal_id    # The id of the requested goal
