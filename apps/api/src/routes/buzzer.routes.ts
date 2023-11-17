@@ -7,8 +7,10 @@ buzzerRouter.use(express.json());
 
 buzzerRouter.post('/tone', async (req: Request<undefined, undefined, Tone>, res: Response) => {
   console.log(req.originalUrl, req.body);
-  const payload = { ...req.body };
-  rosService.callService('/buzzer/play_tone', 'raros_interfaces/srv/PlayTone', payload, () => {});
+  const requestData = { ...req.body };
+  rosService.sendGoal('/buzzer/play_tone', 'raros_interfaces/action/PlayTone', requestData, (status) =>
+    console.log('status', status),
+  );
   res.send();
 });
 

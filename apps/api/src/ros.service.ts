@@ -1,4 +1,4 @@
-import { Message, Ros, Service, ServiceRequest, Topic } from 'roslib';
+import { ActionClient, Goal, Message, Ros, Service, ServiceRequest, Topic } from 'roslib';
 import process from 'process';
 
 class RosService {
@@ -43,14 +43,34 @@ class RosService {
     topic.publish(msg);
   }
 
-  callService(name: string, serviceType: string, payload: unknown, callback: (result: unknown) => void) {
+  callService(name: string, serviceType: string, requestData: unknown, callback: (result: unknown) => void) {
     const service = new Service({
       ros: this.ros,
       name: name,
       serviceType: serviceType,
     });
 
-    service.callService(new ServiceRequest(payload), callback);
+    service.callService(new ServiceRequest(requestData), callback);
+  }
+
+  sendGoal(serverName: string, actionName: string, goalMessage: unknown, statusCallback: (status: unknown) => void) {
+    const actionClient = new ActionClient({
+      ros: this.ros,
+      serverName: serverName,
+      actionName: actionName,
+      timeout: 10,
+      omitStatus: true,
+      omitResult: false,
+      omitFeedback: false,
+    });
+
+    const goal = new Goal({
+      actionClient: actionClient,
+      goalMessage: goalMessage,
+    });
+
+    goal.on('status', statusCallback);
+    goal.send();
   }
 }
 

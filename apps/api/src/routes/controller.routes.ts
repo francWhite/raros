@@ -1,5 +1,5 @@
 import express from 'express';
-import { rosService } from './ros.service';
+import { rosService } from '../ros.service';
 
 export const controllerRouter = express.Router();
 controllerRouter.use(express.json());
