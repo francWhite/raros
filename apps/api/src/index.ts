@@ -1,10 +1,10 @@
 import express from 'express';
 import process from 'process';
 import dotenv from 'dotenv';
-import { controllerRouter } from './controller.routes';
-import { magnetRouter } from './magnet.routes';
+import { controllerRouter } from './routes/controller.routes';
+import { magnetRouter } from './routes/magnet.routes';
 import { rosService } from './ros.service';
-import { buzzerRouter } from './buzzer.routes';
+import { buzzerRouter } from './routes/buzzer.routes';
 
 dotenv.config();
 
