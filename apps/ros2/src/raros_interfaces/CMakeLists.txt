@@ -30,7 +30,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Num.msg"
   "msg/MagnetState.msg"
   "srv/SetMagnetState.srv"
-  "srv/PlayTone.srv"
+  "action/PlayTone.action"
   DEPENDENCIES geometry_msgs
 )
 

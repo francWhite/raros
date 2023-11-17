@@ -1,6 +1,6 @@
 import express from 'express';
 import { Request, Response } from 'express';
-import { rosService } from './ros.service';
+import { rosService } from '../ros.service';
 
 export const buzzerRouter = express.Router();
 buzzerRouter.use(express.json());
