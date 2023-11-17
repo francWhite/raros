@@ -24,12 +24,14 @@ if(BUILD_TESTING)
 endif()
 
 find_package(geometry_msgs REQUIRED)
+find_package(unique_identifier_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Num.msg"
   "msg/MagnetState.msg"
   "srv/SetMagnetState.srv"
+  "srv/ActionPlayTone.srv"
   "action/PlayTone.action"
   DEPENDENCIES geometry_msgs
 )

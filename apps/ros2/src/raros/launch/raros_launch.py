@@ -16,4 +16,10 @@ def generate_launch_description():
             executable='buzzer',
             name='buzzer'
         ),
+        Node(
+            package='raros',
+            namespace='raros',
+            executable='action_api',
+            name='action_api'
+        ),
     ])

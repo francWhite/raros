@@ -23,8 +23,10 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'action_api = raros.action_api:main',
             'magnet = raros.magnet:main',
             'buzzer = raros.buzzer:main',
         ],
     },
 )
+

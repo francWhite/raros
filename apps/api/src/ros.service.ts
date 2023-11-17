@@ -43,14 +43,20 @@ class RosService {
     topic.publish(msg);
   }
 
-  callService(name: string, serviceType: string, requestData: unknown, callback: (result: unknown) => void) {
+  callService<TResponse>(
+    name: string,
+    serviceType: string,
+    requestData: unknown,
+    callback: (result: TResponse) => void,
+    errorCallback?: (error: string) => void,
+  ) {
     const service = new Service({
       ros: this.ros,
       name: name,
       serviceType: serviceType,
     });
 
-    service.callService(new ServiceRequest(requestData), callback);
+    service.callService(new ServiceRequest(requestData), callback, errorCallback);
   }
 
   sendGoal(serverName: string, actionName: string, goalMessage: unknown, statusCallback: (status: unknown) => void) {
