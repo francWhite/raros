@@ -19,8 +19,7 @@ buzzerRouter.post('/tone', async (req: Request<undefined, undefined, Tone>, res:
       const uidString = decode(response.goal_id.uuid);
       console.log('received goal_id', uidString);
 
-      const apiResponse = { goal_id: uidString };
-      res.json(apiResponse).send();
+      res.json({ goal_id: uidString }).send();
     },
     (error) => res.status(500).send(error),
   );

@@ -2,6 +2,7 @@ package ch.hslu.raros.client.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
 public class JsonSerializer {
 
@@ -10,6 +11,16 @@ public class JsonSerializer {
       return new ObjectMapper()
         .writerWithDefaultPrettyPrinter()
         .writeValueAsString(object);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+  }
+  public static <T> T deserialize(String object, Class<T> classType) {
+    try {
+      return new ObjectMapper()
+        .setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy())
+        .readerFor(classType)
+        .readValue(object);
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
     }
