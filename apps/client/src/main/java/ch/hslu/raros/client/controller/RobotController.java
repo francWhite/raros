@@ -18,11 +18,19 @@ public interface RobotController {
   void Beep();
 
   /**
-   * Plays a tone.
+   * Plays a tone. This method will block until the tone is finished.
    *
    * @param frequency The frequency of the tone in Hz.
    * @param duration  The duration of the tone in ms.
    */
   void PlayTone(int frequency, int duration);
+
+  /**
+   * Plays a tone. This method will return immediately, additional calls to this method will queue the requested tone.
+   *
+   * @param frequency The frequency of the tone in Hz.
+   * @param duration  The duration of the tone in ms.
+   */
+  void PlayToneAsync(int frequency, int duration);
 }
 

@@ -1,12 +1,15 @@
 import uuid
 
 import rclpy
+from rclpy.action.client import ClientGoalHandle
 from rclpy.node import Node
 from rclpy.action import ActionClient
 
 from raros_interfaces.action import PlayTone
-from raros_interfaces.srv import ActionPlayTone
-from unique_identifier_msgs.msg import UUID
+from raros_interfaces.srv import ActionPlayTone as PlayToneActionSrv
+from raros_interfaces.srv import ActionCompleted
+
+from unique_identifier_msgs.msg import UUID as UUIDMsg
 
 
 class ActionApi(Node):
@@ -18,9 +21,14 @@ class ActionApi(Node):
     def __init__(self):
         super().__init__('action_api')
         self.get_logger().info('action_api node started')
+        self.pending_goals = set()
         self.play_tone_action_client = ActionClient(self, PlayTone, 'buzzer/play_tone')
-        self.play_tone_service = self.create_service(ActionPlayTone, 'action_api/buzzer/play_tone',
+        self.play_tone_service = self.create_service(PlayToneActionSrv, 'action_api/buzzer/play_tone',
                                                      self.action_play_tone_callback)
+        self.action_completed_service = self.create_service(ActionCompleted, 'action_api/action_completed',
+                                                            self.action_completed_callback)
+        self._play_tone_send_goal_future = None
+        self._play_tone_get_result_future = None
 
     def action_play_tone_callback(self, request, response):
         self.get_logger().info(f'action_play_tone_callback received: "{request}"')
@@ -29,18 +37,41 @@ class ActionApi(Node):
         goal_msg.frequency = request.frequency
         goal_msg.duration = request.duration
 
-        goal_id, goal_id_hex = self._generate_random_uuid()
+        goal_id = self._generate_random_uuid()
+        goal_id_hex = self._get_hex_str_from_uuid(goal_id)
+
+        self.pending_goals.add(goal_id_hex)
         self.play_tone_action_client.wait_for_server()
-        self.play_tone_action_client.send_goal_async(goal_msg, None, goal_id)
-        response.goal_id = goal_id
+        self._play_tone_send_goal_future = self.play_tone_action_client.send_goal_async(goal_msg, None, goal_id)
+        self._play_tone_send_goal_future.add_done_callback(self.play_tone_response_callback)
 
         self.get_logger().info(f'created goal: {goal_id_hex}')
+        response.goal_id = goal_id
+        return response
+
+    def play_tone_response_callback(self, future):
+        goal_handle: ClientGoalHandle = future.result()
+        self._play_tone_get_result_future = goal_handle.get_result_async()
+        self._play_tone_get_result_future.add_done_callback(lambda _: self.play_tone_done_callback(goal_handle.goal_id))
+
+    def play_tone_done_callback(self, goal_id):
+        goal_id_hex = self._get_hex_str_from_uuid(goal_id)
+        self.pending_goals.remove(goal_id_hex)
+        self.get_logger().info(f'goal done: {goal_id_hex}')
+
+    def action_completed_callback(self, request, response):
+        goal_id = request.goal_id.replace('-', '')
+        self.get_logger().info(f'check if goal is completed: "{goal_id}"')
+        response.completed = goal_id not in self.pending_goals
         return response
 
     @staticmethod
     def _generate_random_uuid():
-        new_uuid = uuid.uuid4()
-        return UUID(uuid=list(new_uuid.bytes)), new_uuid.hex
+        return UUIDMsg(uuid=list(uuid.uuid4().bytes))
+
+    @staticmethod
+    def _get_hex_str_from_uuid(uuid_msg: UUIDMsg):
+        return ''.join(f'{x:02x}' for x in uuid_msg.uuid)
 
 
 def main(args=None):

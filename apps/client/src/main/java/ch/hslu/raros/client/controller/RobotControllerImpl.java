@@ -5,10 +5,12 @@ import ch.hslu.raros.client.connector.MagnetService;
 
 class RobotControllerImpl implements RobotController {
 
+  private final ActionAwaiter actionAwaiter;
   private final MagnetService magnetService;
   private final BuzzerService buzzerService;
 
-  public RobotControllerImpl(MagnetService magnetService, BuzzerService buzzerService) {
+  public RobotControllerImpl(ActionAwaiter actionAwaiter, MagnetService magnetService, BuzzerService buzzerService) {
+    this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
   }
@@ -25,11 +27,17 @@ class RobotControllerImpl implements RobotController {
 
   @Override
   public void Beep() {
-    this.buzzerService.PlayTone(15000).join();
+    this.buzzerService.PlayTone(15000, 100).join();
   }
 
   @Override
   public void PlayTone(int frequency, int duration) {
-    this.buzzerService.PlayTone(frequency, duration).join();
+    var action = this.buzzerService.PlayTone(frequency, duration);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void PlayToneAsync(int frequency, int duration) {
+    this.buzzerService.PlayTone(frequency, duration);
   }
 }

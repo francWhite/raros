@@ -5,6 +5,7 @@ import { controllerRouter } from './routes/controller.routes';
 import { magnetRouter } from './routes/magnet.routes';
 import { rosService } from './ros.service';
 import { buzzerRouter } from './routes/buzzer.routes';
+import { actionRouter } from './routes/action.routes';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const port = process.env.PORT || 8000;
 app.use('/api/controller', controllerRouter);
 app.use('/api/magnet', magnetRouter);
 app.use('/api/buzzer', buzzerRouter);
+app.use('/api/actions', actionRouter);
 
 rosService.connect();
 
