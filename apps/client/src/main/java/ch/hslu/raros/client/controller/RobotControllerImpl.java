@@ -1,9 +1,6 @@
 package ch.hslu.raros.client.controller;
 
-import ch.hslu.raros.client.connector.BuzzerService;
-import ch.hslu.raros.client.connector.Color;
-import ch.hslu.raros.client.connector.ColorService;
-import ch.hslu.raros.client.connector.MagnetService;
+import ch.hslu.raros.client.connector.*;
 
 class RobotControllerImpl implements RobotController {
 
@@ -11,15 +8,18 @@ class RobotControllerImpl implements RobotController {
   private final MagnetService magnetService;
   private final BuzzerService buzzerService;
   private final ColorService colorService;
+  private final DistanceService distanceService;
 
   public RobotControllerImpl(ActionAwaiter actionAwaiter,
                              MagnetService magnetService,
                              BuzzerService buzzerService,
-                             ColorService colorService) {
+                             ColorService colorService,
+                             DistanceService distanceService) {
     this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
     this.colorService = colorService;
+    this.distanceService = distanceService;
   }
 
   @Override
@@ -51,5 +51,17 @@ class RobotControllerImpl implements RobotController {
   @Override
   public Color GetColor() {
     return this.colorService.GetColor().join();
+  }
+
+  @Override
+  public float GetDistanceFront() {
+    var distance = this.distanceService.GetDistance().join();
+    return distance.getFront();
+  }
+
+  @Override
+  public float GetDistanceBack() {
+    var distance = this.distanceService.GetDistance().join();
+    return distance.getBack();
   }
 }

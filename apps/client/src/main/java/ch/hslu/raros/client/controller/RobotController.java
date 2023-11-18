@@ -37,8 +37,22 @@ public interface RobotController {
 
   /**
    * Reads the current color of the color sensor.
-   * @return Color The last color read from the color sensor.
+   * @return The last color read from the color sensor.
    */
   Color GetColor();
+
+  /**
+   * Reads the current distance to the nearest object in front of the robot.
+   *
+   * @return Distance in cm. If no object is detected -1 is returned.
+   */
+  float GetDistanceFront();
+
+  /**
+   * Reads the current distance to the nearest object behind the robot.
+   *
+   * @return Distance in cm. If no object is detected -1 is returned.
+   */
+  float GetDistanceBack();
 }
 

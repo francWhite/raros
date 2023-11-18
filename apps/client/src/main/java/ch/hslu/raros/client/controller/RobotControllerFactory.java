@@ -10,7 +10,8 @@ public class RobotControllerFactory {
       new ActionAwaiterImpl(ServiceFactory.createActionService(apiBaseUri)),
       ServiceFactory.createMagnetService(apiBaseUri),
       ServiceFactory.createBuzzerService(apiBaseUri),
-      ServiceFactory.createColorService(apiBaseUri)
+      ServiceFactory.createColorService(apiBaseUri),
+      ServiceFactory.createDistanceService(apiBaseUri)
     );
   }
 }
