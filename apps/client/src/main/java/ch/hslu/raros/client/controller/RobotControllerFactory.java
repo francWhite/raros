@@ -9,7 +9,8 @@ public class RobotControllerFactory {
     return new RobotControllerImpl(
       new ActionAwaiterImpl(ServiceFactory.createActionService(apiBaseUri)),
       ServiceFactory.createMagnetService(apiBaseUri),
-      ServiceFactory.createBuzzerService(apiBaseUri)
+      ServiceFactory.createBuzzerService(apiBaseUri),
+      ServiceFactory.createColorService(apiBaseUri)
     );
   }
 }

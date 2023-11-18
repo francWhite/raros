@@ -1,6 +1,8 @@
 package ch.hslu.raros.client.controller;
 
 import ch.hslu.raros.client.connector.BuzzerService;
+import ch.hslu.raros.client.connector.Color;
+import ch.hslu.raros.client.connector.ColorService;
 import ch.hslu.raros.client.connector.MagnetService;
 
 class RobotControllerImpl implements RobotController {
@@ -8,11 +10,16 @@ class RobotControllerImpl implements RobotController {
   private final ActionAwaiter actionAwaiter;
   private final MagnetService magnetService;
   private final BuzzerService buzzerService;
+  private final ColorService colorService;
 
-  public RobotControllerImpl(ActionAwaiter actionAwaiter, MagnetService magnetService, BuzzerService buzzerService) {
+  public RobotControllerImpl(ActionAwaiter actionAwaiter,
+                             MagnetService magnetService,
+                             BuzzerService buzzerService,
+                             ColorService colorService) {
     this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
+    this.colorService = colorService;
   }
 
   @Override
@@ -39,5 +46,10 @@ class RobotControllerImpl implements RobotController {
   @Override
   public void PlayToneAsync(int frequency, int duration) {
     this.buzzerService.PlayTone(frequency, duration);
+  }
+
+  @Override
+  public Color GetColor() {
+    return this.colorService.GetColor().join();
   }
 }

@@ -78,6 +78,19 @@ class RosService {
     goal.on('status', statusCallback);
     goal.send();
   }
+
+  readSingleMessageFromTopic<T>(topicName: string, messageType: string, callback: (message: T) => void) {
+    const topic = new Topic({
+      ros: this.ros,
+      name: topicName,
+      messageType: messageType,
+    });
+
+    topic.subscribe((message) => {
+      callback(message as T);
+      topic.unsubscribe();
+    });
+  }
 }
 
 export const rosService = new RosService();

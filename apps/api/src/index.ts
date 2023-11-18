@@ -6,6 +6,7 @@ import { magnetRouter } from './routes/magnet.routes';
 import { rosService } from './ros.service';
 import { buzzerRouter } from './routes/buzzer.routes';
 import { actionRouter } from './routes/action.routes';
+import { colorRouter } from './routes/color.routes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use('/api/controller', controllerRouter);
 app.use('/api/magnet', magnetRouter);
 app.use('/api/buzzer', buzzerRouter);
 app.use('/api/actions', actionRouter);
+app.use('/api/color', colorRouter);
 
 rosService.connect();
 

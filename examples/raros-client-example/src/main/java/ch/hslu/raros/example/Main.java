@@ -4,6 +4,7 @@ import ch.hslu.raros.client.controller.RobotController;
 import ch.hslu.raros.client.controller.RobotControllerFactory;
 
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.Scanner;
 
 public class Main {
@@ -14,6 +15,7 @@ public class Main {
     System.out.println("Press");
     System.out.println("  m to control magnet");
     System.out.println("  b to control buzzer");
+    System.out.println("  c to get color");
 
     var input = scanner.next();
     switch (input) {
@@ -22,6 +24,9 @@ public class Main {
         break;
       case "b":
         buzzerExample(robotController, scanner);
+        break;
+      case "c":
+        colorExample(robotController, scanner);
         break;
     }
   }
@@ -83,6 +88,28 @@ public class Main {
           robotController.PlayToneAsync(frequency, duration);
           break;
         }
+        case "q":
+          return;
+        default:
+          System.out.println("Invalid input.");
+          break;
+      }
+    }
+  }
+
+  private static void colorExample(RobotController robotController, Scanner scanner) {
+    System.out.println("Press");
+    System.out.println("  c to get color");
+    System.out.println("  q to quit");
+
+    while (true) {
+      System.out.print("Enter input: ");
+      var input = scanner.next();
+      switch (input) {
+        case "c":
+          var color = robotController.GetColor();
+          System.out.println(MessageFormat.format("Color (R,G,B): {0}, {1}, {2}", color.red(), color.green(), color.blue()));
+          break;
         case "q":
           return;
         default:
