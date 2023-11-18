@@ -7,6 +7,12 @@ def generate_launch_description():
         Node(
             package='raros',
             namespace='raros',
+            executable='action_api',
+            name='action_api'
+        ),
+        Node(
+            package='raros',
+            namespace='raros',
             executable='magnet',
             name='magnet'
         ),
@@ -19,7 +25,7 @@ def generate_launch_description():
         Node(
             package='raros',
             namespace='raros',
-            executable='action_api',
-            name='action_api'
+            executable='color_sensor',
+            name='color_sensor'
         ),
     ])

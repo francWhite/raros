@@ -26,6 +26,7 @@ setup(
             'action_api = raros.action_api:main',
             'magnet = raros.magnet:main',
             'buzzer = raros.buzzer:main',
+            'color_sensor = raros.color_sensor:main',
         ],
     },
 )
