@@ -5,17 +5,17 @@ export const colorRouter = express.Router();
 colorRouter.use(express.json());
 
 colorRouter.get('/', async (req: Request<undefined, undefined, undefined>, res: Response) => {
-  console.log(req.originalUrl, req.body);
+  console.log(req.originalUrl);
 
-  rosService.readSingleMessageFromTopic('/raros/color_sensor/color', 'std_msgs/msg/ColorRGBA', (message: ColorRGBA) => {
+  rosService.readSingleMessageFromTopic('/raros/color_sensor/color', 'std_msgs/msg/ColorRGBA', (message: ColorRGBA) =>
     res
       .json({
         red: message.r,
         green: message.g,
         blue: message.b,
       })
-      .send();
-  });
+      .send(),
+  );
 });
 
 type ColorRGBA = {

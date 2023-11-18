@@ -79,14 +79,25 @@ class RosService {
     goal.send();
   }
 
-  readSingleMessageFromTopic<T>(topicName: string, messageType: string, callback: (message: T) => void) {
+  readSingleMessageFromTopic<T>(
+    topicName: string,
+    messageType: string,
+    callback: (message: T) => void,
+    errorCallback?: (error: string) => void,
+  ) {
     const topic = new Topic({
       ros: this.ros,
       name: topicName,
       messageType: messageType,
     });
 
+    const timeout = setTimeout(() => {
+      topic.unsubscribe();
+      errorCallback && errorCallback('no message received within 5 second');
+    }, 5000);
+
     topic.subscribe((message) => {
+      clearTimeout(timeout);
       callback(message as T);
       topic.unsubscribe();
     });
