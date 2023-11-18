@@ -1,5 +1,6 @@
 package ch.hslu.raros.client.connector;
 
+import ch.hslu.raros.client.util.HttpRequestBuilder;
 import ch.hslu.raros.client.util.JsonSerializer;
 
 import java.net.URI;
@@ -27,4 +28,20 @@ class DistanceApiService implements DistanceService {
         .thenApply(s -> JsonSerializer.deserialize(s, Distance.class));
     }
   }
+
+  @Override
+  public CompletableFuture<Void> RotateSensor(int angle) {
+    if (angle < -90 || angle > 90)
+      throw new IllegalArgumentException("The angle must be between -90 and 90.");
+
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate-sensor"), new Rotation(angle));
+
+    try (var httpClient = HttpClient.newHttpClient()) {
+      return httpClient.sendAsync(request, HttpResponse.BodyHandlers.discarding())
+        .thenApply(HttpResponse::body);
+    }
+  }
+}
+
+record Rotation(int angle) {
 }

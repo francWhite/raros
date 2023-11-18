@@ -44,15 +44,30 @@ public interface RobotController {
   /**
    * Reads the current distance to the nearest object in front of the robot.
    *
-   * @return Distance in cm. If no object is detected -1 is returned.
+   * @return Distance in cm. If no object is detected infinity is returned.
    */
   float GetDistanceFront();
 
   /**
+   * Reads the current distance to the nearest object in front of the robot.
+   *
+   * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
+   * @return Distance in cm. If no object is detected infinity is returned.
+   */
+  float GetDistanceFront(int angle);
+
+  /**
    * Reads the current distance to the nearest object behind the robot.
    *
-   * @return Distance in cm. If no object is detected -1 is returned.
+   * @return Distance in cm. If no object is detected infinity is returned.
    */
   float GetDistanceBack();
+
+  /**
+   * Rotates the range sensor (front) to a given angle.
+   *
+   * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
+   */
+  void RotateRangeSensor(int angle);
 }
 

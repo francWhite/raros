@@ -16,7 +16,7 @@ public class Main {
     System.out.println("  m to control magnet");
     System.out.println("  b to control buzzer");
     System.out.println("  c to get color");
-    System.out.println("  d to get distance");
+    System.out.println("  d to get distance or rotate distance sensor");
 
     var input = scanner.next();
     switch (input) {
@@ -127,6 +127,7 @@ public class Main {
     System.out.println("Press");
     System.out.println("  f to get distance in front");
     System.out.println("  b to get distance in back");
+    System.out.println("  r to rotate distance sensor");
     System.out.println("  q to quit");
 
     while (true) {
@@ -141,6 +142,12 @@ public class Main {
         case "b": {
           var distance = robotController.GetDistanceBack();
           System.out.println(MessageFormat.format("Distance to nearest obstacle behind the robot: {0}", distance));
+          break;
+        }
+        case "r": {
+          System.out.print("Enter angle: ");
+          var angle = scanner.nextInt();
+          robotController.RotateRangeSensor(angle);
           break;
         }
         case "q":
