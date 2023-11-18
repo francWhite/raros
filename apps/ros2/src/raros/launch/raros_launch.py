@@ -28,4 +28,10 @@ def generate_launch_description():
             executable='color_sensor',
             name='color_sensor'
         ),
+        Node(
+            package='raros',
+            namespace='raros',
+            executable='range_sensor',
+            name='range_sensor'
+        ),
     ])

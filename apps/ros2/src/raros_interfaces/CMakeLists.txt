@@ -30,6 +30,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Num.msg"
   "msg/MagnetState.msg"
+  "msg/Distance.msg"
   "srv/SetMagnetState.srv"
   "srv/ActionPlayTone.srv"
   "srv/ActionCompleted.srv"

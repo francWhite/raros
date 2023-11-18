@@ -27,6 +27,7 @@ setup(
             'magnet = raros.magnet:main',
             'buzzer = raros.buzzer:main',
             'color_sensor = raros.color_sensor:main',
+            'range_sensor = raros.range_sensor:main',
         ],
     },
 )
