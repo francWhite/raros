@@ -1,5 +1,7 @@
 package ch.hslu.raros.client.controller;
 
+import ch.hslu.raros.client.connector.Color;
+
 public interface RobotController {
 
   /**
@@ -32,5 +34,11 @@ public interface RobotController {
    * @param duration  The duration of the tone in ms.
    */
   void PlayToneAsync(int frequency, int duration);
+
+  /**
+   * Reads the current color of the color sensor.
+   * @return Color The last color read from the color sensor.
+   */
+  Color GetColor();
 }
 

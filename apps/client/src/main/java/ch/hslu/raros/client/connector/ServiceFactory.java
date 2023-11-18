@@ -15,4 +15,8 @@ public class ServiceFactory {
   public static BuzzerService createBuzzerService(URI apiBaseUri) {
     return new BuzzerApiService(apiBaseUri);
   }
+
+  public static ColorService createColorService(URI apiBaseUri) {
+    return new ColorApiService(apiBaseUri);
+  }
 }
