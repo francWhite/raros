@@ -60,8 +60,20 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
+  public float GetDistanceFront(int angle) {
+    this.distanceService.RotateSensor(angle).join();
+    var distance = this.distanceService.GetDistance().join();
+    return distance.getFront();
+  }
+
+  @Override
   public float GetDistanceBack() {
     var distance = this.distanceService.GetDistance().join();
     return distance.getBack();
+  }
+
+  @Override
+  public void RotateRangeSensor(int angle) {
+    this.distanceService.RotateSensor(angle).join();
   }
 }

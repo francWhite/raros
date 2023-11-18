@@ -15,7 +15,26 @@ distanceRouter.get('/', async (req: Request<undefined, undefined, undefined>, re
   );
 });
 
+distanceRouter.post('/rotate-sensor', async (req: Request<undefined, undefined, Rotation>, res: Response) => {
+  console.log(req.originalUrl, req.body);
+
+  const requestData = {
+    angle: req.body.angle,
+  };
+  rosService.callService(
+    '/raros/range_sensor/rotate',
+    'raros_interfaces/srv/RotateRangeSensor',
+    requestData,
+    () => res.send(),
+    (error) => res.status(500).send(error),
+  );
+});
+
 type Distance = {
   front: number;
   back: number;
+};
+
+type Rotation = {
+  angle: number;
 };
