@@ -16,6 +16,7 @@ public class Main {
     System.out.println("  m to control magnet");
     System.out.println("  b to control buzzer");
     System.out.println("  c to get color");
+    System.out.println("  d to get distance");
 
     var input = scanner.next();
     switch (input) {
@@ -27,6 +28,9 @@ public class Main {
         break;
       case "c":
         colorExample(robotController, scanner);
+        break;
+      case "d":
+        distanceExample(robotController, scanner);
         break;
     }
   }
@@ -110,6 +114,35 @@ public class Main {
           var color = robotController.GetColor();
           System.out.println(MessageFormat.format("Color (R,G,B): {0}, {1}, {2}", color.red(), color.green(), color.blue()));
           break;
+        case "q":
+          return;
+        default:
+          System.out.println("Invalid input.");
+          break;
+      }
+    }
+  }
+
+  private static void distanceExample(RobotController robotController, Scanner scanner) {
+    System.out.println("Press");
+    System.out.println("  f to get distance in front");
+    System.out.println("  b to get distance in back");
+    System.out.println("  q to quit");
+
+    while (true) {
+      System.out.print("Enter input: ");
+      var input = scanner.next();
+      switch (input) {
+        case "f": {
+          var distance = robotController.GetDistanceFront();
+          System.out.println(MessageFormat.format("Distance to nearest obstacle in front of the robot: {0}", distance));
+          break;
+        }
+        case "b": {
+          var distance = robotController.GetDistanceBack();
+          System.out.println(MessageFormat.format("Distance to nearest obstacle behind the robot: {0}", distance));
+          break;
+        }
         case "q":
           return;
         default:

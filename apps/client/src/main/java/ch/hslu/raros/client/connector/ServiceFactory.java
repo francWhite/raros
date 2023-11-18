@@ -19,4 +19,8 @@ public class ServiceFactory {
   public static ColorService createColorService(URI apiBaseUri) {
     return new ColorApiService(apiBaseUri);
   }
+
+  public static DistanceService createDistanceService(URI apiBaseUri) {
+    return new DistanceApiService(apiBaseUri);
+  }
 }
