@@ -1,9 +1,10 @@
-import rclpy
-import board
 from typing import Optional
-from busio import I2C
-from adafruit_tcs34725 import TCS34725
 
+import board
+from adafruit_tcs34725 import TCS34725
+from busio import I2C
+
+import rclpy
 from rclpy.node import Node
 from std_msgs.msg import ColorRGBA
 
