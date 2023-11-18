@@ -1,6 +1,6 @@
-import rclpy
 import RPi.GPIO as GPIO
 
+import rclpy
 from rclpy.node import Node
 from std_srvs.srv import SetBool
 
