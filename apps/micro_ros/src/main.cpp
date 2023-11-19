@@ -189,9 +189,6 @@ void move(raros_interfaces__msg__StepperInstruction instruction_left,
     motor_left.setSpeed(instruction_left.speed);
     motor_right.setSpeed(instruction_right.speed);
 
-    // check if no new stop command was received before starting
-    rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
-
     while ((steps_left_remaining > 0 || steps_right_remaining > 0) && !move_cancelled) {
         if (steps_done++ % FEEDBACK_INTERVAL == 0) {
             rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
@@ -248,6 +245,7 @@ void loop() {
                                                                                         : AGENT_DISCONNECTED;);
             if (state == AGENT_CONNECTED) {
                 rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
+                rclc_executor_spin_some(&executor_stop, RCL_MS_TO_NS(10));
             }
             break;
         case AGENT_DISCONNECTED:
