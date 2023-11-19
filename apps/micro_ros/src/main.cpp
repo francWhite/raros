@@ -5,7 +5,6 @@
 #include <rclc/executor.h>
 #include <Stepper.h>
 
-#include <RoboStepper.h>
 #include <main.h>
 
 #include <std_msgs/msg/empty.h>
@@ -21,6 +20,10 @@
 #define STEP_PIN_MOTOR_LEFT 2
 #define DIR_PIN_MOTOR_LEFT 5
 #define MOTOR_POWER_SUPPLY_PIN 7
+
+#define QUARTER_STEP 0.25
+#define STEPS_PER_REVOLUTION int(1600 / QUARTER_STEP)
+#define FEEDBACK_INTERVAL (STEPS_PER_REVOLUTION / 60)
 
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){return false;}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
@@ -50,7 +53,6 @@ raros_interfaces__msg__StepperMovement msg_stepper_movement;
 raros_interfaces__msg__StepperStatus msg_status;
 raros_interfaces__msg__StepperFeedback feedback_msg;
 
-RoboStepper roboStepper;
 Stepper motor_left(STEPS_PER_REVOLUTION, STEP_PIN_MOTOR_LEFT, DIR_PIN_MOTOR_LEFT);
 Stepper motor_right(STEPS_PER_REVOLUTION, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RIGHT);
 
@@ -158,48 +160,52 @@ void toggle_power_supply(bool on) {
 }
 
 void stop_move() {
-    toggle_power_supply(false);
     digitalWrite(STEP_PIN_MOTOR_RIGHT, LOW);
     digitalWrite(STEP_PIN_MOTOR_LEFT, LOW);
+    toggle_power_supply(false);
 
     move_cancelled = true;
     publish_status(false);
     publish_log("stopped motors");
 }
 
-void move(raros_interfaces__msg__StepperMove stepper_move_left,
-          raros_interfaces__msg__StepperMove stepper_move_right) {
+void move(raros_interfaces__msg__StepperInstruction instruction_left,
+          raros_interfaces__msg__StepperInstruction instruction_right) {
     publish_status(true);
     toggle_power_supply(true);
     move_cancelled = false;
 
-    publish_log("moving left stepper: " + String(stepper_move_left.distance) + "m at " +
-                String(stepper_move_left.speed) + "rev/m");
-    publish_log("moving right stepper: " + String(stepper_move_right.distance) + "m at " +
-                String(stepper_move_right.speed) + "rev/m");
+    publish_log("moving left stepper " + String(instruction_left.steps) + " steps at " +
+                String(instruction_left.speed) + " RPM");
+    publish_log("moving right stepper " + String(instruction_right.steps) + " steps at " +
+                String(instruction_right.speed) + " RPM");
 
-    int steps_right_remaining = roboStepper.distanceInMeterToSteps(stepper_move_right.distance);
-    int steps_left_remaining = roboStepper.distanceInMeterToSteps(stepper_move_left.distance);
+    int steps_right_direction = instruction_right.steps > 0 ? 1 : -1;
+    int steps_right_remaining = abs(instruction_right.steps);
+    int steps_left_direction = instruction_left.steps > 0 ? 1 : -1;
+    int steps_left_remaining = abs(instruction_left.steps);
+    int steps_done = 0;
 
-    motor_left.setSpeed(stepper_move_left.speed);
-    motor_right.setSpeed(stepper_move_right.speed);
+    motor_left.setSpeed(instruction_left.speed);
+    motor_right.setSpeed(instruction_right.speed);
 
     // check if no new stop command was received before starting
     rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
 
     while ((steps_left_remaining > 0 || steps_right_remaining > 0) && !move_cancelled) {
-        if (steps_left_remaining % 100 == 1 || steps_right_remaining % 100 == 1) {
+        if (steps_done++ % FEEDBACK_INTERVAL == 0) {
             rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
             publish_feedback(steps_left_remaining, steps_right_remaining);
         }
+
         if (steps_left_remaining > 0) {
             steps_left_remaining -= 1;
-            motor_left.step(1);
+            motor_left.step(1 * steps_left_direction);
         }
 
         if (steps_right_remaining > 0) {
             steps_right_remaining -= 1;
-            motor_right.step(-1);
+            motor_right.step(-1 * steps_right_direction);
         }
     }
 
