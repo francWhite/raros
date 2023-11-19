@@ -43,6 +43,7 @@ class RosService {
     topic.publish(msg);
   }
 
+  // TODO add timeout
   callService<TResponse>(
     name: string,
     serviceType: string,
