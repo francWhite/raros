@@ -22,8 +22,20 @@
 #define DIR_PIN_MOTOR_LEFT 5
 #define MOTOR_POWER_SUPPLY_PIN 7
 
-#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
+#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){return false;}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
+#define EXECUTE_EVERY_N_MS(MS, X)  do { \
+  static volatile int64_t init = -1; \
+  if (init == -1) { init = uxr_millis();} \
+  if (uxr_millis() - init > MS) { X; init = uxr_millis();} \
+} while (0)\
+
+enum states {
+    WAITING_AGENT,
+    AGENT_AVAILABLE,
+    AGENT_CONNECTED,
+    AGENT_DISCONNECTED
+} state;
 
 rclc_support_t support;
 rcl_allocator_t allocator;
@@ -44,17 +56,9 @@ Stepper motor_right(STEPS_PER_REVOLUTION, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RI
 
 // ROS2 functions
 // -----------------------------------------------------------------------------
-[[noreturn]]
-void error_loop() {
-    while (true) {
-        digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-        delay(100);
-    }
-}
-
 void stop_callback(const void *msgin) {
     RCLC_UNUSED(msgin);
-    stopMoving();
+    stop_move();
 }
 
 void move_callback(const void *msgin) {
@@ -62,63 +66,131 @@ void move_callback(const void *msgin) {
     move(movement_msg->left, movement_msg->right);
 }
 
-void publishStatus(bool moving) {
+void publish_status(bool moving) {
     msg_status.moving = moving;
-    RCSOFTCHECK(rcl_publish(&publisher_status, &msg_status, nullptr))
+    RCSOFTCHECK(rcl_publish(&publisher_status, &msg_status, nullptr));
 }
 
-void publishLog(String msg) {
-    RCSOFTCHECK(rcl_publish(&publisher_log, &msg, nullptr))
+void publish_log(String msg) {
+    RCSOFTCHECK(rcl_publish(&publisher_log, &msg, nullptr));
 }
 
-void publishFeedback(int remaining_steps_left, int remaining_steps_right) {
+void publish_feedback(int remaining_steps_left, int remaining_steps_right) {
     feedback_msg.remaining_steps_left = remaining_steps_left;
     feedback_msg.remaining_steps_right = remaining_steps_right;
-    RCSOFTCHECK(rcl_publish(&publisher_feedback, &feedback_msg, nullptr))
+    RCSOFTCHECK(rcl_publish(&publisher_feedback, &feedback_msg, nullptr));
+}
+
+bool create_entities() {
+    allocator = rcl_get_default_allocator();
+
+    //create init_options
+    RCCHECK(rclc_support_init(&support, 0, nullptr, &allocator));
+
+    // create node
+    RCCHECK(rclc_node_init_default(&node, "arduino_stepper", "raros", &support));
+
+    // create subscriptions
+    RCCHECK(rclc_subscription_init_default(
+            &subscription_stop,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Empty),
+            "arduino_stepper/stop"));
+
+    RCCHECK(rclc_subscription_init_default(
+            &subscription_move,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperMovement),
+            "arduino_stepper/move"));
+
+    // create publishers
+    RCCHECK(rclc_publisher_init_default(
+            &publisher_status,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperStatus),
+            "arduino_stepper/status"));
+
+    RCCHECK(rclc_publisher_init_best_effort(
+            &publisher_log,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
+            "arduino_stepper/log"));
+
+    RCCHECK(rclc_publisher_init_best_effort(
+            &publisher_feedback,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperFeedback),
+            "arduino_stepper/feedback"));
+
+    // create executors
+    RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
+    RCCHECK(rclc_executor_init(&executor_stop, &support.context, 1, &allocator));
+
+    // add subscription to executor
+    RCCHECK(rclc_executor_add_subscription(&executor, &subscription_move, &msg_stepper_movement, &move_callback,
+                                           ON_NEW_DATA));
+    RCCHECK(rclc_executor_add_subscription(&executor_stop, &subscription_stop, &msg_empty, &stop_callback,
+                                           ON_NEW_DATA));
+
+    publish_log("node successfully connected to agent and ready");
+    return true;
+}
+
+void destroy_entities() {
+    rmw_context_t *rmw_context = rcl_context_get_rmw_context(&support.context);
+    RCSOFTCHECK(rmw_uros_set_context_entity_destroy_session_timeout(rmw_context, 0));
+
+    RCSOFTCHECK(rcl_subscription_fini(&subscription_stop, &node));
+    RCSOFTCHECK(rcl_subscription_fini(&subscription_move, &node));
+    RCSOFTCHECK(rcl_publisher_fini(&publisher_status, &node));
+    RCSOFTCHECK(rcl_publisher_fini(&publisher_log, &node));
+    RCSOFTCHECK(rcl_publisher_fini(&publisher_feedback, &node));
+    RCSOFTCHECK(rclc_executor_fini(&executor));
+    RCSOFTCHECK(rclc_executor_fini(&executor_stop));
+    RCSOFTCHECK(rcl_node_fini(&node));
+    RCSOFTCHECK(rclc_support_fini(&support));
 }
 
 // Stepper functions
 // -----------------------------------------------------------------------------
-void togglePowerSupply(bool on) {
+void toggle_power_supply(bool on) {
     digitalWrite(MOTOR_POWER_SUPPLY_PIN, on ? HIGH : LOW);
 }
 
-void stopMoving() {
-    togglePowerSupply(false);
+void stop_move() {
+    toggle_power_supply(false);
     digitalWrite(STEP_PIN_MOTOR_RIGHT, LOW);
     digitalWrite(STEP_PIN_MOTOR_LEFT, LOW);
 
     move_cancelled = true;
-    publishStatus(false);
-    publishLog("stopped motors");
+    publish_status(false);
+    publish_log("stopped motors");
 }
 
 void move(raros_interfaces__msg__StepperMove stepper_move_left,
           raros_interfaces__msg__StepperMove stepper_move_right) {
-    togglePowerSupply(true);
-    publishStatus(true);
+    publish_status(true);
+    toggle_power_supply(true);
     move_cancelled = false;
 
-    publishLog("Moving left stepper: " + String(stepper_move_left.distance) + "m with speed " +
-               String(stepper_move_left.speed) + "rev/s");
-    publishLog("Moving right stepper: " + String(stepper_move_right.distance) + "m with speed " +
-               String(stepper_move_right.speed) + "rev/s");
+    publish_log("moving left stepper: " + String(stepper_move_left.distance) + "m at " +
+                String(stepper_move_left.speed) + "rev/m");
+    publish_log("moving right stepper: " + String(stepper_move_right.distance) + "m at " +
+                String(stepper_move_right.speed) + "rev/m");
 
-    int steps_right = roboStepper.distanceInMeterToSteps(stepper_move_right.distance);
-    int steps_left = roboStepper.distanceInMeterToSteps(stepper_move_left.distance);
-    int steps_right_remaining = steps_right;
-    int steps_left_remaining = steps_left;
+    int steps_right_remaining = roboStepper.distanceInMeterToSteps(stepper_move_right.distance);
+    int steps_left_remaining = roboStepper.distanceInMeterToSteps(stepper_move_left.distance);
 
     motor_left.setSpeed(stepper_move_left.speed);
     motor_right.setSpeed(stepper_move_right.speed);
 
     // check if no new stop command was received before starting
-    RCCHECK(rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10)))
+    rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
 
     while ((steps_left_remaining > 0 || steps_right_remaining > 0) && !move_cancelled) {
         if (steps_left_remaining % 100 == 1 || steps_right_remaining % 100 == 1) {
-            RCCHECK(rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10)))
-            publishFeedback(steps_left_remaining, steps_right_remaining);
+            rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
+            publish_feedback(steps_left_remaining, steps_right_remaining);
         }
         if (steps_left_remaining > 0) {
             steps_left_remaining -= 1;
@@ -131,10 +203,10 @@ void move(raros_interfaces__msg__StepperMove stepper_move_left,
         }
     }
 
-    publishFeedback(0, 0);
-    publishLog("Finished moving");
-    togglePowerSupply(false);
-    publishStatus(false);
+    publish_feedback(0, 0);
+    publish_log("finished movement");
+    toggle_power_supply(false);
+    publish_status(false);
 }
 
 // Arduino functions
@@ -144,71 +216,41 @@ void setup() {
     set_microros_serial_transports(Serial);
 
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
-
     pinMode(STEP_PIN_MOTOR_LEFT, OUTPUT);
     pinMode(STEP_PIN_MOTOR_RIGHT, OUTPUT);
     pinMode(DIR_PIN_MOTOR_LEFT, OUTPUT);
     pinMode(DIR_PIN_MOTOR_RIGHT, OUTPUT);
     pinMode(MOTOR_POWER_SUPPLY_PIN, OUTPUT);
 
-    // wait for the serial port to be initialized
-    delay(2000);
-
-    allocator = rcl_get_default_allocator();
-
-    //create init_options
-    RCCHECK(rclc_support_init(&support, 0, nullptr, &allocator))
-
-    // create node
-    RCCHECK(rclc_node_init_default(&node, "arduino_stepper", "raros", &support))
-
-    // create subscriptions
-    RCCHECK(rclc_subscription_init_default(
-            &subscription_stop,
-            &node,
-            ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Empty),
-            "arduino_stepper/stop"))
-
-    RCCHECK(rclc_subscription_init_default(
-            &subscription_move,
-            &node,
-            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperMovement),
-            "arduino_stepper/move"))
-
-    // create publishers
-    RCCHECK(rclc_publisher_init_default(
-            &publisher_status,
-            &node,
-            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperStatus),
-            "arduino_stepper/status"))
-
-    RCCHECK(rclc_publisher_init_best_effort(
-            &publisher_log,
-            &node,
-            ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, String),
-            "arduino_stepper/log"))
-
-    RCCHECK(rclc_publisher_init_best_effort(
-            &publisher_feedback,
-            &node,
-            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperFeedback),
-            "arduino_stepper/feedback"))
-
-    // create executors
-    RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator))
-    RCCHECK(rclc_executor_init(&executor_stop, &support.context, 1, &allocator))
-
-    // add subscription to executor
-    RCCHECK(rclc_executor_add_subscription(&executor, &subscription_move, &msg_stepper_movement, &move_callback,
-                                           ON_NEW_DATA))
-    RCCHECK(rclc_executor_add_subscription(&executor_stop, &subscription_stop, &msg_empty, &stop_callback,
-                                           ON_NEW_DATA))
-
-    publishLog("node started successfully");
+    state = WAITING_AGENT;
 }
 
 void loop() {
-    delay(100);
-    RCCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)))
+    switch (state) {
+        case WAITING_AGENT:
+            EXECUTE_EVERY_N_MS(500,
+                               state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AGENT_AVAILABLE : WAITING_AGENT;);
+            break;
+        case AGENT_AVAILABLE:
+            state = create_entities() ? AGENT_CONNECTED : WAITING_AGENT;
+            if (state == WAITING_AGENT) {
+                destroy_entities();
+            };
+            break;
+        case AGENT_CONNECTED:
+            EXECUTE_EVERY_N_MS(200, state = (RMW_RET_OK == rmw_uros_ping_agent(100, 1)) ? AGENT_CONNECTED
+                                                                                        : AGENT_DISCONNECTED;);
+            if (state == AGENT_CONNECTED) {
+                rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100));
+            }
+            break;
+        case AGENT_DISCONNECTED:
+            destroy_entities();
+            state = WAITING_AGENT;
+            break;
+        default:
+            break;
+    }
+
+    digitalWrite(LED_PIN, state == AGENT_CONNECTED);
 }
