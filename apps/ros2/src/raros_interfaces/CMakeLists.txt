@@ -40,6 +40,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ActionCompleted.srv"
   "srv/RotateRangeSensor.srv"
   "action/PlayTone.action"
+  "action/Move.action"
   DEPENDENCIES geometry_msgs
 )
 
