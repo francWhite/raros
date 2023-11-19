@@ -34,4 +34,10 @@ def generate_launch_description():
             executable='range_sensor',
             name='range_sensor'
         ),
+        Node(
+            package='raros',
+            namespace='raros',
+            executable='navigation',
+            name='navigation'
+        ),
     ])

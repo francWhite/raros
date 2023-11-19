@@ -1,0 +1,2 @@
+int32 remaining_steps_left
+int32 remaining_steps_right
