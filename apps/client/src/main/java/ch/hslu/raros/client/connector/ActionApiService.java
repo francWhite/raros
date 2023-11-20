@@ -10,6 +10,9 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class ActionApiService implements ActionService {
+  private record Goal(UUID goalId, Boolean completed) {
+  }
+
   private final URI apiUri;
 
   public ActionApiService(URI apiBaseUri) {
@@ -30,7 +33,4 @@ public class ActionApiService implements ActionService {
         .thenApply(Goal::completed);
     }
   }
-}
-
-record Goal(UUID goalId, Boolean completed) {
 }

@@ -7,10 +7,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
-record MagnetState(Boolean active) {
-}
-
 class MagnetApiService implements MagnetService {
+  private record MagnetState(Boolean active) {
+  }
 
   private final URI apiUri;
 
