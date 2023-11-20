@@ -6,7 +6,8 @@ from rclpy import qos
 from rclpy.action import ActionServer
 from rclpy.action.server import ServerGoalHandle
 from rclpy.node import Node
-from std_msgs.msg import Empty
+from std_msgs.msg import Empty as EmptyMsg
+from std_srvs.srv import Empty as EmptySrv
 
 
 # TODO rename/refactor to a more generic way
@@ -44,9 +45,16 @@ class Navigation(Node):
         super().__init__('navigation')
         self.get_logger().info('navigation node started')
 
+        self.stop_service = self.create_service(EmptySrv, 'navigation/stop', self.stop_callback)
         self.move_action_server = ActionServer(self, Move, 'navigation/move', self.move_action_callback)
+
         self.stepper_publisher = self.create_publisher(StepperMovement, '/raros/arduino_stepper/move', 10)
-        self.stop_publisher = self.create_publisher(Empty, '/raros/arduino_stepper/stop', 10)
+        self.stop_publisher = self.create_publisher(EmptyMsg, '/raros/arduino_stepper/stop', 10)
+
+    def stop_callback(self, request, response):
+        self.get_logger().info(f'received stop request')
+        self.stop_publisher.publish(EmptyMsg())
+        return response
 
     def move_action_callback(self, goal_handle: ServerGoalHandle):
         request: Move.Goal = goal_handle.request
@@ -57,10 +65,11 @@ class Navigation(Node):
         goal_handle.publish_feedback(feedback_msg)
 
         stepper_msg = StepperMovement()
+        # TODO convert m/s to rpm and respect default speed
         stepper_msg.left.steps = convert_distance_to_steps(request.distance, request.direction)
-        stepper_msg.left.speed = int(request.speed)  # TODO convert m/s to rpm
+        stepper_msg.left.speed = int(request.speed) if request.speed != -1 else 30
         stepper_msg.right.steps = convert_distance_to_steps(request.distance, request.direction)
-        stepper_msg.right.speed = int(request.speed)  # TODO convert m/s to rpm
+        stepper_msg.right.speed = int(request.speed) if request.speed != -1 else 30
 
         self.stepper_publisher.publish(stepper_msg)
 
@@ -75,14 +84,14 @@ class Navigation(Node):
 
 # TODO actually convert m to steps
 def convert_distance_to_steps(distance, direction):
-    steps = distance * 1600
+    steps = distance * 1600 * 16
     if direction == Move.Goal.DIRECTION_BACKWARD:
         steps *= -1
     return int(steps)
 
 
 def convert_steps_to_distance(steps):
-    return steps / 1600
+    return steps / 1600 / 16
 
 
 def main(args=None):
