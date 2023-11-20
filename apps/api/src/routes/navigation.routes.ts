@@ -25,6 +25,18 @@ navigationRouter.post('/move', async (req: Request<undefined, undefined, MoveReq
   );
 });
 
+navigationRouter.post('/stop', async (req: Request<undefined, undefined, undefined>, res: Response) => {
+  console.log(req.originalUrl);
+
+  rosService.callService(
+    '/raros/navigation/stop',
+    'std_srvs/srv/Empty',
+    {},
+    () => res.send(),
+    (error) => res.status(500).send(error),
+  );
+});
+
 type MoveRequest = {
   distance: number;
   speed: number;

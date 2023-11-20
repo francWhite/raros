@@ -98,7 +98,6 @@ class ActionApi(Node):
 
     def action_completed_callback(self, request, response):
         goal_id = request.goal_id.replace('-', '')
-        self.get_logger().info(f'check if goal is completed: "{goal_id}"')
         response.completed = goal_id not in self.pending_goals
         return response
 
