@@ -10,6 +10,9 @@ import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
 class DistanceApiService implements DistanceService {
+  private record Rotation(int angle) {
+  }
+
   private final URI apiUri;
 
   public DistanceApiService(URI apiBaseUri) {
@@ -41,7 +44,4 @@ class DistanceApiService implements DistanceService {
         .thenApply(HttpResponse::body);
     }
   }
-}
-
-record Rotation(int angle) {
 }

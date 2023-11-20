@@ -8,10 +8,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
-record Tone(int frequency, int duration) {
-}
 
 class BuzzerApiService implements BuzzerService {
+  private record Tone(int frequency, int duration) {
+  }
 
   private final URI apiUri;
 
