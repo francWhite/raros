@@ -3,7 +3,6 @@ package ch.hslu.raros.client.controller;
 import ch.hslu.raros.client.connector.*;
 
 class RobotControllerImpl implements RobotController {
-
   private final ActionAwaiter actionAwaiter;
   private final MagnetService magnetService;
   private final BuzzerService buzzerService;
@@ -137,5 +136,27 @@ class RobotControllerImpl implements RobotController {
   @Override
   public void MoveBackwardAsync(double distance, double speed) {
     this.navigationService.Move(distance, speed, Direction.Backward);
+  }
+
+  @Override
+  public void RotateLeft(double angle) {
+    var action = this.navigationService.Rotate(angle, Direction.Left);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void RotateLeftAsync(double angle) {
+    this.navigationService.Rotate(angle, Direction.Left);
+  }
+
+  @Override
+  public void RotateRight(double angle) {
+    var action = this.navigationService.Rotate(angle, Direction.Right);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void RotateRightAsync(double angle) {
+    this.navigationService.Rotate(angle, Direction.Right);
   }
 }

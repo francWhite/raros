@@ -166,17 +166,25 @@ public class InteractiveExample {
 
   private static void navigationExample(RobotController robotController, Scanner scanner) {
     System.out.println("Press");
+    System.out.println("  s to stop");
     System.out.println("  f to move forward");
     System.out.println("  fa to move forward async");
     System.out.println("  b to move backward");
     System.out.println("  ba to move backward async");
-    System.out.println("  s to stop");
+    System.out.println("  rl to rotate left");
+    System.out.println("  rla to rotate left async");
+    System.out.println("  rr to rotate right");
+    System.out.println("  rra to rotate right async");
     System.out.println("  q to quit");
 
     while (true) {
       System.out.print("Enter input: ");
       var input = scanner.next();
       switch (input) {
+        case "s":
+          System.out.println("Stopping...");
+          robotController.StopMovement();
+          break;
         case "f": {
           var moveRequest = getMoveRequest(scanner);
           if (moveRequest.speed().isPresent()) {
@@ -225,10 +233,32 @@ public class InteractiveExample {
           }
           break;
         }
-        case "s":
-          System.out.println("Stopping...");
-          robotController.StopMovement();
+        case "rl": {
+          var angle = getAngle(scanner);
+          System.out.println("Rotating left and waiting for completion...");
+          robotController.RotateLeft(angle);
+          System.out.println("Finished rotating");
           break;
+        }
+        case "rla": {
+          var angle = getAngle(scanner);
+          System.out.println("Rotating left...");
+          robotController.RotateLeftAsync(angle);
+          break;
+        }
+        case "rr": {
+          var angle = getAngle(scanner);
+          System.out.println("Rotating right and waiting for completion...");
+          robotController.RotateRight(angle);
+          System.out.println("Finished rotating");
+          break;
+        }
+        case "rra": {
+          var angle = getAngle(scanner);
+          System.out.println("Rotating right...");
+          robotController.RotateRightAsync(angle);
+          break;
+        }
         case "q":
           return;
         default:
@@ -265,5 +295,10 @@ public class InteractiveExample {
   private static int getDuration(Scanner scanner) {
     System.out.print("Enter duration: ");
     return scanner.nextInt();
+  }
+
+  private static double getAngle(Scanner scanner) {
+    System.out.print("Enter angle: ");
+    return scanner.nextDouble();
   }
 }
