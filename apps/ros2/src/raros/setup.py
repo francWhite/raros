@@ -28,7 +28,7 @@ setup(
             'buzzer = raros.buzzer:main',
             'color_sensor = raros.color_sensor:main',
             'range_sensor = raros.range_sensor:main',
-            'navigation = raros.navigation:main'
+            'navigation = raros.navigation.navigation:main'
         ],
     },
 )
