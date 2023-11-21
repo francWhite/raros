@@ -8,8 +8,6 @@ actionRouter.use(express.json());
 actionRouter.get(
   '/goals/:goalId',
   async (req: Request<{ goalId: string }, undefined, ActionCompletedResult>, res: Response) => {
-    console.log(req.originalUrl, req.body);
-
     const requestData = { goal_id: req.params.goalId };
     rosService.callService(
       '/raros/action_api/action_completed',

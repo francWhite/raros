@@ -2,6 +2,6 @@
 
 float64 distance            # in meters
 float32 speed               # in m/s
-uint8 direction             # 1 (forward) or 2(backward)
+Direction direction         # DIRECTION_FORWARD(1) or DIRECTION_BACKWARD(2)
 ---
 unique_identifier_msgs/UUID goal_id    # The id of the requested goal

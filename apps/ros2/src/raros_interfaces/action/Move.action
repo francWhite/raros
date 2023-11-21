@@ -1,9 +1,6 @@
 float64 distance            # in meters
 float32 speed               # in m/s
-
-uint8 DIRECTION_FORWARD=1
-uint8 DIRECTION_BACKWARD=2
-uint8 direction             # DIRECTION_FORWARD(1) or DIRECTION_BACKWARD(2)
+Direction direction         # DIRECTION_FORWARD(1) or DIRECTION_BACKWARD(2)
 ---
 ---
 float64 remaining_distance  # in meters
