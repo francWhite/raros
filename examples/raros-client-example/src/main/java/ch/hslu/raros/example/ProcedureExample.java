@@ -12,7 +12,7 @@ public class ProcedureExample {
 
     controller.MoveForwardAsync();
     Color color = controller.GetColor();
-    while (color.red() < 60) {
+    while (color.red() < 70) {
       if (controller.GetDistanceFront() < 30) {
         System.out.println("possible collision recognized, aborting");
         controller.StopMovement();
@@ -20,29 +20,34 @@ public class ProcedureExample {
         System.exit(0);
       }
       color = controller.GetColor();
-      System.out.println("Waiting for green color to appear... current color: " + color);
+      System.out.println("Waiting for red color to appear... current color: " + color);
     }
 
-    System.out.println("Red color detected! Stop movement.");
+    System.out.println("Target detected! Stop movement.");
     controller.Beep();
     controller.StopMovement();
 
-    System.out.println("Enable magnet...");
+    System.out.println("Picking up payload...");
     controller.EnableMagnet();
 
-    System.out.println("Move 0.5m backward...");
+    System.out.println("Move to drop zone...");
     controller.MoveBackward(0.5);
+    controller.RotateLeft(90);
+    controller.MoveForward(0.1);
 
-    System.out.println("Disable magnet...");
+    System.out.println("Releasing payload");
+    controller.Beep();
     controller.DisableMagnet();
 
-    System.out.println("Move 0.1m backward...");
+    System.out.println("Leave drop zone...");
     controller.MoveBackward(0.1);
+    controller.RotateRight(90);
+    controller.MoveBackward(0.5);
 
     System.out.println("Finished!");
-    controller.PlayTone(440, 200);
-    controller.PlayTone(880, 200);
-    controller.PlayTone(440, 200);
+    controller.PlayToneAsync(440, 500);
+    controller.PlayToneAsync(880, 500);
+    controller.PlayToneAsync(440, 500);
     System.exit(0);
   }
 }
