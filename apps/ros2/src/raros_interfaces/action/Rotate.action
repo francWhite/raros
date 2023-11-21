@@ -1,0 +1,5 @@
+float32 angle               # in degrees
+Direction direction         # DIRECTION_LEFT(3) or DIRECTION_RIGHT(4)
+---
+---
+float32 remaining_angle     # in degrees
