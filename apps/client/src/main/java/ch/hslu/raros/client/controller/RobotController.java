@@ -38,6 +38,7 @@ public interface RobotController {
 
   /**
    * Reads the current color of the color sensor.
+   *
    * @return The last color read from the color sensor.
    */
   Color GetColor();
@@ -156,5 +157,37 @@ public interface RobotController {
    * @param speed    The speed at which the robot moves forward in m/s.
    */
   void MoveBackwardAsync(double distance, double speed);
+
+  /**
+   * Rotates the robot to the left by the specified angle.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void RotateLeft(double angle);
+
+  /**
+   * Rotates the robot to the left by the specified angle.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void RotateLeftAsync(double angle);
+
+  /**
+   * Rotates the robot to the right by the specified angle.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void RotateRight(double angle);
+
+  /**
+   * Rotates the robot to the right by the specified angle.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void RotateRightAsync(double angle);
 }
 

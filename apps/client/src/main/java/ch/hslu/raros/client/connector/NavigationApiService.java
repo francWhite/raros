@@ -13,6 +13,9 @@ class NavigationApiService implements NavigationService {
   private record MoveRequest(double distance, double speed, Direction direction) {
   }
 
+  private record RotateRequest(double angle, Direction direction) {
+  }
+
   private final URI apiUri;
 
   public NavigationApiService(URI apiBaseUri) {
@@ -47,7 +50,28 @@ class NavigationApiService implements NavigationService {
     return Move(new MoveRequest(distance, speed, direction));
   }
 
+  @Override
+  public CompletableFuture<ActionInvocationResult> Rotate(double angle, Direction direction) {
+    if (angle < 0 || angle > 180)
+      throw new IllegalArgumentException("The angle must be between 0° and 180°.");
+
+    if (direction != Direction.Left && direction != Direction.Right)
+      throw new IllegalArgumentException("Only left and right are supported as directions.");
+
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate"), new RotateRequest(angle, direction));
+
+    try (var httpClient = HttpClient.newHttpClient()) {
+      return httpClient
+        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        .thenApply(HttpResponse::body)
+        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+    }
+  }
+
   private CompletableFuture<ActionInvocationResult> Move(MoveRequest moveRequest) {
+    if (moveRequest.direction != Direction.Forward && moveRequest.direction != Direction.Backward)
+      throw new IllegalArgumentException("Only forward and backward are supported as directions.");
+
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./move"), moveRequest);
 
     try (var httpClient = HttpClient.newHttpClient()) {
