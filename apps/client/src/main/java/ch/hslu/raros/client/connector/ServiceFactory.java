@@ -23,4 +23,8 @@ public class ServiceFactory {
   public static DistanceService createDistanceService(URI apiBaseUri) {
     return new DistanceApiService(apiBaseUri);
   }
+
+  public static NavigationService createNavigationService(URI apiBaseUri) {
+    return new NavigationApiService(apiBaseUri);
+  }
 }

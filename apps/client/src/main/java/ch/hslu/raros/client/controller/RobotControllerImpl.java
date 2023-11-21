@@ -9,17 +9,20 @@ class RobotControllerImpl implements RobotController {
   private final BuzzerService buzzerService;
   private final ColorService colorService;
   private final DistanceService distanceService;
+  private final NavigationService navigationService;
 
   public RobotControllerImpl(ActionAwaiter actionAwaiter,
                              MagnetService magnetService,
                              BuzzerService buzzerService,
                              ColorService colorService,
-                             DistanceService distanceService) {
+                             DistanceService distanceService,
+                             NavigationService navigationService) {
     this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
     this.colorService = colorService;
     this.distanceService = distanceService;
+    this.navigationService = navigationService;
   }
 
   @Override
@@ -75,5 +78,64 @@ class RobotControllerImpl implements RobotController {
   @Override
   public void RotateRangeSensor(int angle) {
     this.distanceService.RotateSensor(angle).join();
+  }
+
+  @Override
+  public void StopMovement() {
+    this.navigationService.Stop().join();
+  }
+
+  @Override
+  public void MoveForward(double distance) {
+    var action = this.navigationService.Move(distance, Direction.Forward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveForward(double distance, double speed) {
+    var action = this.navigationService.Move(distance, speed, Direction.Forward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveForwardAsync() {
+    this.navigationService.Move(Direction.Forward);
+  }
+
+  @Override
+  public void MoveForwardAsync(double distance) {
+    this.navigationService.Move(distance, Direction.Forward);
+  }
+
+  @Override
+  public void MoveForwardAsync(double distance, double speed) {
+    this.navigationService.Move(distance, speed, Direction.Forward);
+  }
+
+  @Override
+  public void MoveBackward(double distance) {
+    var action = this.navigationService.Move(distance, Direction.Backward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveBackward(double distance, double speed) {
+    var action = this.navigationService.Move(distance, speed, Direction.Backward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveBackwardAsync() {
+    this.navigationService.Move(Direction.Backward);
+  }
+
+  @Override
+  public void MoveBackwardAsync(double distance) {
+    this.navigationService.Move(distance, Direction.Backward);
+  }
+
+  @Override
+  public void MoveBackwardAsync(double distance, double speed) {
+    this.navigationService.Move(distance, speed, Direction.Backward);
   }
 }
