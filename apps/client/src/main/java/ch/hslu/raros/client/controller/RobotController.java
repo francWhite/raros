@@ -2,6 +2,7 @@ package ch.hslu.raros.client.controller;
 
 import ch.hslu.raros.client.connector.Color;
 
+//TODO (entire project): rename methods to match the camelCase naming convention
 public interface RobotController {
 
   /**
@@ -69,5 +70,91 @@ public interface RobotController {
    * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
    */
   void RotateRangeSensor(int angle);
+
+  /**
+   * Stops any movement of the robot.
+   */
+  void StopMovement();
+
+  /**
+   * Moves the robot forward by the specified distance.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance The distance to move the robot forward in m.
+   */
+  void MoveForward(double distance);
+
+  /**
+   * Moves the robot forward by the specified distance.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance The distance to move the robot forward in m.
+   * @param speed    The speed at which the robot moves forward in m/s.
+   */
+  void MoveForward(double distance, double speed);
+
+  /**
+   * Moves the robot forward indefinitely.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   */
+  void MoveForwardAsync();
+
+  /**
+   * Moves the robot forward by the specified distance.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param distance The distance to move the robot forward in m.
+   */
+  void MoveForwardAsync(double distance);
+
+  /**
+   * Moves the robot forward by the specified distance.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param distance The distance to move the robot forward in m.
+   * @param speed    The speed to move the robot forward in m/s.
+   */
+  void MoveForwardAsync(double distance, double speed);
+
+
+  /**
+   * Moves the robot backward by the specified distance.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance The distance to move the robot backward in m.
+   */
+  void MoveBackward(double distance);
+
+  /**
+   * Moves the robot backward by the specified distance.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance The distance to move the robot backward in m.
+   * @param speed    The speed at which the robot moves forward in m/s.
+   */
+  void MoveBackward(double distance, double speed);
+
+  /**
+   * Moves the robot backward indefinitely.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   */
+  void MoveBackwardAsync();
+
+  /**
+   * Moves the robot backward by the specified distance.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param distance The distance to move the robot backward in m.
+   */
+  void MoveBackwardAsync(double distance);
+
+  /**
+   * Moves the robot backward by the specified distance.
+   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   *
+   * @param distance The distance to move the robot backward in m.
+   * @param speed    The speed at which the robot moves forward in m/s.
+   */
+  void MoveBackwardAsync(double distance, double speed);
 }
 

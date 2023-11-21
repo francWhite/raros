@@ -11,7 +11,8 @@ public class RobotControllerFactory {
       ServiceFactory.createMagnetService(apiBaseUri),
       ServiceFactory.createBuzzerService(apiBaseUri),
       ServiceFactory.createColorService(apiBaseUri),
-      ServiceFactory.createDistanceService(apiBaseUri)
+      ServiceFactory.createDistanceService(apiBaseUri),
+      ServiceFactory.createNavigationService(apiBaseUri)
     );
   }
 }

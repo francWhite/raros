@@ -5,6 +5,7 @@ import ch.hslu.raros.client.controller.RobotControllerFactory;
 
 import java.net.URI;
 import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -17,6 +18,7 @@ public class Main {
     System.out.println("  b to control buzzer");
     System.out.println("  c to get color");
     System.out.println("  d to get distance or rotate distance sensor");
+    System.out.println("  n to navigate");
 
     var input = scanner.next();
     switch (input) {
@@ -31,6 +33,9 @@ public class Main {
         break;
       case "d":
         distanceExample(robotController, scanner);
+        break;
+      case "n":
+        navigationExample(robotController, scanner);
         break;
     }
   }
@@ -156,6 +161,99 @@ public class Main {
           System.out.println("Invalid input.");
           break;
       }
+    }
+  }
+
+  private static void navigationExample(RobotController robotController, Scanner scanner) {
+    System.out.println("Press");
+    System.out.println("  f to move forward");
+    System.out.println("  fa to move forward async");
+    System.out.println("  b to move backward");
+    System.out.println("  ba to move backward async");
+    System.out.println("  s to stop");
+    System.out.println("  q to quit");
+
+    while (true) {
+      System.out.print("Enter input: ");
+      var input = scanner.next();
+      switch (input) {
+        case "f": {
+          var moveRequest = getMoveRequest(scanner);
+          if (moveRequest.speed().isPresent()) {
+            System.out.println("Moving forward and waiting for completion...");
+            robotController.MoveForward(moveRequest.distance(), moveRequest.speed().get());
+            System.out.println("Finished moving forward.");
+          } else {
+            System.out.println("Moving forward and waiting for completion...");
+            robotController.MoveForward(moveRequest.distance());
+            System.out.println("Finished moving forward.");
+          }
+          break;
+        }
+        case "fa": {
+          var moveRequest = getMoveRequest(scanner);
+          if (moveRequest.speed().isPresent()) {
+            System.out.println("Moving forward...");
+            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.speed().get());
+          } else {
+            System.out.println("Moving forward...");
+            robotController.MoveForwardAsync(moveRequest.distance());
+          }
+          break;
+        }
+        case "b": {
+          var moveRequest = getMoveRequest(scanner);
+          if (moveRequest.speed().isPresent()) {
+            System.out.println("Moving backward and waiting for completion...");
+            robotController.MoveBackward(moveRequest.distance(), moveRequest.speed().get());
+            System.out.println("Finished moving backward.");
+          } else {
+            System.out.println("Moving backward and waiting for completion...");
+            robotController.MoveBackward(moveRequest.distance());
+            System.out.println("Finished moving backward.");
+          }
+          break;
+        }
+        case "ba": {
+          var moveRequest = getMoveRequest(scanner);
+          if (moveRequest.speed().isPresent()) {
+            System.out.println("Moving backward...");
+            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.speed().get());
+          } else {
+            System.out.println("Moving backward...");
+            robotController.MoveBackwardAsync(moveRequest.distance());
+          }
+          break;
+        }
+        case "s":
+          System.out.println("Stopping...");
+          robotController.StopMovement();
+          break;
+        case "q":
+          return;
+        default:
+          System.out.println("Invalid input.");
+          break;
+      }
+    }
+  }
+
+  private record MoveRequest(double distance, Optional<Double> speed) {
+  }
+
+  private static MoveRequest getMoveRequest(Scanner scanner) {
+    System.out.print("With speed? (y/n): ");
+    var withSpeed = scanner.next();
+    if (withSpeed.equals("y")) {
+      System.out.print("Enter distance: ");
+      var distance = scanner.nextDouble();
+      System.out.print("Enter speed: ");
+      var speed = scanner.nextDouble();
+      return new MoveRequest(distance, Optional.of(speed));
+    } else {
+      System.out.print("Enter distance: ");
+      var distance = scanner.nextDouble();
+      return new MoveRequest(distance, Optional.empty());
     }
   }
 
