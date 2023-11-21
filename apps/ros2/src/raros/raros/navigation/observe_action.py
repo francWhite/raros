@@ -1,5 +1,5 @@
-import raros.navigation.step_converter as converter
-from raros_interfaces.action import Move
+from typing import Callable, Any
+
 from raros_interfaces.msg import StepperFeedback, StepperStatus
 from rclpy import qos
 from rclpy.action.server import ServerGoalHandle
@@ -7,10 +7,10 @@ from rclpy.node import Node
 
 
 class ObserveAction(Node):
-    def __init__(self, goal_handle: ServerGoalHandle, feedback_msg: Move.Feedback):
+    def __init__(self, goal_handle: ServerGoalHandle, create_feedback_msg_callback: Callable[[StepperFeedback], Any]):
         super().__init__('observe_action', use_global_arguments=False)
         self.goal_handle = goal_handle
-        self.action_feedback_msg = feedback_msg
+        self.create_feedback_msg_callback = create_feedback_msg_callback
 
         self.status_subscriber = self.create_subscription(
             StepperStatus,
@@ -30,6 +30,5 @@ class ObserveAction(Node):
             self.goal_handle.succeed()
 
     def feedback_callback(self, msg: StepperFeedback):
-        remaining_steps = max(msg.remaining_steps_left, msg.remaining_steps_right)
-        self.action_feedback_msg.remaining_distance = converter.steps_to_distance(remaining_steps)
-        self.goal_handle.publish_feedback(self.action_feedback_msg)
+        feedback_msg = self.create_feedback_msg_callback(msg)
+        self.goal_handle.publish_feedback(feedback_msg)

@@ -41,8 +41,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/ActionPlayTone.srv"
   "srv/ActionCompleted.srv"
   "srv/ActionMove.srv"
+  "srv/ActionRotate.srv"
   "action/PlayTone.action"
   "action/Move.action"
+  "action/Rotate.action"
   DEPENDENCIES geometry_msgs
 )
 

@@ -1,9 +1,7 @@
 import rclpy
 from raros.action_api.action_handler import ActionHandler
-from raros_interfaces.action import Move
-from raros_interfaces.action import PlayTone
-from raros_interfaces.srv import ActionCompleted
-from raros_interfaces.srv import ActionMove, ActionPlayTone
+from raros_interfaces.action import PlayTone, Move, Rotate
+from raros_interfaces.srv import ActionCompleted, ActionPlayTone, ActionMove, ActionRotate
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
@@ -19,6 +17,9 @@ class ActionApi(Node):
         self.get_logger().info('action_api node started')
         self.pending_goals = set()
 
+        self.action_completed_service = self.create_service(ActionCompleted, 'action_api/action_completed',
+                                                            self.action_completed_callback)
+
         play_tone_action_client = ActionClient(self, PlayTone, 'buzzer/play_tone')
         self.play_tone_action_handler = ActionHandler(play_tone_action_client, self.pending_goals, self.get_logger())
         self.play_tone_service = self.create_service(ActionPlayTone, 'action_api/buzzer/play_tone',
@@ -29,12 +30,18 @@ class ActionApi(Node):
         self.move_service = self.create_service(ActionMove, 'action_api/navigation/move',
                                                 self.move_callback)
 
-        self.action_completed_service = self.create_service(ActionCompleted, 'action_api/action_completed',
-                                                            self.action_completed_callback)
+        rotate_action_client = ActionClient(self, Rotate, 'navigation/rotate')
+        self.rotate_action_handler = ActionHandler(rotate_action_client, self.pending_goals, self.get_logger())
+        self.rotate_service = self.create_service(ActionRotate, 'action_api/navigation/rotate',
+                                                  self.rotate_callback)
+
+    def action_completed_callback(self, request, response):
+        goal_id = request.goal_id.replace('-', '')
+        response.completed = goal_id not in self.pending_goals
+        return response
 
     def play_tone_callback(self, request, response):
         self.get_logger().info(f'play_tone_callback received: "{request}"')
-
         goal_msg = PlayTone.Goal()
         goal_msg.frequency = request.frequency
         goal_msg.duration = request.duration
@@ -45,7 +52,6 @@ class ActionApi(Node):
 
     def move_callback(self, request, response):
         self.get_logger().info(f'move_callback received: "{request}"')
-
         goal_msg = Move.Goal()
         goal_msg.speed = request.speed
         goal_msg.distance = request.distance
@@ -55,9 +61,14 @@ class ActionApi(Node):
         response.goal_id = goal_id
         return response
 
-    def action_completed_callback(self, request, response):
-        goal_id = request.goal_id.replace('-', '')
-        response.completed = goal_id not in self.pending_goals
+    def rotate_callback(self, request, response):
+        self.get_logger().info(f'rotate_callback received: "{request}"')
+        goal_msg = Rotate.Goal()
+        goal_msg.angle = request.angle
+        goal_msg.direction = request.direction
+        goal_id = self.rotate_action_handler.send_goal(goal_msg)
+
+        response.goal_id = goal_id
         return response
 
 
