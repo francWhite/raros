@@ -8,7 +8,7 @@ import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class Main {
+public class InteractiveExample {
   public static void main(String[] args) {
     var robotController = RobotControllerFactory.create(URI.create("http://eee-03300:8000"));
     var scanner = new Scanner(System.in);
