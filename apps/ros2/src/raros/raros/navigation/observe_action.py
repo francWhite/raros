@@ -8,7 +8,7 @@ from rclpy.node import Node
 
 class ObserveAction(Node):
     def __init__(self, goal_handle: ServerGoalHandle, feedback_msg: Move.Feedback):
-        super().__init__('wait')
+        super().__init__('observe_action', use_global_arguments=False)
         self.goal_handle = goal_handle
         self.action_feedback_msg = feedback_msg
 

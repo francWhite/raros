@@ -1,11 +1,11 @@
-from raros_interfaces.action import Move
+from raros_interfaces.msg import Direction
 
 
 # TODO actually convert m to steps
-def distance_to_steps(distance, direction):
+def distance_to_steps(distance, direction: Direction):
     steps = distance * 1600 * 16
     # TODO move direction to dedicated message
-    if direction == Move.Goal.DIRECTION_BACKWARD:
+    if direction.value == Direction.DIRECTION_BACKWARD:
         steps *= -1
     return int(steps)
 
