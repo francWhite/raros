@@ -14,15 +14,15 @@ class ColorSensor(Node):
         super().__init__('color_sensor')
         self.get_logger().info('color_sensor node started')
         self.publisher = self.create_publisher(ColorRGBA, 'color_sensor/color', 10)
-        self.timer = self.create_timer(0.5, self.timer_callback)
+        self.timer = self.create_timer(0.1, self.timer_callback)
         self.i2c: Optional[I2C] = None
         self.sensor: Optional[TCS34725] = None
 
     def setup_i2c(self):
         self.i2c = board.I2C()
         self.sensor = TCS34725(self.i2c)
-        self.sensor.gain = 4
-        self.sensor.integration_time = 480
+        self.sensor.gain = 16
+        self.sensor.integration_time = 120
 
     def timer_callback(self):
         color_rgb = self.sensor.color_rgb_bytes
