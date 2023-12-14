@@ -1,0 +1,7 @@
+# service to interact with the Turn action. See action_api node for more details.
+
+float32 angle               # in degrees
+float64 radius              # in meters
+Direction direction         # DIRECTION_LEFT(3) or DIRECTION_RIGHT(4)
+---
+unique_identifier_msgs/UUID goal_id    # The id of the requested goal

@@ -1,7 +1,7 @@
 import rclpy
 from raros.action_api.action_handler import ActionHandler
-from raros_interfaces.action import PlayTone, Move, Rotate
-from raros_interfaces.srv import ActionCompleted, ActionPlayTone, ActionMove, ActionRotate
+from raros_interfaces.action import PlayTone, Move, Rotate, Turn
+from raros_interfaces.srv import ActionCompleted, ActionPlayTone, ActionMove, ActionRotate, ActionTurn
 from rclpy.action import ActionClient
 from rclpy.node import Node
 
@@ -35,6 +35,11 @@ class ActionApi(Node):
         self.rotate_service = self.create_service(ActionRotate, 'action_api/navigation/rotate',
                                                   self.rotate_callback)
 
+        turn_action_client = ActionClient(self, Turn, 'navigation/turn')
+        self.turn_action_handler = ActionHandler(turn_action_client, self.pending_goals, self.get_logger())
+        self.turn_service = self.create_service(ActionTurn, 'action_api/navigation/turn',
+                                                self.turn_callback)
+
     def action_completed_callback(self, request, response):
         goal_id = request.goal_id.replace('-', '')
         response.completed = goal_id not in self.pending_goals
@@ -67,6 +72,17 @@ class ActionApi(Node):
         goal_msg.angle = request.angle
         goal_msg.direction = request.direction
         goal_id = self.rotate_action_handler.send_goal(goal_msg)
+
+        response.goal_id = goal_id
+        return response
+
+    def turn_callback(self, request, response):
+        self.get_logger().info(f'turn_callback received: "{request}"')
+        goal_msg = Turn.Goal()
+        goal_msg.angle = request.angle
+        goal_msg.radius = request.radius
+        goal_msg.direction = request.direction
+        goal_id = self.turn_action_handler.send_goal(goal_msg)
 
         response.goal_id = goal_id
         return response
