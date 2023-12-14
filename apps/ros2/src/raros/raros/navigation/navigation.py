@@ -35,6 +35,8 @@ class Navigation(Node):
         request: Move.Goal = goal_handle.request
         self.get_logger().info(f'executing goal: "{request}"')
 
+        self.stop_publisher.publish(EmptyMsg())
+
         feedback_msg = Move.Feedback()
         feedback_msg.remaining_distance = request.distance
         goal_handle.publish_feedback(feedback_msg)
@@ -64,6 +66,8 @@ class Navigation(Node):
     def rotate_action_callback(self, goal_handle: ServerGoalHandle):
         request: Rotate.Goal = goal_handle.request
         self.get_logger().info(f'executing goal: "{request}"')
+
+        self.stop_publisher.publish(EmptyMsg())
 
         feedback_msg = Rotate.Feedback()
         feedback_msg.remaining_angle = request.angle
@@ -95,6 +99,8 @@ class Navigation(Node):
     def turn_action_callback(self, goal_handle: ServerGoalHandle):
         request: Turn.Goal = goal_handle.request
         self.get_logger().info(f'executing goal: "{request}"')
+
+        self.stop_publisher.publish(EmptyMsg())
 
         feedback_msg = Turn.Feedback()
         feedback_msg.remaining_angle = request.angle
