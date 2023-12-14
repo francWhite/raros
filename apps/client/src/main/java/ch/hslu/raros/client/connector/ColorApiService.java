@@ -21,10 +21,10 @@ class ColorApiService implements ColorService {
       .GET()
       .build();
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, Color.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, Color.class));
+
   }
 }

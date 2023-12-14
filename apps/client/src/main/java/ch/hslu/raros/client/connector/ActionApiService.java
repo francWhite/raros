@@ -26,11 +26,11 @@ public class ActionApiService implements ActionService {
       .GET()
       .build();
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, Goal.class))
-        .thenApply(Goal::completed);
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, Goal.class))
+      .thenApply(Goal::completed);
+
   }
 }

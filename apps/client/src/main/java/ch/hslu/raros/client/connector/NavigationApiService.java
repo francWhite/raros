@@ -31,11 +31,10 @@ class NavigationApiService implements NavigationService {
       .POST(HttpRequest.BodyPublishers.noBody())
       .build();
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.discarding())
-        .thenApply(HttpResponse::body);
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.discarding())
+      .thenApply(HttpResponse::body);
+
   }
 
   @Override
@@ -63,12 +62,11 @@ class NavigationApiService implements NavigationService {
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate"), new RotateRequest(angle, direction));
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+
   }
 
   @Override
@@ -81,12 +79,11 @@ class NavigationApiService implements NavigationService {
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./turn"), new TurnRequest(angle, radius, direction));
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+
   }
 
   private CompletableFuture<ActionInvocationResult> Move(MoveRequest moveRequest) {
@@ -95,11 +92,9 @@ class NavigationApiService implements NavigationService {
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./move"), moveRequest);
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
   }
 }

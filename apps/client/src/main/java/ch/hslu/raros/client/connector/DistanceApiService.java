@@ -25,11 +25,11 @@ class DistanceApiService implements DistanceService {
       .GET()
       .build();
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, Distance.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, Distance.class));
+
   }
 
   @Override
@@ -39,9 +39,9 @@ class DistanceApiService implements DistanceService {
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate-sensor"), new Rotation(angle));
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient.sendAsync(request, HttpResponse.BodyHandlers.discarding())
-        .thenApply(HttpResponse::body);
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.discarding())
+      .thenApply(HttpResponse::body);
+
   }
 }

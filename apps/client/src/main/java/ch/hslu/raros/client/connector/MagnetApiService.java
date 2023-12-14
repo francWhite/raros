@@ -23,11 +23,9 @@ class MagnetApiService implements MagnetService {
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri, magnetState);
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.discarding())
-        .thenApply(HttpResponse::body);
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.discarding())
+      .thenApply(HttpResponse::body);
+
   }
 }
-

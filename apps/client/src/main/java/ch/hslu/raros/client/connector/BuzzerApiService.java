@@ -24,11 +24,10 @@ class BuzzerApiService implements BuzzerService {
     var tone = new Tone(frequency, duration);
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./tone"), tone);
 
-    try (var httpClient = HttpClient.newHttpClient()) {
-      return httpClient
-        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
-        .thenApply(HttpResponse::body)
-        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
-    }
+    return HttpClient.newHttpClient()
+      .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+      .thenApply(HttpResponse::body)
+      .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+
   }
 }
