@@ -46,5 +46,15 @@ public interface NavigationService {
    * @return CompletableFuture<ActionInvocationResult> The result of the action invocation.
    */
   CompletableFuture<ActionInvocationResult> Rotate(double angle, Direction direction);
+
+  /**
+   * Turns the robot by the given angle and radius.
+   *
+   * @param angle     The angle to turn in degrees. The angle must be between 0° and 180°.
+   * @param radius    The radius to turn in meters.
+   * @param direction The direction to turn in (only left and right are possible)
+   * @return CompletableFuture<ActionInvocationResult> The result of the action invocation.
+   */
+  CompletableFuture<ActionInvocationResult> Turn(double angle, double radius, Direction direction);
 }
 

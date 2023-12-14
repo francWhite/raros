@@ -175,6 +175,8 @@ public class InteractiveExample {
     System.out.println("  rla to rotate left async");
     System.out.println("  rr to rotate right");
     System.out.println("  rra to rotate right async");
+    System.out.println("  tl to turn left");
+    System.out.println("  tr to turn right");
     System.out.println("  q to quit");
 
     while (true) {
@@ -259,6 +261,28 @@ public class InteractiveExample {
           robotController.RotateRightAsync(angle);
           break;
         }
+        case "tl": {
+          var turnRequest = getTurnRequest(scanner);
+          System.out.println("Turning left and waiting for completion...");
+          if (turnRequest.radius().isPresent()) {
+            robotController.TurnLeft(turnRequest.angle(), turnRequest.radius().get());
+          } else {
+            robotController.TurnLeft(turnRequest.angle());
+          }
+          System.out.println("Finished turning");
+          break;
+        }
+        case "tr": {
+          var turnRequest = getTurnRequest(scanner);
+          System.out.println("Turning right and waiting for completion...");
+          if (turnRequest.radius().isPresent()) {
+            robotController.TurnRight(turnRequest.angle(), turnRequest.radius().get());
+          } else {
+            robotController.TurnRight(turnRequest.angle());
+          }
+          System.out.println("Finished turning");
+          break;
+        }
         case "q":
           return;
         default:
@@ -300,5 +324,25 @@ public class InteractiveExample {
   private static double getAngle(Scanner scanner) {
     System.out.print("Enter angle: ");
     return scanner.nextDouble();
+  }
+
+  private static double getRadius(Scanner scanner) {
+    System.out.print("Enter radius: ");
+    return scanner.nextDouble();
+  }
+
+  private record TurnRequest(double angle, Optional<Double> radius) {
+  }
+
+  private static TurnRequest getTurnRequest(Scanner scanner) {
+    System.out.print("With radius? (y/n): ");
+    var withRadius = scanner.next();
+    var angle = getAngle(scanner);
+    if (withRadius.equals("y")) {
+      var radius = getRadius(scanner);
+      return new TurnRequest(angle, Optional.of(radius));
+    } else {
+      return new TurnRequest(angle, Optional.empty());
+    }
   }
 }

@@ -96,13 +96,13 @@ public interface RobotController {
 
   /**
    * Moves the robot forward indefinitely.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    */
   void MoveForwardAsync();
 
   /**
    * Moves the robot forward by the specified distance.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot forward in m.
    */
@@ -110,7 +110,7 @@ public interface RobotController {
 
   /**
    * Moves the robot forward by the specified distance.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot forward in m.
    * @param speed    The speed to move the robot forward in m/s.
@@ -137,13 +137,13 @@ public interface RobotController {
 
   /**
    * Moves the robot backward indefinitely.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    */
   void MoveBackwardAsync();
 
   /**
    * Moves the robot backward by the specified distance.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot backward in m.
    */
@@ -151,7 +151,7 @@ public interface RobotController {
 
   /**
    * Moves the robot backward by the specified distance.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot backward in m.
    * @param speed    The speed at which the robot moves forward in m/s.
@@ -168,7 +168,7 @@ public interface RobotController {
 
   /**
    * Rotates the robot to the left by the specified angle.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
@@ -184,10 +184,78 @@ public interface RobotController {
 
   /**
    * Rotates the robot to the right by the specified angle.
-   * This method will return immediately, additional calls to this method will cancel the current movement and queue the requested movement.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
   void RotateRightAsync(double angle);
-}
 
+  /**
+   * Turns the robot to the left by the specified angle.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void TurnLeft(double angle);
+
+  /**
+   * Turns the robot to the left by the specified angle.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void TurnLeftAsync(double angle);
+
+
+  /**
+   * Turns the robot to the left by the specified angle and radius.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   * @param radius The radius of the turn in m.
+   */
+  void TurnLeft(double angle, double radius);
+
+  /**
+   * Turns the robot to the left by the specified angle and radius.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   * @param radius The radius of the turn in m.
+   */
+  void TurnLeftAsync(double angle, double radius);
+
+  /**
+   * Turns the robot to the right by the specified angle.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void TurnRight(double angle);
+
+  /**
+   * Turns the robot to the right by the specified angle.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   */
+  void TurnRightAsync(double angle);
+
+  /**
+   * Turns the robot to the right by the specified angle and radius.
+   * This method will block until the robot has rotated by the specified angle.
+   *
+   * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   * @param radius The radius of the turn in m.
+   */
+  void TurnRight(double angle, double radius);
+
+  /**
+   * Turns the robot to the right by the specified angle and radius.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
+   * @param radius The radius of the turn in m.
+   */
+  void TurnRightAsync(double angle, double radius);
+}
