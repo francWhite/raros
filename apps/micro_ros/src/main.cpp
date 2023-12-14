@@ -44,7 +44,7 @@ rclc_support_t support;
 rcl_allocator_t allocator;
 rcl_node_t node;
 rclc_executor_t executor, executor_stop;
-rcl_subscription_t subscription_stop, subscription_move;
+rcl_subscription_t subscription_stop, subscription_move, subscription_turn;
 rcl_publisher_t publisher_status, publisher_log, publisher_feedback;
 bool move_cancelled = false;
 
@@ -66,6 +66,11 @@ void stop_callback(const void *msgin) {
 void move_callback(const void *msgin) {
     const auto *movement_msg = (const raros_interfaces__msg__StepperMovement *) msgin;
     move(movement_msg->left, movement_msg->right);
+}
+
+void turn_callback(const void *msgin) {
+    const auto *movement_msg = (const raros_interfaces__msg__StepperMovement *) msgin;
+    turn(movement_msg->left, movement_msg->right);
 }
 
 void publish_status(bool moving) {
@@ -105,6 +110,12 @@ bool create_entities() {
             ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperMovement),
             "arduino_stepper/move"));
 
+    RCCHECK(rclc_subscription_init_default(
+            &subscription_turn,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperMovement),
+            "arduino_stepper/turn"));
+
     // create publishers
     RCCHECK(rclc_publisher_init_default(
             &publisher_status,
@@ -125,11 +136,13 @@ bool create_entities() {
             "arduino_stepper/feedback"));
 
     // create executors
-    RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
+    RCCHECK(rclc_executor_init(&executor, &support.context, 2, &allocator));
     RCCHECK(rclc_executor_init(&executor_stop, &support.context, 1, &allocator));
 
     // add subscription to executor
     RCCHECK(rclc_executor_add_subscription(&executor, &subscription_move, &msg_stepper_movement, &move_callback,
+                                           ON_NEW_DATA));
+    RCCHECK(rclc_executor_add_subscription(&executor, &subscription_turn, &msg_stepper_movement, &turn_callback,
                                            ON_NEW_DATA));
     RCCHECK(rclc_executor_add_subscription(&executor_stop, &subscription_stop, &msg_empty, &stop_callback,
                                            ON_NEW_DATA));
@@ -144,6 +157,7 @@ void destroy_entities() {
 
     RCSOFTCHECK(rcl_subscription_fini(&subscription_stop, &node));
     RCSOFTCHECK(rcl_subscription_fini(&subscription_move, &node));
+    RCSOFTCHECK(rcl_subscription_fini(&subscription_turn, &node));
     RCSOFTCHECK(rcl_publisher_fini(&publisher_status, &node));
     RCSOFTCHECK(rcl_publisher_fini(&publisher_log, &node));
     RCSOFTCHECK(rcl_publisher_fini(&publisher_feedback, &node));
@@ -169,8 +183,8 @@ void stop_move() {
     publish_log("stopped motors");
 }
 
-void move(raros_interfaces__msg__StepperInstruction instruction_left,
-          raros_interfaces__msg__StepperInstruction instruction_right) {
+void begin_movement(raros_interfaces__msg__StepperInstruction instruction_left,
+                    raros_interfaces__msg__StepperInstruction instruction_right) {
     publish_status(true);
     toggle_power_supply(true);
     move_cancelled = false;
@@ -179,6 +193,19 @@ void move(raros_interfaces__msg__StepperInstruction instruction_left,
                 String(instruction_left.speed) + " RPM");
     publish_log("moving right stepper " + String(instruction_right.steps) + " steps at " +
                 String(instruction_right.speed) + " RPM");
+}
+
+void end_movement() {
+    publish_feedback(0, 0);
+    publish_log("finished movement");
+    toggle_power_supply(false);
+    publish_status(false);
+}
+
+void move(raros_interfaces__msg__StepperInstruction instruction_left,
+          raros_interfaces__msg__StepperInstruction instruction_right) {
+
+    begin_movement(instruction_left, instruction_right);
 
     int steps_right_direction = instruction_right.steps > 0 ? 1 : -1;
     int steps_right_remaining = abs(instruction_right.steps);
@@ -206,10 +233,52 @@ void move(raros_interfaces__msg__StepperInstruction instruction_left,
         }
     }
 
-    publish_feedback(0, 0);
-    publish_log("finished movement");
-    toggle_power_supply(false);
-    publish_status(false);
+    end_movement();
+}
+
+void turn(raros_interfaces__msg__StepperInstruction instruction_left,
+          raros_interfaces__msg__StepperInstruction instruction_right) {
+
+    begin_movement(instruction_left, instruction_right);
+
+    bool left_turn = instruction_right.steps > instruction_left.steps;
+    int steps_min = min(instruction_left.steps, instruction_right.steps);
+    int steps_max = max(instruction_left.steps, instruction_right.steps);
+    int steps_remaining = steps_min;
+    int steps_done = 0;
+
+    double factor = double(steps_max) / double(steps_min);
+    double delta = 0;
+
+    motor_left.setSpeed(instruction_left.speed);
+    motor_right.setSpeed(instruction_right.speed);
+
+    while (steps_remaining > 0 && !move_cancelled) {
+        if (steps_done++ % FEEDBACK_INTERVAL == 0) {
+            rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
+            publish_feedback(steps_remaining, steps_remaining);
+        }
+
+        int steps_to_move = (int) factor;
+        delta += factor - steps_to_move;
+
+        if (delta >= 1) {
+            delta -= 1;
+            steps_to_move += 1;
+        }
+
+        if (left_turn) {
+            motor_left.step(1);
+            motor_right.step(-steps_to_move);
+        } else {
+            motor_left.step(steps_to_move);
+            motor_right.step(-1);
+        }
+
+        steps_remaining--;
+    }
+
+    end_movement();
 }
 
 // Arduino functions

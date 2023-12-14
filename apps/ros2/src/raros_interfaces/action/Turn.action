@@ -1,0 +1,6 @@
+float32 angle               # in degrees
+float64 radius              # in meters
+Direction direction         # DIRECTION_LEFT(3) or DIRECTION_RIGHT(4)
+---
+---
+float32 remaining_angle     # in degrees
