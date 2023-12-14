@@ -51,6 +51,22 @@ navigationRouter.post('/rotate', async (req: Request<undefined, undefined, Rotat
   );
 });
 
+navigationRouter.post('/turn', async (req: Request<undefined, undefined, TurnRequest>, res: Response) => {
+  console.log(req.originalUrl, req.body);
+
+  const requestData = { ...req.body, direction: { value: req.body.direction } };
+  rosService.callService(
+    '/raros/action_api/navigation/turn',
+    'raros_interfaces/srv/ActionTurn',
+    requestData,
+    (response: ActionInvocationResult) => {
+      const uidString = decode(response.goal_id.uuid);
+      res.json({ goal_id: uidString }).send();
+    },
+    (error) => res.status(500).send(error),
+  );
+});
+
 type MoveRequest = {
   distance: number;
   speed: number;
@@ -59,5 +75,11 @@ type MoveRequest = {
 
 type RotateRequest = {
   angle: number;
+  direction: number;
+};
+
+type TurnRequest = {
+  angle: number;
+  radius: number;
   direction: number;
 };

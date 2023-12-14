@@ -16,6 +16,9 @@ class NavigationApiService implements NavigationService {
   private record RotateRequest(double angle, Direction direction) {
   }
 
+  private record TurnRequest(double angle, double radius, Direction direction) {
+  }
+
   private final URI apiUri;
 
   public NavigationApiService(URI apiBaseUri) {
@@ -59,6 +62,24 @@ class NavigationApiService implements NavigationService {
       throw new IllegalArgumentException("Only left and right are supported as directions.");
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate"), new RotateRequest(angle, direction));
+
+    try (var httpClient = HttpClient.newHttpClient()) {
+      return httpClient
+        .sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        .thenApply(HttpResponse::body)
+        .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+    }
+  }
+
+  @Override
+  public CompletableFuture<ActionInvocationResult> Turn(double angle, double radius, Direction direction) {
+    if (angle < 0 || angle > 180)
+      throw new IllegalArgumentException("The angle must be between 0° and 180°.");
+
+    if (direction != Direction.Left && direction != Direction.Right)
+      throw new IllegalArgumentException("Only left and right are supported as directions.");
+
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./turn"), new TurnRequest(angle, radius, direction));
 
     try (var httpClient = HttpClient.newHttpClient()) {
       return httpClient

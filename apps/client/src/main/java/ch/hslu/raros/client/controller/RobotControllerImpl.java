@@ -159,4 +159,48 @@ class RobotControllerImpl implements RobotController {
   public void RotateRightAsync(double angle) {
     this.navigationService.Rotate(angle, Direction.Right);
   }
+
+  @Override
+  public void TurnLeft(double angle) {
+    var action = this.navigationService.Turn(angle, 0, Direction.Left);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void TurnLeftAsync(double angle) {
+    this.navigationService.Turn(angle, 0, Direction.Left);
+  }
+
+  @Override
+  public void TurnLeft(double angle, double radius) {
+    var action = this.navigationService.Turn(angle, radius, Direction.Left);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void TurnLeftAsync(double angle, double radius) {
+    this.navigationService.Turn(angle, radius, Direction.Left);
+  }
+
+  @Override
+  public void TurnRight(double angle) {
+    var action = this.navigationService.Turn(angle, 0, Direction.Right);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void TurnRightAsync(double angle) {
+    this.navigationService.Turn(angle, 0, Direction.Right);
+  }
+
+  @Override
+  public void TurnRight(double angle, double radius) {
+    var action = this.navigationService.Turn(angle, radius, Direction.Right);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void TurnRightAsync(double angle, double radius) {
+    this.navigationService.Turn(angle, radius, Direction.Right);
+  }
 }
