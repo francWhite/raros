@@ -27,4 +27,8 @@ public class ServiceFactory {
   public static NavigationService createNavigationService(URI apiBaseUri) {
     return new NavigationApiService(apiBaseUri);
   }
+
+  public static StatusService createStatusService(URI apiBaseUri) {
+    return new StatusApiService(apiBaseUri);
+  }
 }
