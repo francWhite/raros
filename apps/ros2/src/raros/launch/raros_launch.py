@@ -62,7 +62,8 @@ def generate_launch_description():
             package='raros',
             namespace='raros',
             executable='collision_detection',
-            name='collision_detection'
+            name='collision_detection',
+            parameters=[config]
         ),
         Node(
             package='raros',
