@@ -15,6 +15,17 @@ raros:
       gain: 16
       integration_time: 120
 
+  range_sensor:
+    ros__parameters:
+      active: true
+      pwm_pin_servo: 12
+      sensor_front:
+        trigger_pin: 23
+        echo_pin: 24
+      sensor_back:
+        trigger_pin: 8
+        echo_pin: 7
+
   camera:
     ros__parameters:
       active: true
