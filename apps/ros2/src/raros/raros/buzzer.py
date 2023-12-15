@@ -13,11 +13,20 @@ from std_msgs.msg import Bool
 class Buzzer(Node):
     def __init__(self):
         super().__init__('buzzer')
+        self.active, self.pin = self.init_params()
+        if not self.active:
+            return
         self.get_logger().info('buzzer node started')
         self.action_server = ActionServer(self, PlayTone, 'buzzer/play_tone', self.play_tone_callback)
         self.update_play_tone_status_publisher = self.create_publisher(Bool, 'status/playing_tone', 10)
-        self.pin = 33
         self.buzzer: Optional[GPIO.PWM] = None
+
+    def init_params(self):
+        self.declare_parameter('active', True)
+        self.declare_parameter('pin', 33)
+        active = self.get_parameter('active').get_parameter_value().bool_value
+        pin = self.get_parameter('pin').get_parameter_value().integer_value
+        return active, pin
 
     def setup_gpio(self):
         GPIO.setmode(GPIO.BOARD)
@@ -51,7 +60,11 @@ class Buzzer(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+
     node = Buzzer()
+    if not node.active:
+        node.get_logger().info('buzzer node not active, exiting')
+        return
 
     try:
         node.setup_gpio()
