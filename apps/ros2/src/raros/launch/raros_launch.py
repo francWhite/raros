@@ -7,6 +7,12 @@ def generate_launch_description():
         Node(
             package='raros',
             namespace='raros',
+            executable='status',
+            name='status'
+        ),
+        Node(
+            package='raros',
+            namespace='raros',
             executable='action_api',
             name='action_api'
         ),

@@ -9,6 +9,7 @@ import { actionRouter } from './routes/action.routes';
 import { colorRouter } from './routes/color.routes';
 import { distanceRouter } from './routes/distance.routes';
 import { navigationRouter } from './routes/navigation.routes';
+import { statusRouter } from './routes/status.routes';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ app.use('/api/actions', actionRouter);
 app.use('/api/color', colorRouter);
 app.use('/api/distance', distanceRouter);
 app.use('/api/navigation', navigationRouter);
+app.use('/api/status', statusRouter);
 
 rosService.connect();
 

@@ -7,6 +7,7 @@ import rclpy
 from raros_interfaces.action import PlayTone
 from rclpy.action import ActionServer
 from rclpy.node import Node
+from std_msgs.msg import Bool
 
 
 class Buzzer(Node):
@@ -14,6 +15,7 @@ class Buzzer(Node):
         super().__init__('buzzer')
         self.get_logger().info('buzzer node started')
         self.action_server = ActionServer(self, PlayTone, 'buzzer/play_tone', self.play_tone_callback)
+        self.update_play_tone_status_publisher = self.create_publisher(Bool, 'status/playing_tone', 10)
         self.pin = 33
         self.buzzer: Optional[GPIO.PWM] = None
 
@@ -25,6 +27,7 @@ class Buzzer(Node):
     def play_tone_callback(self, goal_handle):
         request = goal_handle.request
         self.get_logger().debug(f'executing goal for request: "{request}"')
+        self.update_play_tone_status_publisher.publish(Bool(data=True))
 
         feedback_msg = PlayTone.Feedback()
         feedback_msg.remaining = request.duration
@@ -39,6 +42,7 @@ class Buzzer(Node):
             goal_handle.publish_feedback(feedback_msg)
 
         self.buzzer.stop()
+        self.update_play_tone_status_publisher.publish(Bool(data=False))
         goal_handle.succeed()
 
         result = PlayTone.Result()
