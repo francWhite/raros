@@ -20,6 +20,7 @@ public class InteractiveExample {
     System.out.println("  c to get color");
     System.out.println("  d to get distance or rotate distance sensor");
     System.out.println("  n to navigate");
+    System.out.println("  ca to control camera");
 
     var input = scanner.next();
     switch (input) {
@@ -40,6 +41,9 @@ public class InteractiveExample {
         break;
       case "n":
         navigationExample(robotController, scanner);
+        break;
+      case "ca":
+        cameraExample(robotController, scanner);
         break;
     }
   }
@@ -309,6 +313,37 @@ public class InteractiveExample {
           System.out.println("Finished turning");
           break;
         }
+        case "q":
+          return;
+        default:
+          System.out.println("Invalid input.");
+          break;
+      }
+    }
+  }
+
+  private static void cameraExample(RobotController robotController, Scanner scanner) {
+    System.out.println("Press");
+    System.out.println("  c to capture image");
+    System.out.println("  r to rotate camera");
+    System.out.println("  q to quit");
+
+    while (true) {
+      System.out.print("Enter input: ");
+      var input = scanner.next();
+      switch (input) {
+        case "c":
+          var image = robotController.CaptureImage();
+          System.out.println("image: ");
+          System.out.println(image);
+          break;
+        case "r":
+          System.out.print("Enter horizontal angle: ");
+          var angleHorizontal = scanner.nextInt();
+          System.out.print("Enter vertical angle: ");
+          var angleVertical = scanner.nextInt();
+          robotController.RotateCamera(angleHorizontal, angleVertical);
+          break;
         case "q":
           return;
         default:

@@ -306,4 +306,28 @@ public interface RobotController {
    * @param radius The radius of the turn in m.
    */
   void TurnRightAsync(double angle, double radius);
+
+  /**
+   * Captures an image from the camera.
+   *
+   * @return String The captured image as a base64 encoded string.
+   */
+  String CaptureImage();
+
+  /**
+   * Captures an image from the camera.
+   *
+   * @param angleHorizontal The horizontal angle to rotate the camera to. The angle must be between -90 and 90.
+   * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
+   * @return String The captured image as a base64 encoded string.
+   */
+  String CaptureImage(int angleHorizontal, int angleVertical);
+
+  /**
+   * Rotates the camera to a given angle.
+   *
+   * @param angleHorizontal The horizontal angle to rotate the camera to. The angle must be between -90 and 90.
+   * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
+   */
+  void RotateCamera(int angleHorizontal, int angleVertical);
 }

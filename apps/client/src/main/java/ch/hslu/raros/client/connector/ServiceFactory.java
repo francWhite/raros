@@ -31,4 +31,8 @@ public class ServiceFactory {
   public static StatusService createStatusService(URI apiBaseUri) {
     return new StatusApiService(apiBaseUri);
   }
+
+  public static CameraService createCameraService(URI apiBaseUri) {
+    return new CameraApiService(apiBaseUri);
+  }
 }

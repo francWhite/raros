@@ -13,7 +13,8 @@ public class RobotControllerFactory {
       ServiceFactory.createColorService(apiBaseUri),
       ServiceFactory.createDistanceService(apiBaseUri),
       ServiceFactory.createNavigationService(apiBaseUri),
-      ServiceFactory.createStatusService(apiBaseUri)
+      ServiceFactory.createStatusService(apiBaseUri),
+      ServiceFactory.createCameraService(apiBaseUri)
     );
   }
 }
