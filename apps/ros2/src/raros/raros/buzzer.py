@@ -29,7 +29,7 @@ class Buzzer(Node):
         return active, pin
 
     def setup_gpio(self):
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT)
         self.buzzer = GPIO.PWM(self.pin, 1000)
 

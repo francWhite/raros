@@ -2,11 +2,11 @@ raros:
   magnet:
     ros__parameters:
       active: true
-      pin: 22
+      pin: 25
   buzzer:
     ros__parameters:
       active: true
-      pin: 33
+      pin: 13
   camera:
     ros__parameters:
       active: true
