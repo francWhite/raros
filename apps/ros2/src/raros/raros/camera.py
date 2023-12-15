@@ -1,11 +1,14 @@
+import base64
 from typing import Optional
 
 import board
+import cv2
 import pwmio
 from adafruit_motor import servo
+from cv2 import VideoCapture
 
 import rclpy
-from raros_interfaces.srv import RotateCamera
+from raros_interfaces.srv import RotateCamera, CaptureImage
 from rclpy.node import Node
 from rclpy.timer import Timer
 
@@ -15,8 +18,10 @@ class Camera(Node):
         super().__init__('camera')
         self.get_logger().info('camera node started')
 
-        self.service = self.create_service(RotateCamera, 'camera/rotate', self.rotate_callback)
+        self.rotate_service = self.create_service(RotateCamera, 'camera/rotate', self.rotate_callback)
+        self.capture_service = self.create_service(CaptureImage, 'camera/capture', self.capture_callback)
 
+        self.camera: Optional[VideoCapture] = None
         self.pwm_servo_horizontal: Optional[pwmio.PWMOut] = None
         self.pwm_servo_vertical: Optional[pwmio.PWMOut] = None
         self.servo_horizontal: Optional[servo.Servo] = None
@@ -30,10 +35,27 @@ class Camera(Node):
         self.servo_horizontal = servo.Servo(self.pwm_servo_horizontal, min_pulse=600, max_pulse=2300,
                                             actuation_range=180)
         self.servo_vertical = servo.Servo(self.pwm_servo_vertical, min_pulse=600, max_pulse=2300, actuation_range=180)
+        self.camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
+        self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+        self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
     def cleanup(self):
         self.pwm_servo_horizontal.deinit()
         self.pwm_servo_vertical.deinit()
+        self.camera.release()
+
+    def capture_callback(self, request, response: CaptureImage.Response):
+        self.get_logger().info(f'capturing image')
+
+        ret, frame = self.camera.read()
+        if not ret:
+            self.get_logger().warn('could not read frame')
+            return response
+
+        ret, encoded_frame = cv2.imencode('.jpg', frame)
+        base64_str = base64.b64encode(encoded_frame.tobytes()).decode('utf-8')
+        response.image_base64 = base64_str
+        return response
 
     def rotate_callback(self, request: RotateCamera.Request, response):
         self.get_logger().info(f'rotating to {request.angle_horizontal}°, {request.angle_vertical}°')
