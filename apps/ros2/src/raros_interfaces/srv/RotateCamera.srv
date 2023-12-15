@@ -1,0 +1,3 @@
+float32 angle_horizontal     # angle of the servo in degrees (-90 <= x <= 90)
+float32 angle_vertical       # angle of the servo in degrees (-90 <= x <= 90)
+---

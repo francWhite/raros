@@ -31,6 +31,7 @@ setup(
             'navigation = raros.navigation.navigation:main',
             'collision_detection = raros.navigation.collision_detection:main',
             'status = raros.status:main',
+            'camera = raros.camera:main',
         ],
     },
 )
