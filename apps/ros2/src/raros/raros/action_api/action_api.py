@@ -59,6 +59,7 @@ class ActionApi(Node):
         self.get_logger().info(f'move_callback received: "{request}"')
         goal_msg = Move.Goal()
         goal_msg.speed = request.speed
+        goal_msg.speed_start = request.speed_start
         goal_msg.distance = request.distance
         goal_msg.direction = request.direction
         goal_id = self.move_action_handler.send_goal(goal_msg)

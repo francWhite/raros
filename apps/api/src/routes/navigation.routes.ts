@@ -70,6 +70,7 @@ navigationRouter.post('/turn', async (req: Request<undefined, undefined, TurnReq
 type MoveRequest = {
   distance: number;
   speed: number;
+  speed_start: number;
   direction: number;
 };
 

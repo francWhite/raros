@@ -10,6 +10,10 @@ from rclpy.node import Node
 from std_msgs.msg import Empty as EmptyMsg
 from std_srvs.srv import Empty as EmptySrv
 
+DEFAULT_MOVE_SPEED = 30
+DEFAULT_TURN_SPEED = 20
+DEFAULT_ROTATE_SPEED = 15
+
 
 class Navigation(Node):
     def __init__(self):
@@ -43,9 +47,11 @@ class Navigation(Node):
 
         stepper_msg = StepperMovement()
         stepper_msg.left.steps = self.converter.distance_to_steps(request.distance, request.direction)
-        stepper_msg.left.speed = int(request.speed) if request.speed != -1 else 30
+        stepper_msg.left.speed = request.speed if request.speed != -1 else DEFAULT_MOVE_SPEED
+        stepper_msg.left.speed_start = request.speed_start if request.speed_start != -1 else DEFAULT_MOVE_SPEED
         stepper_msg.right.steps = self.converter.distance_to_steps(request.distance, request.direction)
-        stepper_msg.right.speed = int(request.speed) if request.speed != -1 else 30
+        stepper_msg.right.speed = request.speed if request.speed != -1 else DEFAULT_MOVE_SPEED
+        stepper_msg.right.speed_start = request.speed_start if request.speed_start != -1 else DEFAULT_MOVE_SPEED
 
         self.stepper_move_publisher.publish(stepper_msg)
 
@@ -76,9 +82,11 @@ class Navigation(Node):
         steps_left, steps_right = self.converter.angle_to_steps_for_rotation(request.angle, request.direction)
         stepper_msg = StepperMovement()
         stepper_msg.left.steps = steps_left
-        stepper_msg.left.speed = 15
+        stepper_msg.left.speed = DEFAULT_ROTATE_SPEED
+        stepper_msg.left.speed_start = stepper_msg.left.speed
         stepper_msg.right.steps = steps_right
-        stepper_msg.right.speed = 15
+        stepper_msg.right.speed = DEFAULT_ROTATE_SPEED
+        stepper_msg.right.speed_start = stepper_msg.right.speed
 
         self.stepper_move_publisher.publish(stepper_msg)
 
@@ -125,12 +133,14 @@ class Navigation(Node):
                                                                                     request.direction)
 
         speed_left, speed_right = self.converter.turning_steps_to_speed(steps_left, steps_right,
-                                                                        30, request.direction)
+                                                                        DEFAULT_MOVE_SPEED, request.direction)
         stepper_msg = StepperMovement()
         stepper_msg.left.steps = steps_left
         stepper_msg.left.speed = speed_left
+        stepper_msg.left.speed_start = stepper_msg.left.speed
         stepper_msg.right.steps = steps_right
         stepper_msg.right.speed = speed_right
+        stepper_msg.right.speed_start = stepper_msg.right.speed
 
         self.stepper_turn_publisher.publish(stepper_msg)
 
@@ -139,9 +149,11 @@ class Navigation(Node):
 
         stepper_msg = StepperMovement()
         stepper_msg.left.steps = steps_left
-        stepper_msg.left.speed = 20
+        stepper_msg.left.speed = DEFAULT_TURN_SPEED
+        stepper_msg.left.speed_start = stepper_msg.left.speed
         stepper_msg.right.steps = steps_right
-        stepper_msg.right.speed = 20
+        stepper_msg.right.speed = DEFAULT_TURN_SPEED
+        stepper_msg.right.speed_start = stepper_msg.right.speed
 
         # as the robot is turning on the spot and therefore only one motor is active,
         # the normal stepper movement publisher is used
