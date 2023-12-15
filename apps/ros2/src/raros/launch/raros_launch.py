@@ -51,5 +51,11 @@ def generate_launch_description():
             namespace='raros',
             executable='collision_detection',
             name='collision_detection'
-        )
+        ),
+        Node(
+            package='raros',
+            namespace='raros',
+            executable='camera',
+            name='camera'
+        ),
     ])

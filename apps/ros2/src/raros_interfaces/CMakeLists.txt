@@ -39,6 +39,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/Status.msg"
   "srv/SetMagnetState.srv"
   "srv/RotateRangeSensor.srv"
+  "srv/RotateCamera.srv"
   "srv/GetStatus.srv"
   "srv/ActionPlayTone.srv"
   "srv/ActionCompleted.srv"

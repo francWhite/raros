@@ -10,6 +10,7 @@ import { colorRouter } from './routes/color.routes';
 import { distanceRouter } from './routes/distance.routes';
 import { navigationRouter } from './routes/navigation.routes';
 import { statusRouter } from './routes/status.routes';
+import { cameraRouter } from './routes/camera.routes';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api/color', colorRouter);
 app.use('/api/distance', distanceRouter);
 app.use('/api/navigation', navigationRouter);
 app.use('/api/status', statusRouter);
+app.use('/api/camera', cameraRouter);
 
 rosService.connect();
 

@@ -43,7 +43,6 @@ class RosService {
     topic.publish(msg);
   }
 
-  // TODO add timeout
   callService<TResponse>(
     name: string,
     serviceType: string,
@@ -57,7 +56,12 @@ class RosService {
       serviceType: serviceType,
     });
 
+    const timeout = setTimeout(() => {
+      errorCallback && errorCallback('no response received within 5 second');
+    }, 5000);
+
     service.callService(new ServiceRequest(requestData), callback, errorCallback);
+    clearTimeout(timeout);
   }
 
   sendGoal(serverName: string, actionName: string, goalMessage: unknown, statusCallback: (status: unknown) => void) {
