@@ -32,11 +32,22 @@ public interface NavigationService {
    * Moves the robot forward for the given distance.
    *
    * @param distance  The distance to move in meters.
-   * @param speed     The speed to move in meters per second.
+   * @param speed     The speed to move in % (0-100%).
    * @param direction The direction to move in (only forward and backward are possible)
    * @return CompletableFuture<ActionInvocationResult> The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Move(double distance, double speed, Direction direction);
+  CompletableFuture<ActionInvocationResult> Move(double distance, int speed, Direction direction);
+
+  /**
+   * Moves the robot forward for the given distance using acceleration.
+   *
+   * @param distance   The distance to move in meters.
+   * @param startSpeed The speed at which the robot starts moving forward in % (0-100%).
+   * @param endSpeed   The desired end speed % (0-100%).
+   * @param direction  The direction to move in (only forward and backward are possible)
+   * @return CompletableFuture<ActionInvocationResult> The result of the action invocation.
+   */
+  CompletableFuture<ActionInvocationResult> Move(double distance, int startSpeed, int endSpeed, Direction direction);
 
   /**
    * Rotates the robot by the given angle.

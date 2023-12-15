@@ -10,7 +10,10 @@ import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
 class NavigationApiService implements NavigationService {
-  private record MoveRequest(double distance, double speed, Direction direction) {
+  private static final int MAX_SPEED = 60;
+  private static final int DEFAULT_SPEED = 30;
+
+  private record MoveRequest(double distance, int startSpeed, int endSpeed, Direction direction) {
   }
 
   private record RotateRequest(double angle, Direction direction) {
@@ -39,17 +42,22 @@ class NavigationApiService implements NavigationService {
 
   @Override
   public CompletableFuture<ActionInvocationResult> Move(Direction direction) {
-    return Move(new MoveRequest(Math.pow(10, 4), -1d, direction));
+    return Move(new MoveRequest(Math.pow(10, 4), DEFAULT_SPEED, DEFAULT_SPEED, direction));
   }
 
   @Override
   public CompletableFuture<ActionInvocationResult> Move(double distance, Direction direction) {
-    return Move(new MoveRequest(distance, -1d, direction));
+    return Move(new MoveRequest(distance, DEFAULT_SPEED, DEFAULT_SPEED, direction));
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Move(double distance, double speed, Direction direction) {
-    return Move(new MoveRequest(distance, speed, direction));
+  public CompletableFuture<ActionInvocationResult> Move(double distance, int speed, Direction direction) {
+    return Move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(speed), ConvertSpeedPercentageToRPM(speed), direction));
+  }
+
+  @Override
+  public CompletableFuture<ActionInvocationResult> Move(double distance, int startSpeed, int endSpeed, Direction direction) {
+    return Move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(startSpeed), ConvertSpeedPercentageToRPM(endSpeed), direction));
   }
 
   @Override
@@ -96,5 +104,12 @@ class NavigationApiService implements NavigationService {
       .sendAsync(request, HttpResponse.BodyHandlers.ofString())
       .thenApply(HttpResponse::body)
       .thenApply(s -> JsonSerializer.deserialize(s, ActionInvocationResult.class));
+  }
+
+  private int ConvertSpeedPercentageToRPM(int speed) {
+    if (speed < 0 || speed > 100)
+      throw new IllegalArgumentException("The speed must be between 0% and 100%.");
+
+    return (int) Math.round(speed / 100.0 * MAX_SPEED);
   }
 }

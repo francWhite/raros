@@ -189,49 +189,51 @@ public class InteractiveExample {
           break;
         case "f": {
           var moveRequest = getMoveRequest(scanner);
-          if (moveRequest.speed().isPresent()) {
-            System.out.println("Moving forward and waiting for completion...");
-            robotController.MoveForward(moveRequest.distance(), moveRequest.speed().get());
-            System.out.println("Finished moving forward.");
-          } else {
-            System.out.println("Moving forward and waiting for completion...");
+          System.out.println("Moving forward and waiting for completion...");
+          if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
             robotController.MoveForward(moveRequest.distance());
-            System.out.println("Finished moving forward.");
+          } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
+            robotController.MoveForward(moveRequest.distance(), moveRequest.startSpeed().get());
+          } else {
+            robotController.MoveForward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
+          System.out.println("Finished moving forward.");
           break;
         }
         case "fa": {
           var moveRequest = getMoveRequest(scanner);
-          if (moveRequest.speed().isPresent()) {
-            System.out.println("Moving forward...");
-            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.speed().get());
-          } else {
-            System.out.println("Moving forward...");
+          System.out.println("Moving forward...");
+          if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
             robotController.MoveForwardAsync(moveRequest.distance());
+          } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
+            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
+          } else {
+            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           break;
         }
         case "b": {
           var moveRequest = getMoveRequest(scanner);
-          if (moveRequest.speed().isPresent()) {
-            System.out.println("Moving backward and waiting for completion...");
-            robotController.MoveBackward(moveRequest.distance(), moveRequest.speed().get());
-            System.out.println("Finished moving backward.");
-          } else {
-            System.out.println("Moving backward and waiting for completion...");
+          System.out.println("Moving backward and waiting for completion...");
+          if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
             robotController.MoveBackward(moveRequest.distance());
-            System.out.println("Finished moving backward.");
+          } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
+            robotController.MoveBackward(moveRequest.distance(), moveRequest.startSpeed().get());
+          } else {
+            robotController.MoveBackward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
+          System.out.println("Finished moving backward.");
           break;
         }
         case "ba": {
           var moveRequest = getMoveRequest(scanner);
-          if (moveRequest.speed().isPresent()) {
-            System.out.println("Moving backward...");
-            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.speed().get());
-          } else {
-            System.out.println("Moving backward...");
+          System.out.println("Moving backward...");
+          if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
             robotController.MoveBackwardAsync(moveRequest.distance());
+          } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
+            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
+          } else {
+            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           break;
         }
@@ -292,22 +294,31 @@ public class InteractiveExample {
     }
   }
 
-  private record MoveRequest(double distance, Optional<Double> speed) {
+  private record MoveRequest(double distance, Optional<Integer> startSpeed, Optional<Integer> endSpeed) {
   }
 
   private static MoveRequest getMoveRequest(Scanner scanner) {
     System.out.print("With speed? (y/n): ");
     var withSpeed = scanner.next();
+    System.out.print("Enter distance: ");
+    var distance = scanner.nextDouble();
+
     if (withSpeed.equals("y")) {
-      System.out.print("Enter distance: ");
-      var distance = scanner.nextDouble();
-      System.out.print("Enter speed: ");
-      var speed = scanner.nextDouble();
-      return new MoveRequest(distance, Optional.of(speed));
+      System.out.print("With acceleration? (y/n): ");
+      var withAcceleration = scanner.next();
+      if (withAcceleration.equals("y")) {
+        System.out.print("Enter start speed: ");
+        var startSpeed = scanner.nextInt();
+        System.out.print("Enter end speed: ");
+        var endSpeed = scanner.nextInt();
+        return new MoveRequest(distance, Optional.of(startSpeed), Optional.of(endSpeed));
+      } else {
+        System.out.print("Enter speed: ");
+        var speed = scanner.nextInt();
+        return new MoveRequest(distance, Optional.of(speed), Optional.of(speed));
+      }
     } else {
-      System.out.print("Enter distance: ");
-      var distance = scanner.nextDouble();
-      return new MoveRequest(distance, Optional.empty());
+      return new MoveRequest(distance, Optional.empty(), Optional.empty());
     }
   }
 

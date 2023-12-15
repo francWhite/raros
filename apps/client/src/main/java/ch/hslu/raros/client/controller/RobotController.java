@@ -90,9 +90,19 @@ public interface RobotController {
    * This method will block until the robot has reached the specified distance or an obstacle is detected.
    *
    * @param distance The distance to move the robot forward in m.
-   * @param speed    The speed at which the robot moves forward in m/s.
+   * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveForward(double distance, double speed);
+  void MoveForward(double distance, int speed);
+
+  /**
+   * Moves the robot forward by the specified distance using acceleration.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance   The distance to move the robot forward in m.
+   * @param startSpeed The speed at which the robot starts moving forward in % (0-100%).
+   * @param endSpeed   The desired end speed % (0-100%).
+   */
+  void MoveForward(double distance, int startSpeed, int endSpeed);
 
   /**
    * Moves the robot forward indefinitely.
@@ -113,9 +123,19 @@ public interface RobotController {
    * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot forward in m.
-   * @param speed    The speed to move the robot forward in m/s.
+   * @param speed    The speed to move the robot forward in % (0-100%).
    */
-  void MoveForwardAsync(double distance, double speed);
+  void MoveForwardAsync(double distance, int speed);
+
+  /**
+   * Moves the robot forward by the specified distance using acceleration.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param distance   The distance to move the robot forward in m.
+   * @param startSpeed The speed at which the robot starts moving forward in % (0-100%).
+   * @param endSpeed   The desired end speed % (0-100%).
+   */
+  void MoveForwardAsync(double distance, int startSpeed, int endSpeed);
 
 
   /**
@@ -131,9 +151,19 @@ public interface RobotController {
    * This method will block until the robot has reached the specified distance or an obstacle is detected.
    *
    * @param distance The distance to move the robot backward in m.
-   * @param speed    The speed at which the robot moves forward in m/s.
+   * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveBackward(double distance, double speed);
+  void MoveBackward(double distance, int speed);
+
+  /**
+   * Moves the robot backward by the specified distance using acceleration.
+   * This method will block until the robot has reached the specified distance or an obstacle is detected.
+   *
+   * @param distance   The distance to move the robot backward in m.
+   * @param startSpeed The speed at which the robot starts moving backward in % (0-100%).
+   * @param endSpeed   The desired end speed % (0-100%).
+   */
+  void MoveBackward(double distance, int startSpeed, int endSpeed);
 
   /**
    * Moves the robot backward indefinitely.
@@ -154,9 +184,19 @@ public interface RobotController {
    * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    *
    * @param distance The distance to move the robot backward in m.
-   * @param speed    The speed at which the robot moves forward in m/s.
+   * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveBackwardAsync(double distance, double speed);
+  void MoveBackwardAsync(double distance, int speed);
+
+  /**
+   * Moves the robot backward by the specified distance using acceleration.
+   * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
+   *
+   * @param distance   The distance to move the robot backward in m.
+   * @param startSpeed The speed at which the robot starts moving backward in % (0-100%).
+   * @param endSpeed   The desired end speed % (0-100%).
+   */
+  void MoveBackwardAsync(double distance, int startSpeed, int endSpeed);
 
   /**
    * Rotates the robot to the left by the specified angle.

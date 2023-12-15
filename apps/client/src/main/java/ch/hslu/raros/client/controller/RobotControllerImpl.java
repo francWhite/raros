@@ -91,8 +91,14 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
-  public void MoveForward(double distance, double speed) {
+  public void MoveForward(double distance, int speed) {
     var action = this.navigationService.Move(distance, speed, Direction.Forward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveForward(double distance, int startSpeed, int endSpeed) {
+    var action = this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Forward);
     this.actionAwaiter.WaitForAction(action);
   }
 
@@ -107,8 +113,13 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
-  public void MoveForwardAsync(double distance, double speed) {
+  public void MoveForwardAsync(double distance, int speed) {
     this.navigationService.Move(distance, speed, Direction.Forward);
+  }
+
+  @Override
+  public void MoveForwardAsync(double distance, int startSpeed, int endSpeed) {
+    this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Forward);
   }
 
   @Override
@@ -118,8 +129,14 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
-  public void MoveBackward(double distance, double speed) {
+  public void MoveBackward(double distance, int speed) {
     var action = this.navigationService.Move(distance, speed, Direction.Backward);
+    this.actionAwaiter.WaitForAction(action);
+  }
+
+  @Override
+  public void MoveBackward(double distance, int startSpeed, int endSpeed) {
+    var action = this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Backward);
     this.actionAwaiter.WaitForAction(action);
   }
 
@@ -134,8 +151,13 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
-  public void MoveBackwardAsync(double distance, double speed) {
+  public void MoveBackwardAsync(double distance, int speed) {
     this.navigationService.Move(distance, speed, Direction.Backward);
+  }
+
+  @Override
+  public void MoveBackwardAsync(double distance, int startSpeed, int endSpeed) {
+    this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Backward);
   }
 
   @Override
