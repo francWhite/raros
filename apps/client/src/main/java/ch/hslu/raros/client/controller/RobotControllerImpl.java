@@ -10,6 +10,7 @@ class RobotControllerImpl implements RobotController {
   private final DistanceService distanceService;
   private final NavigationService navigationService;
   private final StatusService statusService;
+  private final CameraService cameraService;
 
   public RobotControllerImpl(ActionAwaiter actionAwaiter,
                              MagnetService magnetService,
@@ -17,7 +18,8 @@ class RobotControllerImpl implements RobotController {
                              ColorService colorService,
                              DistanceService distanceService,
                              NavigationService navigationService,
-                             StatusService statusService) {
+                             StatusService statusService,
+                             CameraService cameraService) {
     this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
@@ -25,6 +27,7 @@ class RobotControllerImpl implements RobotController {
     this.distanceService = distanceService;
     this.navigationService = navigationService;
     this.statusService = statusService;
+    this.cameraService = cameraService;
   }
 
   @Override
@@ -232,5 +235,21 @@ class RobotControllerImpl implements RobotController {
   @Override
   public void TurnRightAsync(double angle, double radius) {
     this.navigationService.Turn(angle, radius, Direction.Right);
+  }
+
+  @Override
+  public String CaptureImage() {
+    return this.cameraService.CaptureImage().join();
+  }
+
+  @Override
+  public String CaptureImage(int angleHorizontal, int angleVertical) {
+    this.cameraService.RotateCamera(angleHorizontal, angleVertical).join();
+    return this.cameraService.CaptureImage().join();
+  }
+
+  @Override
+  public void RotateCamera(int angleHorizontal, int angleVertical) {
+    this.cameraService.RotateCamera(angleHorizontal, angleVertical).join();
   }
 }
