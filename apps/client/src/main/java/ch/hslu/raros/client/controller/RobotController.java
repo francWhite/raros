@@ -1,9 +1,17 @@
 package ch.hslu.raros.client.controller;
 
 import ch.hslu.raros.client.connector.Color;
+import ch.hslu.raros.client.connector.Status;
 
 //TODO (entire project): rename methods to match the camelCase naming convention
 public interface RobotController {
+
+  /**
+   * Gets the current status of the robot.
+   *
+   * @return The current status of the robot.
+   */
+  Status GetStatus();
 
   /**
    * Enables the magnet.

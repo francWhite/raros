@@ -9,19 +9,27 @@ class RobotControllerImpl implements RobotController {
   private final ColorService colorService;
   private final DistanceService distanceService;
   private final NavigationService navigationService;
+  private final StatusService statusService;
 
   public RobotControllerImpl(ActionAwaiter actionAwaiter,
                              MagnetService magnetService,
                              BuzzerService buzzerService,
                              ColorService colorService,
                              DistanceService distanceService,
-                             NavigationService navigationService) {
+                             NavigationService navigationService,
+                             StatusService statusService) {
     this.actionAwaiter = actionAwaiter;
     this.magnetService = magnetService;
     this.buzzerService = buzzerService;
     this.colorService = colorService;
     this.distanceService = distanceService;
     this.navigationService = navigationService;
+    this.statusService = statusService;
+  }
+
+  @Override
+  public Status GetStatus() {
+    return this.statusService.GetStatus().join();
   }
 
   @Override

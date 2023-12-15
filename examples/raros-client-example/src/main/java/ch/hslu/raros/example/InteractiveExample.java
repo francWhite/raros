@@ -14,6 +14,7 @@ public class InteractiveExample {
     var scanner = new Scanner(System.in);
 
     System.out.println("Press");
+    System.out.println("  s to get the current status");
     System.out.println("  m to control magnet");
     System.out.println("  b to control buzzer");
     System.out.println("  c to get color");
@@ -22,6 +23,9 @@ public class InteractiveExample {
 
     var input = scanner.next();
     switch (input) {
+      case "s":
+        statusExample(robotController, scanner);
+        break;
       case "m":
         magnetExample(robotController, scanner);
         break;
@@ -40,6 +44,26 @@ public class InteractiveExample {
     }
   }
 
+  private static void statusExample(RobotController robotController, Scanner scanner) {
+    System.out.println("Press");
+    System.out.println("  s to get the status");
+    System.out.println("  q to quit");
+
+    while (true) {
+      var input = scanner.next();
+      switch (input) {
+        case "s":
+          var status = robotController.GetStatus();
+          System.out.println(MessageFormat.format("Status: {0}", status));
+          break;
+        case "q":
+          return;
+        default:
+          System.out.println("Invalid input.");
+          break;
+      }
+    }
+  }
 
   private static void magnetExample(RobotController robotController, Scanner scanner) {
     System.out.println("Press");
