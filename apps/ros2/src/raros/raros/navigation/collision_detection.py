@@ -1,9 +1,10 @@
 import rclpy
 from raros_interfaces.action import PlayTone
+from raros_interfaces.msg import Distance
 from rclpy.action import ActionClient
 from rclpy.node import Node
+from std_msgs.msg import Bool
 from std_srvs.srv import Empty as EmptySrv
-from raros_interfaces.msg import Distance
 
 
 class CollisionDetection(Node):
@@ -18,6 +19,9 @@ class CollisionDetection(Node):
         while not self.stop_service_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('navigation/stop service not available, waiting...')
         self.get_logger().info('collision_detection node ready')
+
+        update_status_publisher = self.create_publisher(Bool, 'status/collision_detection_active', 10)
+        update_status_publisher.publish(Bool(data=True))
 
     def distance_callback(self, msg: Distance):
         if msg.front < 20 or msg.back < 20:

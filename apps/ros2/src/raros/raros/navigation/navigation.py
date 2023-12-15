@@ -26,9 +26,9 @@ class Navigation(Node):
         self.rotate_action_server = ActionServer(self, Rotate, 'navigation/rotate', self.rotate_action_callback)
         self.turn_action_server = ActionServer(self, Turn, 'navigation/turn', self.turn_action_callback)
 
-        self.stepper_move_publisher = self.create_publisher(StepperMovement, '/raros/arduino_stepper/move', 10)
-        self.stepper_turn_publisher = self.create_publisher(StepperMovement, '/raros/arduino_stepper/turn', 10)
-        self.stop_publisher = self.create_publisher(EmptyMsg, '/raros/arduino_stepper/stop', 10)
+        self.stepper_move_publisher = self.create_publisher(StepperMovement, 'arduino_stepper/move', 10)
+        self.stepper_turn_publisher = self.create_publisher(StepperMovement, 'arduino_stepper/turn', 10)
+        self.stop_publisher = self.create_publisher(EmptyMsg, 'arduino_stepper/stop', 10)
 
     def stop_callback(self, request, response):
         self.get_logger().info(f'received stop request')

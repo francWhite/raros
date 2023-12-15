@@ -29,7 +29,8 @@ setup(
             'color_sensor = raros.color_sensor:main',
             'range_sensor = raros.range_sensor:main',
             'navigation = raros.navigation.navigation:main',
-            'collision_detection = raros.navigation.collision_detection:main'
+            'collision_detection = raros.navigation.collision_detection:main',
+            'status = raros.status:main',
         ],
     },
 )

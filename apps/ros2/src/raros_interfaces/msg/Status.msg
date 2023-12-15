@@ -1,0 +1,5 @@
+bool is_available
+bool is_moving
+bool is_playing_tone
+bool is_magnet_active
+bool is_collision_detection_active
