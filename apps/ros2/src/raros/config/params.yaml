@@ -36,3 +36,17 @@ raros:
     ros__parameters:
       active: true
       threshold: 20
+
+  navigation:
+    ros__parameters:
+      active: true
+      steps_per_revolution: 1600
+      micro_steps: 4
+      wheel:
+        distance: 22.0
+        radius: 4.21
+      default_speed:
+        linear: 30
+        rotation: 15
+        turn_with_radius: 40
+        turn_on_spot: 20

@@ -56,7 +56,8 @@ def generate_launch_description():
             package='raros',
             namespace='raros',
             executable='navigation',
-            name='navigation'
+            name='navigation',
+            parameters=[config]
         ),
         Node(
             package='raros',

@@ -53,7 +53,6 @@ class CollisionDetection(Node):
 
     def update_moving_status_callback(self, msg: StepperStatus):
         self.is_moving = msg.moving
-        self.get_logger().info(f'is_moving: {self.is_moving}')
 
 
 def main(args=None):
