@@ -35,7 +35,8 @@ def generate_launch_description():
             package='raros',
             namespace='raros',
             executable='buzzer',
-            name='buzzer'
+            name='buzzer',
+            parameters=[config]
         ),
         Node(
             package='raros',

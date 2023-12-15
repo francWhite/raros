@@ -3,3 +3,7 @@ raros:
     ros__parameters:
       active: true
       pin: 22
+  buzzer:
+    ros__parameters:
+      active: true
+      pin: 33
