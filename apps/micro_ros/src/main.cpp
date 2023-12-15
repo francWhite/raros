@@ -24,6 +24,8 @@
 #define QUARTER_STEP 0.25
 #define STEPS_PER_REVOLUTION int(1600 / QUARTER_STEP)
 #define FEEDBACK_INTERVAL (STEPS_PER_REVOLUTION / 60)
+#define ACCELERATION_RANGE_IN_REVOLUTIONS 4
+#define ACCELERATION_RANGE_IN_STEPS (ACCELERATION_RANGE_IN_REVOLUTIONS * STEPS_PER_REVOLUTION)
 
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){return false;}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
@@ -65,7 +67,11 @@ void stop_callback(const void *msgin) {
 
 void move_callback(const void *msgin) {
     const auto *movement_msg = (const raros_interfaces__msg__StepperMovement *) msgin;
-    move(movement_msg->left, movement_msg->right);
+    if (movement_msg->left.speed == movement_msg->left.speed_start &&
+        movement_msg->right.speed == movement_msg->right.speed_start)
+        move(movement_msg->left, movement_msg->right);
+    else
+        move_with_acceleration(movement_msg->left, movement_msg->right);
 }
 
 void turn_callback(const void *msgin) {
@@ -189,10 +195,10 @@ void begin_movement(raros_interfaces__msg__StepperInstruction instruction_left,
     toggle_power_supply(true);
     move_cancelled = false;
 
-    publish_log("moving left stepper " + String(instruction_left.steps) + " steps at " +
-                String(instruction_left.speed) + " RPM");
-    publish_log("moving right stepper " + String(instruction_right.steps) + " steps at " +
-                String(instruction_right.speed) + " RPM");
+    publish_log("left stepper instruction = steps: " + String(instruction_left.steps) + ", speed: " +
+                String(instruction_left.speed) + ", speed_start: " + String(instruction_left.speed_start));
+    publish_log("right stepper instruction = steps: " + String(instruction_right.steps) + ", speed: " +
+                String(instruction_right.speed) + ", speed_start: " + String(instruction_right.speed_start));
 }
 
 void end_movement() {
@@ -231,6 +237,63 @@ void move(raros_interfaces__msg__StepperInstruction instruction_left,
             steps_right_remaining -= 1;
             motor_right.step(-1 * steps_right_direction);
         }
+    }
+
+    end_movement();
+}
+
+void move_with_acceleration(raros_interfaces__msg__StepperInstruction instruction_left,
+                            raros_interfaces__msg__StepperInstruction instruction_right) {
+    begin_movement(instruction_left, instruction_right);
+
+    int right_direction = instruction_right.steps > 0 ? 1 : -1;
+    int left_direction = instruction_left.steps > 0 ? 1 : -1;
+
+    //when moving with acceleration, the left and right motor should move identically
+    int steps = min(abs(instruction_left.steps), abs(instruction_right.steps));
+    int speed_min = min(instruction_left.speed, instruction_right.speed);
+    int speed_max = min(instruction_left.speed_start, instruction_right.speed_start);
+
+    int speed_delta = speed_max - speed_min;
+    int steps_per_acceleration_increase = ACCELERATION_RANGE_IN_STEPS / speed_delta;
+    int end_of_acceleration = 0;
+    int start_of_deceleration = 0;
+
+    if (steps > ACCELERATION_RANGE_IN_STEPS * 2) {
+        end_of_acceleration = ACCELERATION_RANGE_IN_STEPS;
+        start_of_deceleration = steps - ACCELERATION_RANGE_IN_STEPS;
+    } else {
+        end_of_acceleration = steps / 2;
+        start_of_deceleration = steps / 2;
+    }
+
+    int steps_remaining = steps;
+    int steps_done = 0;
+    int current_speed = speed_min;
+    motor_left.setSpeed(current_speed);
+    motor_right.setSpeed(current_speed);
+
+    while (steps_remaining > 0 && !move_cancelled) {
+        if (steps_done++ % FEEDBACK_INTERVAL == 0) {
+            rclc_executor_spin_some(&executor_stop, RCL_US_TO_NS(10));
+            publish_feedback(steps_remaining, steps_remaining);
+        }
+
+        if (steps_done % steps_per_acceleration_increase == 0) {
+            if (steps_done <= end_of_acceleration) {
+                current_speed++;
+            }
+            if (steps_done >= start_of_deceleration) {
+                current_speed--;
+            }
+
+            motor_left.setSpeed(current_speed);
+            motor_right.setSpeed(current_speed);
+        }
+
+        motor_left.step(1 * left_direction);
+        motor_right.step(-1 * right_direction);
+        steps_remaining--;
     }
 
     end_movement();

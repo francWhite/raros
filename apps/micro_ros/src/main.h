@@ -15,6 +15,7 @@ void stop_move();
 void begin_movement(raros_interfaces__msg__StepperInstruction instruction_left, raros_interfaces__msg__StepperInstruction instruction_right);
 void end_movement();
 void move(raros_interfaces__msg__StepperInstruction instruction_left, raros_interfaces__msg__StepperInstruction instruction_right);
+void move_with_acceleration(raros_interfaces__msg__StepperInstruction instruction_left, raros_interfaces__msg__StepperInstruction instruction_right);
 void turn(raros_interfaces__msg__StepperInstruction instruction_left, raros_interfaces__msg__StepperInstruction instruction_right);
 void publish_status(bool moving);
 void publish_log(String msg);

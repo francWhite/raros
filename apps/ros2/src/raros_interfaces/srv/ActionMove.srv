@@ -1,7 +1,8 @@
 # service to interact with the Move action. See action_api node for more details.
 
 float64 distance            # in meters
-float32 speed               # in m/s
+int16 speed                 # in RPM
+int16 speed_start           # speed to start with in RPM. if equal to 'speed', no acceleration is used
 Direction direction         # DIRECTION_FORWARD(1) or DIRECTION_BACKWARD(2)
 ---
 unique_identifier_msgs/UUID goal_id    # The id of the requested goal
