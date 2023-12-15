@@ -42,7 +42,8 @@ def generate_launch_description():
             package='raros',
             namespace='raros',
             executable='color_sensor',
-            name='color_sensor'
+            name='color_sensor',
+            parameters=[config]
         ),
         Node(
             package='raros',

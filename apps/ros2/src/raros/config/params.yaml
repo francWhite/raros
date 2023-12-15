@@ -3,10 +3,18 @@ raros:
     ros__parameters:
       active: true
       pin: 25
+
   buzzer:
     ros__parameters:
       active: true
       pin: 13
+
+  color_sensor:
+    ros__parameters:
+      active: true
+      gain: 16
+      integration_time: 120
+
   camera:
     ros__parameters:
       active: true
