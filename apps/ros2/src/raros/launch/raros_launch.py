@@ -66,6 +66,7 @@ def generate_launch_description():
             package='raros',
             namespace='raros',
             executable='camera',
-            name='camera'
+            name='camera',
+            parameters=[config]
         ),
     ])

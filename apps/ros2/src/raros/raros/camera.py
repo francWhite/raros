@@ -1,9 +1,9 @@
 import base64
 from typing import Optional
 
-import board
 import cv2
 import pwmio
+from adafruit_blinka.board.raspberrypi.raspi_4b import pin
 from adafruit_motor import servo
 from cv2 import VideoCapture
 
@@ -16,6 +16,9 @@ from rclpy.timer import Timer
 class Camera(Node):
     def __init__(self):
         super().__init__('camera')
+        self.active, self.pwm_pin_servo_horizontal, self.pwm_pin_servo_vertical = self.init_params()
+        if not self.active:
+            return
         self.get_logger().info('camera node started')
 
         self.rotate_service = self.create_service(RotateCamera, 'camera/rotate', self.rotate_callback)
@@ -28,10 +31,19 @@ class Camera(Node):
         self.servo_vertical: Optional[servo.Servo] = None
         self.rotate_cleanup_timer: Optional[Timer] = None
 
+    def init_params(self):
+        self.declare_parameter('active', True)
+        self.declare_parameter('pwm_pin_servo_horizontal', 29)
+        self.declare_parameter('pwm_pin_servo_vertical', 31)
+        active = self.get_parameter('active').get_parameter_value().bool_value
+        pwm_pin_servo_vertical = self.get_parameter('pwm_pin_servo_horizontal').get_parameter_value().integer_value
+        pwm_pin_servo_horizontal = self.get_parameter('pwm_pin_servo_vertical').get_parameter_value().integer_value
+        return active, pwm_pin_servo_horizontal, pwm_pin_servo_vertical
+
     def setup(self):
         # BCM numbering
-        self.pwm_servo_horizontal = pwmio.PWMOut(pin=board.D5, frequency=50)
-        self.pwm_servo_vertical = pwmio.PWMOut(pin=board.D6, frequency=50)
+        self.pwm_servo_horizontal = pwmio.PWMOut(pin=pin.Pin(self.pwm_pin_servo_horizontal), frequency=50)
+        self.pwm_servo_vertical = pwmio.PWMOut(pin=pin.Pin(self.pwm_pin_servo_vertical), frequency=50)
         self.servo_horizontal = servo.Servo(self.pwm_servo_horizontal, min_pulse=600, max_pulse=2300,
                                             actuation_range=180)
         self.servo_vertical = servo.Servo(self.pwm_servo_vertical, min_pulse=600, max_pulse=2300, actuation_range=180)
@@ -76,7 +88,11 @@ class Camera(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+
     node = Camera()
+    if not node.active:
+        node.get_logger().info('camera node not active, exiting')
+        return
 
     try:
         node.setup()

@@ -7,3 +7,8 @@ raros:
     ros__parameters:
       active: true
       pin: 33
+  camera:
+    ros__parameters:
+      active: true
+      pwm_pin_servo_horizontal: 5
+      pwm_pin_servo_vertical: 6
