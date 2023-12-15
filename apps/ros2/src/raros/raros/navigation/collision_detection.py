@@ -10,6 +10,9 @@ from std_srvs.srv import Empty as EmptySrv
 class CollisionDetection(Node):
     def __init__(self):
         super().__init__('collision_detection')
+        self.active, self.threshold = self.init_params()
+        if not self.active:
+            return
         self.get_logger().info('collision_detection node started')
 
         self.is_moving = False
@@ -27,8 +30,15 @@ class CollisionDetection(Node):
         update_status_publisher = self.create_publisher(Bool, 'status/collision_detection_active', 10)
         update_status_publisher.publish(Bool(data=True))
 
+    def init_params(self):
+        self.declare_parameter('active', True)
+        self.declare_parameter('threshold', 20)
+        active = self.get_parameter('active').get_parameter_value().bool_value
+        threshold = self.get_parameter('threshold').get_parameter_value().integer_value
+        return active, threshold
+
     def distance_callback(self, msg: Distance):
-        if self.is_moving and (msg.front < 20 or msg.back < 20):
+        if self.is_moving and (msg.front < self.threshold or msg.back < self.threshold):
             self.get_logger().info(f'obstacle detected: front={msg.front}, back={msg.back}, stopping...')
             request = EmptySrv.Request()
             self.stop_service_client.call_async(request)
@@ -48,7 +58,11 @@ class CollisionDetection(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+
     node = CollisionDetection()
+    if not node.active:
+        node.get_logger().info('collision_detection node not active, exiting')
+        return
 
     try:
         rclpy.spin(node)

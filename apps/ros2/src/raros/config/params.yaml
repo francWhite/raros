@@ -31,3 +31,8 @@ raros:
       active: true
       pwm_pin_servo_horizontal: 5
       pwm_pin_servo_vertical: 6
+
+  collision_detection:
+    ros__parameters:
+      active: true
+      threshold: 20
