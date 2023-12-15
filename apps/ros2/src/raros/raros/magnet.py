@@ -25,7 +25,7 @@ class Magnet(Node):
         return active, pin
 
     def setup_gpio(self):
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT)
 
     def set_magnet_state_callback(self, request, response):
