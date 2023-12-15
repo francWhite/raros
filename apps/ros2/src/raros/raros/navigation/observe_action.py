@@ -27,7 +27,6 @@ class ObserveAction(Node):
             qos_profile=qos.qos_profile_sensor_data)
 
     def status_callback(self, msg: StepperStatus):
-        self.get_logger().info(f'received: "{msg}"')
         if msg.moving is False and self.goal_handle.status == GoalStatus.STATUS_EXECUTING:
             self.goal_handle.succeed()
 
