@@ -40,4 +40,10 @@ def generate_launch_description():
             executable='navigation',
             name='navigation'
         ),
+        Node(
+            package='raros',
+            namespace='raros',
+            executable='collision_detection',
+            name='collision_detection'
+        )
     ])

@@ -26,5 +26,5 @@ app.use('/api/navigation', navigationRouter);
 rosService.connect();
 
 app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
