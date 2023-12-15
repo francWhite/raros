@@ -248,7 +248,8 @@ void turn(raros_interfaces__msg__StepperInstruction instruction_left,
     int steps_done = 0;
 
     double factor = double(steps_max) / double(steps_min);
-    double delta = 0;
+    double fraction_part = factor - int(factor);
+    double accumulated_fractions = 0;
 
     motor_left.setSpeed(instruction_left.speed);
     motor_right.setSpeed(instruction_right.speed);
@@ -259,11 +260,11 @@ void turn(raros_interfaces__msg__StepperInstruction instruction_left,
             publish_feedback(steps_remaining, steps_remaining);
         }
 
-        int steps_to_move = (int) factor;
-        delta += factor - steps_to_move;
+        int steps_to_move = 1;
+        accumulated_fractions += fraction_part;
 
-        if (delta >= 1) {
-            delta -= 1;
+        if (accumulated_fractions >= 1) {
+            accumulated_fractions -= 1;
             steps_to_move += 1;
         }
 
