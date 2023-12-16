@@ -55,6 +55,7 @@ raros_interfaces__msg__StepperFeedback feedback_msg;
 raros_interfaces__msg__StepperParameters parameters_msg;
 
 bool move_cancelled = false;
+bool hold_power = false;
 int steps_per_revolution = 1600 * 4;
 
 // default initialization
@@ -71,9 +72,11 @@ void stop_callback(const void *msgin) {
 void parameters_callback(const void *msgin) {
     const auto *parameters = (const raros_interfaces__msg__StepperParameters *) msgin;
     publish_log("received params steps_per_revolution: " + String(parameters->steps_per_revolution) +
-                ", micro_steps: " + String(parameters->micro_steps));
+                ", micro_steps: " + String(parameters->micro_steps) +
+                ", hold_power: " + String(parameters->hold_power));
 
     steps_per_revolution = parameters->steps_per_revolution * parameters->micro_steps;
+    hold_power = parameters->hold_power;
     motor_left = Stepper(steps_per_revolution, STEP_PIN_MOTOR_LEFT, DIR_PIN_MOTOR_LEFT);
     motor_right = Stepper(steps_per_revolution, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RIGHT);
 }
@@ -192,12 +195,18 @@ void destroy_entities() {
     RCSOFTCHECK(rclc_executor_fini(&executor_stop));
     RCSOFTCHECK(rcl_node_fini(&node));
     RCSOFTCHECK(rclc_support_fini(&support));
+
+    digitalWrite(MOTOR_POWER_SUPPLY_PIN, LOW);
 }
 
 // Stepper functions
 // -----------------------------------------------------------------------------
 void toggle_power_supply(bool on) {
-    digitalWrite(MOTOR_POWER_SUPPLY_PIN, on ? HIGH : LOW);
+    if (on) {
+        digitalWrite(MOTOR_POWER_SUPPLY_PIN, HIGH);
+    } else if (!hold_power) {
+        digitalWrite(MOTOR_POWER_SUPPLY_PIN, LOW);
+    }
 }
 
 void stop_move() {

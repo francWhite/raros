@@ -14,7 +14,7 @@ from std_srvs.srv import Empty as EmptySrv
 class Navigation(Node):
     def __init__(self):
         super().__init__('navigation')
-        (self.active, self.steps_per_revolution, self.micro_steps,
+        (self.active, self.steps_per_revolution, self.micro_steps, self.hold_power,
          self.wheel_distance, self.wheel_radius, self.default_speed_linear, self.default_speed_rotation,
          self.default_speed_turn_with_radius, self.default_speed_turn_on_spot) = self.init_params()
         if not self.active:
@@ -37,6 +37,7 @@ class Navigation(Node):
         self.declare_parameter('active', True)
         self.declare_parameter('steps_per_revolution', 1600)
         self.declare_parameter('micro_steps', 4)
+        self.declare_parameter('hold_power', False)
         self.declare_parameter('wheel.distance', 22.0)
         self.declare_parameter('wheel.radius', 4.2)
         self.declare_parameter('default_speed.linear', 30)
@@ -46,6 +47,7 @@ class Navigation(Node):
         active = self.get_parameter('active').get_parameter_value().bool_value
         steps_per_revolution = self.get_parameter('steps_per_revolution').get_parameter_value().integer_value
         micro_steps = self.get_parameter('micro_steps').get_parameter_value().integer_value
+        hold_power = self.get_parameter('hold_power').get_parameter_value().bool_value
         wheel_distance = self.get_parameter('wheel.distance').get_parameter_value().double_value
         wheel_radius = self.get_parameter('wheel.radius').get_parameter_value().double_value
         default_speed_linear = self.get_parameter('default_speed.linear').get_parameter_value().integer_value
@@ -54,7 +56,7 @@ class Navigation(Node):
             'default_speed.turn_with_radius').get_parameter_value().integer_value
         default_speed_turn_on_spot = self.get_parameter(
             'default_speed.turn_on_spot').get_parameter_value().integer_value
-        return (active, steps_per_revolution, micro_steps, wheel_distance, wheel_radius,
+        return (active, steps_per_revolution, micro_steps, hold_power, wheel_distance, wheel_radius,
                 default_speed_linear, default_speed_rotation, default_speed_turn_with_radius,
                 default_speed_turn_on_spot)
 
@@ -62,6 +64,7 @@ class Navigation(Node):
         stepper_parameters_msg = StepperParameters()
         stepper_parameters_msg.steps_per_revolution = self.steps_per_revolution
         stepper_parameters_msg.micro_steps = self.micro_steps
+        stepper_parameters_msg.hold_power = self.hold_power
         self.stepper_parameters_publisher.publish(stepper_parameters_msg)
 
     def stop_callback(self, request, response):
