@@ -35,6 +35,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/StepperMovement.msg"
   "msg/StepperStatus.msg"
   "msg/StepperFeedback.msg"
+  "msg/StepperParameters.msg"
   "msg/Direction.msg"
   "msg/Status.msg"
   "srv/SetMagnetState.srv"

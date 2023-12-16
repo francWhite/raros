@@ -3,7 +3,7 @@ import rclpy
 from action_msgs.msg import GoalStatus
 from raros.navigation.observe_action import ObserveAction
 from raros_interfaces.action import Move, Rotate, Turn
-from raros_interfaces.msg import StepperMovement, StepperFeedback
+from raros_interfaces.msg import StepperMovement, StepperFeedback, StepperParameters
 from rclpy.action import ActionServer
 from rclpy.action.server import ServerGoalHandle
 from rclpy.node import Node
@@ -27,9 +27,11 @@ class Navigation(Node):
         self.rotate_action_server = ActionServer(self, Rotate, 'navigation/rotate', self.rotate_action_callback)
         self.turn_action_server = ActionServer(self, Turn, 'navigation/turn', self.turn_action_callback)
 
+        self.stop_publisher = self.create_publisher(EmptyMsg, 'arduino_stepper/stop', 10)
         self.stepper_move_publisher = self.create_publisher(StepperMovement, 'arduino_stepper/move', 10)
         self.stepper_turn_publisher = self.create_publisher(StepperMovement, 'arduino_stepper/turn', 10)
-        self.stop_publisher = self.create_publisher(EmptyMsg, 'arduino_stepper/stop', 10)
+        self.stepper_parameters_publisher = self.create_publisher(StepperParameters, 'arduino_stepper/parameters', 10)
+        self.propagate_parameters()
 
     def init_params(self):
         self.declare_parameter('active', True)
@@ -55,6 +57,12 @@ class Navigation(Node):
         return (active, steps_per_revolution, micro_steps, wheel_distance, wheel_radius,
                 default_speed_linear, default_speed_rotation, default_speed_turn_with_radius,
                 default_speed_turn_on_spot)
+
+    def propagate_parameters(self):
+        stepper_parameters_msg = StepperParameters()
+        stepper_parameters_msg.steps_per_revolution = self.steps_per_revolution
+        stepper_parameters_msg.micro_steps = self.micro_steps
+        self.stepper_parameters_publisher.publish(stepper_parameters_msg)
 
     def stop_callback(self, request, response):
         self.get_logger().info(f'received stop request')
