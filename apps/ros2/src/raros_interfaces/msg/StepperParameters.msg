@@ -1,2 +1,3 @@
 int32 steps_per_revolution
 int32 micro_steps
+bool hold_power

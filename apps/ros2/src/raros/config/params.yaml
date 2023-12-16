@@ -42,6 +42,7 @@ raros:
       active: true
       steps_per_revolution: 1600
       micro_steps: 4
+      hold_power: false
       wheel:
         distance: 22.0
         radius: 4.21
@@ -49,4 +50,4 @@ raros:
         linear: 30
         rotation: 15
         turn_with_radius: 40
-        turn_on_spot: 20
+        turn_on_spot: 30
