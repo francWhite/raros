@@ -12,6 +12,7 @@
 #include <raros_interfaces/msg/stepper_movement.h>
 #include <raros_interfaces/msg/stepper_status.h>
 #include <raros_interfaces/msg/stepper_feedback.h>
+#include <raros_interfaces/msg/stepper_parameters.h>
 
 
 #define LED_PIN 13
@@ -21,11 +22,9 @@
 #define DIR_PIN_MOTOR_LEFT 5
 #define MOTOR_POWER_SUPPLY_PIN 7
 
-#define QUARTER_STEP 0.25
-#define STEPS_PER_REVOLUTION int(1600 / QUARTER_STEP)
-#define FEEDBACK_INTERVAL (STEPS_PER_REVOLUTION / 60)
+#define FEEDBACK_INTERVAL (steps_per_revolution / 60)
 #define ACCELERATION_RANGE_IN_REVOLUTIONS 4
-#define ACCELERATION_RANGE_IN_STEPS (ACCELERATION_RANGE_IN_REVOLUTIONS * STEPS_PER_REVOLUTION)
+#define ACCELERATION_RANGE_IN_STEPS (ACCELERATION_RANGE_IN_REVOLUTIONS * steps_per_revolution)
 
 #define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){return false;}}
 #define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
@@ -46,23 +45,37 @@ rclc_support_t support;
 rcl_allocator_t allocator;
 rcl_node_t node;
 rclc_executor_t executor, executor_stop;
-rcl_subscription_t subscription_stop, subscription_move, subscription_turn;
+rcl_subscription_t subscription_stop, subscription_move, subscription_turn, subscription_parameters;
 rcl_publisher_t publisher_status, publisher_log, publisher_feedback;
-bool move_cancelled = false;
 
 std_msgs__msg__Empty msg_empty;
 raros_interfaces__msg__StepperMovement msg_stepper_movement;
 raros_interfaces__msg__StepperStatus msg_status;
 raros_interfaces__msg__StepperFeedback feedback_msg;
+raros_interfaces__msg__StepperParameters parameters_msg;
 
-Stepper motor_left(STEPS_PER_REVOLUTION, STEP_PIN_MOTOR_LEFT, DIR_PIN_MOTOR_LEFT);
-Stepper motor_right(STEPS_PER_REVOLUTION, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RIGHT);
+bool move_cancelled = false;
+int steps_per_revolution = 1600 * 4;
+
+// default initialization
+Stepper motor_left(steps_per_revolution, STEP_PIN_MOTOR_LEFT, DIR_PIN_MOTOR_LEFT);
+Stepper motor_right(steps_per_revolution, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RIGHT);
 
 // ROS2 functions
 // -----------------------------------------------------------------------------
 void stop_callback(const void *msgin) {
     RCLC_UNUSED(msgin);
     stop_move();
+}
+
+void parameters_callback(const void *msgin) {
+    const auto *parameters = (const raros_interfaces__msg__StepperParameters *) msgin;
+    publish_log("received params steps_per_revolution: " + String(parameters->steps_per_revolution) +
+                ", micro_steps: " + String(parameters->micro_steps));
+
+    steps_per_revolution = parameters->steps_per_revolution * parameters->micro_steps;
+    motor_left = Stepper(steps_per_revolution, STEP_PIN_MOTOR_LEFT, DIR_PIN_MOTOR_LEFT);
+    motor_right = Stepper(steps_per_revolution, STEP_PIN_MOTOR_RIGHT, DIR_PIN_MOTOR_RIGHT);
 }
 
 void move_callback(const void *msgin) {
@@ -122,6 +135,12 @@ bool create_entities() {
             ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperMovement),
             "arduino_stepper/turn"));
 
+    RCCHECK(rclc_subscription_init_default(
+            &subscription_parameters,
+            &node,
+            ROSIDL_GET_MSG_TYPE_SUPPORT(raros_interfaces, msg, StepperParameters),
+            "arduino_stepper/parameters"));
+
     // create publishers
     RCCHECK(rclc_publisher_init_default(
             &publisher_status,
@@ -142,13 +161,15 @@ bool create_entities() {
             "arduino_stepper/feedback"));
 
     // create executors
-    RCCHECK(rclc_executor_init(&executor, &support.context, 2, &allocator));
+    RCCHECK(rclc_executor_init(&executor, &support.context, 3, &allocator));
     RCCHECK(rclc_executor_init(&executor_stop, &support.context, 1, &allocator));
 
     // add subscription to executor
     RCCHECK(rclc_executor_add_subscription(&executor, &subscription_move, &msg_stepper_movement, &move_callback,
                                            ON_NEW_DATA));
     RCCHECK(rclc_executor_add_subscription(&executor, &subscription_turn, &msg_stepper_movement, &turn_callback,
+                                           ON_NEW_DATA));
+    RCCHECK(rclc_executor_add_subscription(&executor, &subscription_parameters, &parameters_msg, &parameters_callback,
                                            ON_NEW_DATA));
     RCCHECK(rclc_executor_add_subscription(&executor_stop, &subscription_stop, &msg_empty, &stop_callback,
                                            ON_NEW_DATA));
