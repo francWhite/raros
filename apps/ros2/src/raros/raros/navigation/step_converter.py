@@ -4,8 +4,8 @@ from raros_interfaces.msg import Direction
 
 
 class Converter:
-    def __init__(self, steps_per_revolution, wheel_radius_cm, wheel_distance_cm):
-        self.steps_per_revolution = steps_per_revolution
+    def __init__(self, steps_per_revolution, micro_steps, wheel_radius_cm, wheel_distance_cm):
+        self.steps_per_revolution = steps_per_revolution * micro_steps
         self.wheel_distance = (wheel_distance_cm / 100)
         self.wheel_circumference = (wheel_radius_cm / 100) * 2 * math.pi
 
