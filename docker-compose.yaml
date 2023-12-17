@@ -1,0 +1,53 @@
+services:
+
+  raros:
+    container_name: raros
+    image: ghcr.io/francwhite/raros:dev
+    restart: unless-stopped
+    network_mode: host
+    ipc: host
+    privileged: true
+    stop_signal: SIGINT
+    volumes:
+      - raros_config:/opt/ros/overlay_ws/install/raros/share/raros/config
+    depends_on:
+      - micro-ros-agent
+
+  micro-ros-agent:
+    container_name: micro-ros-agent
+    image: microros/micro-ros-agent:humble
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    ipc: host
+    command: serial --dev /dev/ttyACM0 -v4
+
+  ros_bridge:
+    container_name: ros_bridge
+    image: ghcr.io/francwhite/raros:dev
+    restart: unless-stopped
+    network_mode: host
+    ipc: host
+    stop_signal: SIGINT
+    command:
+      ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+
+  raros_api:
+    container_name: raros_api
+    image: ghcr.io/francwhite/raros_api:dev
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - PORT=8000
+      - ROS_URL=ws://localhost:9090
+    depends_on:
+      - ros_bridge
+
+
+volumes:
+  raros_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./config
