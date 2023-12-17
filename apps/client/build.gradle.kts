@@ -9,7 +9,7 @@ plugins {
 
 group = "io.github.francwhite"
 description = "Client library to interact with raros"
-version = "1.0.0"
+version = System.getenv("RELEASE_VERSION") ?: "0.0.1-SNAPSHOT"
 
 repositories {
   mavenCentral()
