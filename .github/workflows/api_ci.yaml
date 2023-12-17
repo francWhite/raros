@@ -1,3 +1,5 @@
+name: CI - api
+
 on:
   workflow_call:
 

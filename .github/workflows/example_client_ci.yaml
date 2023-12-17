@@ -1,3 +1,5 @@
+name: CI - example client
+
 on:
   workflow_call:
 

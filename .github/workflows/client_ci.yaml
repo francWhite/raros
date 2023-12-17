@@ -1,3 +1,5 @@
+name: CI - client library
+
 on:
   workflow_call:
 
