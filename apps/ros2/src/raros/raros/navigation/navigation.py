@@ -21,7 +21,7 @@ class Navigation(Node):
             return
         self.get_logger().info('navigation node started')
 
-        self.converter = Converter(self.steps_per_revolution * self.micro_steps, self.wheel_radius, self.wheel_distance)
+        self.converter = Converter(self.steps_per_revolution, self.micro_steps, self.wheel_radius, self.wheel_distance)
         self.stop_service = self.create_service(EmptySrv, 'navigation/stop', self.stop_callback)
         self.move_action_server = ActionServer(self, Move, 'navigation/move', self.move_action_callback)
         self.rotate_action_server = ActionServer(self, Rotate, 'navigation/rotate', self.rotate_action_callback)

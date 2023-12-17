@@ -44,8 +44,8 @@ raros:
       micro_steps: 4
       hold_power: false
       wheel:
-        distance: 22.0
-        radius: 4.21
+        distance: 22.1109
+        radius: 4.2066
       default_speed:
         linear: 30
         rotation: 15
