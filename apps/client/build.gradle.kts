@@ -3,7 +3,7 @@ plugins {
   signing
 }
 
-group = "ch.hslu.raros.client"
+group = "io.github.francwhite"
 version = "1.0.0"
 
 repositories {

@@ -3,7 +3,7 @@ plugins {
   application
 }
 
-group = "ch.hslu.raros.example"
+group = "io.github.francwhite"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -21,5 +21,5 @@ tasks.test {
 }
 
 application {
-  mainClass.set("ch.hslu.raros.example.App")
+  mainClass.set("io.github.francwhite.raros.example.InteractiveExample")
 }
