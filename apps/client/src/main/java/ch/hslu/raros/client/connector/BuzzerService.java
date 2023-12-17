@@ -8,7 +8,7 @@ public interface BuzzerService {
    *
    * @param frequency in Hz
    * @param duration  in ms
-   * @return CompletableFuture<Void>
+   * @return {@code CompletableFuture<Void>}
    */
   CompletableFuture<ActionInvocationResult> PlayTone(int frequency, int duration);
 }
