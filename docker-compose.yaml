@@ -2,7 +2,7 @@ services:
 
   raros:
     container_name: raros
-    image: ghcr.io/francwhite/raros:dev
+    image: ghcr.io/francwhite/raros:latest
     restart: unless-stopped
     network_mode: host
     ipc: host
@@ -24,7 +24,7 @@ services:
 
   ros_bridge:
     container_name: ros_bridge
-    image: ghcr.io/francwhite/raros:dev
+    image: ghcr.io/francwhite/raros:latest
     restart: unless-stopped
     network_mode: host
     ipc: host
@@ -34,7 +34,7 @@ services:
 
   raros_api:
     container_name: raros_api
-    image: ghcr.io/francwhite/raros_api:dev
+    image: ghcr.io/francwhite/raros_api:latest
     restart: unless-stopped
     network_mode: host
     environment:
