@@ -37,7 +37,7 @@ class DistanceApiService implements DistanceService {
     if (angle < -90 || angle > 90)
       throw new IllegalArgumentException("The angle must be between -90 and 90.");
 
-    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate-sensor"), new Rotation(angle));
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./rotate"), new Rotation(angle));
 
     return HttpClient.newHttpClient()
       .sendAsync(request, HttpResponse.BodyHandlers.discarding())

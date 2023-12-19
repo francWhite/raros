@@ -15,7 +15,7 @@ distanceRouter.get('/', async (req: Request<undefined, undefined, undefined>, re
   );
 });
 
-distanceRouter.post('/rotate-sensor', async (req: Request<undefined, undefined, Rotation>, res: Response) => {
+distanceRouter.post('/rotate', async (req: Request<undefined, undefined, Rotation>, res: Response) => {
   console.log(req.originalUrl, req.body);
 
   const requestData = {

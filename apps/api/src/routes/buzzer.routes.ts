@@ -7,7 +7,7 @@ import { ActionInvocationResult } from '../ros.model';
 export const buzzerRouter = express.Router();
 buzzerRouter.use(express.json());
 
-buzzerRouter.post('/tone', async (req: Request<undefined, undefined, Tone>, res: Response) => {
+buzzerRouter.post('/', async (req: Request<undefined, undefined, Tone>, res: Response) => {
   console.log(req.originalUrl, req.body);
 
   const requestData = { ...req.body };

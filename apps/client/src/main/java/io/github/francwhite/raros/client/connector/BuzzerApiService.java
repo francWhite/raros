@@ -16,13 +16,13 @@ class BuzzerApiService implements BuzzerService {
   private final URI apiUri;
 
   public BuzzerApiService(URI apiBaseUri) {
-    this.apiUri = apiBaseUri.resolve("/api/buzzer/");
+    this.apiUri = apiBaseUri.resolve("/api/buzzer");
   }
 
   @Override
   public CompletableFuture<ActionInvocationResult> PlayTone(int frequency, int duration) {
     var tone = new Tone(frequency, duration);
-    var request = HttpRequestBuilder.buildJsonPOST(apiUri.resolve("./tone"), tone);
+    var request = HttpRequestBuilder.buildJsonPOST(apiUri, tone);
 
     return HttpClient.newHttpClient()
       .sendAsync(request, HttpResponse.BodyHandlers.ofString())
