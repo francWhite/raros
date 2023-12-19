@@ -33,8 +33,8 @@ class Camera(Node):
 
     def init_params(self):
         self.declare_parameter('active', True)
-        self.declare_parameter('pwm_pin_servo_horizontal', 29)
-        self.declare_parameter('pwm_pin_servo_vertical', 31)
+        self.declare_parameter('pwm_pin_servo_horizontal', 6)
+        self.declare_parameter('pwm_pin_servo_vertical', 5)
         active = self.get_parameter('active').get_parameter_value().bool_value
         pwm_pin_servo_vertical = self.get_parameter('pwm_pin_servo_horizontal').get_parameter_value().integer_value
         pwm_pin_servo_horizontal = self.get_parameter('pwm_pin_servo_vertical').get_parameter_value().integer_value
