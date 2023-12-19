@@ -128,7 +128,7 @@ class Calibration(Node):
         return round(radius_in_cm, 4)
 
     def calculate_actual_wheel_distance(self, wheel_radius, steps):
-        actual_distance = (4 * math.pi * wheel_radius * steps) / (self.converter.steps_per_revolution * 2 * math.pi)
+        actual_distance = (2 * wheel_radius * steps) / self.converter.steps_per_revolution
         return round(actual_distance, 4)
 
     @staticmethod
