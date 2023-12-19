@@ -14,9 +14,9 @@ public class ActionAwaiterImpl implements ActionAwaiter {
   }
 
   @Override
-  public void WaitForAction(CompletableFuture<ActionInvocationResult> action) {
+  public void waitForAction(CompletableFuture<ActionInvocationResult> action) {
     var goalId = action.join().GoalId();
-    while (!actionService.IsActionCompleted(goalId).join()) {
+    while (!actionService.isActionCompleted(goalId).join()) {
       try {
         Thread.sleep(100);
       } catch (InterruptedException e) {

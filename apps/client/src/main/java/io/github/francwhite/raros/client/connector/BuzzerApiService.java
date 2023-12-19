@@ -20,7 +20,7 @@ class BuzzerApiService implements BuzzerService {
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> PlayTone(int frequency, int duration) {
+  public CompletableFuture<ActionInvocationResult> playTone(int frequency, int duration) {
     var tone = new Tone(frequency, duration);
     var request = HttpRequestBuilder.buildJsonPOST(apiUri, tone);
 

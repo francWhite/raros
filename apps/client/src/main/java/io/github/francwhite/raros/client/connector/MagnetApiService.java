@@ -18,7 +18,7 @@ class MagnetApiService implements MagnetService {
   }
 
   @Override
-  public CompletableFuture<Void> SetMagnetState(Boolean active) {
+  public CompletableFuture<Void> setMagnetState(Boolean active) {
     var magnetState = new MagnetState(active);
 
     var request = HttpRequestBuilder.buildJsonPOST(apiUri, magnetState);

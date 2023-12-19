@@ -10,5 +10,5 @@ public interface BuzzerService {
    * @param duration  in ms
    * @return {@code CompletableFuture<Void>}
    */
-  CompletableFuture<ActionInvocationResult> PlayTone(int frequency, int duration);
+  CompletableFuture<ActionInvocationResult> playTone(int frequency, int duration);
 }

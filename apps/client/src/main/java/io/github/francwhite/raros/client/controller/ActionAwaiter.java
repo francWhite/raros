@@ -10,5 +10,5 @@ interface ActionAwaiter {
    *
    * @param action The action to wait for.
    */
-  void WaitForAction(CompletableFuture<ActionInvocationResult> action);
+  void waitForAction(CompletableFuture<ActionInvocationResult> action);
 }

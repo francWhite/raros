@@ -10,5 +10,5 @@ public interface ActionService {
    * @param goalId The goalId to check
    * @return {@code CompletableFuture<Boolean>} True if the action is completed, false otherwise
    */
-  CompletableFuture<Boolean> IsActionCompleted(UUID goalId);
+  CompletableFuture<Boolean> isActionCompleted(UUID goalId);
 }

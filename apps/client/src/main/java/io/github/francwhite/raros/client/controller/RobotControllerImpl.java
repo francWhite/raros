@@ -31,229 +31,229 @@ class RobotControllerImpl implements RobotController {
   }
 
   @Override
-  public Status GetStatus() {
+  public Status getStatus() {
     try {
-      return this.statusService.GetStatus().join();
+      return this.statusService.getStatus().join();
     } catch (RuntimeException e) {
       return new Status(false, false, false, false, false);
     }
   }
 
   @Override
-  public void EnableMagnet() {
-    this.magnetService.SetMagnetState(true).join();
+  public void enableMagnet() {
+    this.magnetService.setMagnetState(true).join();
   }
 
   @Override
-  public void DisableMagnet() {
-    this.magnetService.SetMagnetState(false).join();
+  public void disableMagnet() {
+    this.magnetService.setMagnetState(false).join();
   }
 
   @Override
-  public void Beep() {
-    this.buzzerService.PlayTone(15000, 100).join();
+  public void beep() {
+    this.buzzerService.playTone(15000, 100).join();
   }
 
   @Override
-  public void PlayTone(int frequency, int duration) {
-    var action = this.buzzerService.PlayTone(frequency, duration);
-    this.actionAwaiter.WaitForAction(action);
+  public void playTone(int frequency, int duration) {
+    var action = this.buzzerService.playTone(frequency, duration);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void PlayToneAsync(int frequency, int duration) {
-    this.buzzerService.PlayTone(frequency, duration);
+  public void playToneAsync(int frequency, int duration) {
+    this.buzzerService.playTone(frequency, duration);
   }
 
   @Override
-  public Color GetColor() {
-    return this.colorService.GetColor().join();
+  public Color getColor() {
+    return this.colorService.getColor().join();
   }
 
   @Override
-  public float GetDistanceFront() {
-    var distance = this.distanceService.GetDistance().join();
+  public float getDistanceFront() {
+    var distance = this.distanceService.getDistance().join();
     return distance.getFront();
   }
 
   @Override
-  public float GetDistanceFront(int angle) {
-    this.distanceService.RotateSensor(angle).join();
-    var distance = this.distanceService.GetDistance().join();
+  public float getDistanceFront(int angle) {
+    this.distanceService.rotateSensor(angle).join();
+    var distance = this.distanceService.getDistance().join();
     return distance.getFront();
   }
 
   @Override
-  public float GetDistanceBack() {
-    var distance = this.distanceService.GetDistance().join();
+  public float getDistanceBack() {
+    var distance = this.distanceService.getDistance().join();
     return distance.getBack();
   }
 
   @Override
-  public void RotateRangeSensor(int angle) {
-    this.distanceService.RotateSensor(angle).join();
+  public void rotateRangeSensor(int angle) {
+    this.distanceService.rotateSensor(angle).join();
   }
 
   @Override
-  public void StopMovement() {
-    this.navigationService.Stop().join();
+  public void stopMovement() {
+    this.navigationService.stop().join();
   }
 
   @Override
-  public void MoveForward(double distance) {
-    var action = this.navigationService.Move(distance, Direction.Forward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveForward(double distance) {
+    var action = this.navigationService.move(distance, Direction.Forward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveForward(double distance, int speed) {
-    var action = this.navigationService.Move(distance, speed, Direction.Forward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveForward(double distance, int speed) {
+    var action = this.navigationService.move(distance, speed, Direction.Forward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveForward(double distance, int startSpeed, int endSpeed) {
-    var action = this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Forward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveForward(double distance, int startSpeed, int endSpeed) {
+    var action = this.navigationService.move(distance, startSpeed, endSpeed, Direction.Forward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveForwardAsync() {
-    this.navigationService.Move(Direction.Forward);
+  public void moveForwardAsync() {
+    this.navigationService.move(Direction.Forward);
   }
 
   @Override
-  public void MoveForwardAsync(double distance) {
-    this.navigationService.Move(distance, Direction.Forward);
+  public void moveForwardAsync(double distance) {
+    this.navigationService.move(distance, Direction.Forward);
   }
 
   @Override
-  public void MoveForwardAsync(double distance, int speed) {
-    this.navigationService.Move(distance, speed, Direction.Forward);
+  public void moveForwardAsync(double distance, int speed) {
+    this.navigationService.move(distance, speed, Direction.Forward);
   }
 
   @Override
-  public void MoveForwardAsync(double distance, int startSpeed, int endSpeed) {
-    this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Forward);
+  public void moveForwardAsync(double distance, int startSpeed, int endSpeed) {
+    this.navigationService.move(distance, startSpeed, endSpeed, Direction.Forward);
   }
 
   @Override
-  public void MoveBackward(double distance) {
-    var action = this.navigationService.Move(distance, Direction.Backward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveBackward(double distance) {
+    var action = this.navigationService.move(distance, Direction.Backward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveBackward(double distance, int speed) {
-    var action = this.navigationService.Move(distance, speed, Direction.Backward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveBackward(double distance, int speed) {
+    var action = this.navigationService.move(distance, speed, Direction.Backward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveBackward(double distance, int startSpeed, int endSpeed) {
-    var action = this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Backward);
-    this.actionAwaiter.WaitForAction(action);
+  public void moveBackward(double distance, int startSpeed, int endSpeed) {
+    var action = this.navigationService.move(distance, startSpeed, endSpeed, Direction.Backward);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void MoveBackwardAsync() {
-    this.navigationService.Move(Direction.Backward);
+  public void moveBackwardAsync() {
+    this.navigationService.move(Direction.Backward);
   }
 
   @Override
-  public void MoveBackwardAsync(double distance) {
-    this.navigationService.Move(distance, Direction.Backward);
+  public void moveBackwardAsync(double distance) {
+    this.navigationService.move(distance, Direction.Backward);
   }
 
   @Override
-  public void MoveBackwardAsync(double distance, int speed) {
-    this.navigationService.Move(distance, speed, Direction.Backward);
+  public void moveBackwardAsync(double distance, int speed) {
+    this.navigationService.move(distance, speed, Direction.Backward);
   }
 
   @Override
-  public void MoveBackwardAsync(double distance, int startSpeed, int endSpeed) {
-    this.navigationService.Move(distance, startSpeed, endSpeed, Direction.Backward);
+  public void moveBackwardAsync(double distance, int startSpeed, int endSpeed) {
+    this.navigationService.move(distance, startSpeed, endSpeed, Direction.Backward);
   }
 
   @Override
-  public void RotateLeft(double angle) {
-    var action = this.navigationService.Rotate(angle, Direction.Left);
-    this.actionAwaiter.WaitForAction(action);
+  public void rotateLeft(double angle) {
+    var action = this.navigationService.rotate(angle, Direction.Left);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void RotateLeftAsync(double angle) {
-    this.navigationService.Rotate(angle, Direction.Left);
+  public void rotateLeftAsync(double angle) {
+    this.navigationService.rotate(angle, Direction.Left);
   }
 
   @Override
-  public void RotateRight(double angle) {
-    var action = this.navigationService.Rotate(angle, Direction.Right);
-    this.actionAwaiter.WaitForAction(action);
+  public void rotateRight(double angle) {
+    var action = this.navigationService.rotate(angle, Direction.Right);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void RotateRightAsync(double angle) {
-    this.navigationService.Rotate(angle, Direction.Right);
+  public void rotateRightAsync(double angle) {
+    this.navigationService.rotate(angle, Direction.Right);
   }
 
   @Override
-  public void TurnLeft(double angle) {
-    var action = this.navigationService.Turn(angle, 0, Direction.Left);
-    this.actionAwaiter.WaitForAction(action);
+  public void turnLeft(double angle) {
+    var action = this.navigationService.turn(angle, 0, Direction.Left);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void TurnLeftAsync(double angle) {
-    this.navigationService.Turn(angle, 0, Direction.Left);
+  public void turnLeftAsync(double angle) {
+    this.navigationService.turn(angle, 0, Direction.Left);
   }
 
   @Override
-  public void TurnLeft(double angle, double radius) {
-    var action = this.navigationService.Turn(angle, radius, Direction.Left);
-    this.actionAwaiter.WaitForAction(action);
+  public void turnLeft(double angle, double radius) {
+    var action = this.navigationService.turn(angle, radius, Direction.Left);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void TurnLeftAsync(double angle, double radius) {
-    this.navigationService.Turn(angle, radius, Direction.Left);
+  public void turnLeftAsync(double angle, double radius) {
+    this.navigationService.turn(angle, radius, Direction.Left);
   }
 
   @Override
-  public void TurnRight(double angle) {
-    var action = this.navigationService.Turn(angle, 0, Direction.Right);
-    this.actionAwaiter.WaitForAction(action);
+  public void turnRight(double angle) {
+    var action = this.navigationService.turn(angle, 0, Direction.Right);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void TurnRightAsync(double angle) {
-    this.navigationService.Turn(angle, 0, Direction.Right);
+  public void turnRightAsync(double angle) {
+    this.navigationService.turn(angle, 0, Direction.Right);
   }
 
   @Override
-  public void TurnRight(double angle, double radius) {
-    var action = this.navigationService.Turn(angle, radius, Direction.Right);
-    this.actionAwaiter.WaitForAction(action);
+  public void turnRight(double angle, double radius) {
+    var action = this.navigationService.turn(angle, radius, Direction.Right);
+    this.actionAwaiter.waitForAction(action);
   }
 
   @Override
-  public void TurnRightAsync(double angle, double radius) {
-    this.navigationService.Turn(angle, radius, Direction.Right);
+  public void turnRightAsync(double angle, double radius) {
+    this.navigationService.turn(angle, radius, Direction.Right);
   }
 
   @Override
-  public String CaptureImage() {
-    return this.cameraService.CaptureImage().join();
+  public String captureImage() {
+    return this.cameraService.captureImage().join();
   }
 
   @Override
-  public String CaptureImage(int angleHorizontal, int angleVertical) {
-    this.cameraService.RotateCamera(angleHorizontal, angleVertical).join();
-    return this.cameraService.CaptureImage().join();
+  public String captureImage(int angleHorizontal, int angleVertical) {
+    this.cameraService.rotateCamera(angleHorizontal, angleVertical).join();
+    return this.cameraService.captureImage().join();
   }
 
   @Override
-  public void RotateCamera(int angleHorizontal, int angleVertical) {
-    this.cameraService.RotateCamera(angleHorizontal, angleVertical).join();
+  public void rotateCamera(int angleHorizontal, int angleVertical) {
+    this.cameraService.rotateCamera(angleHorizontal, angleVertical).join();
   }
 }

@@ -10,44 +10,44 @@ public class ProcedureExample {
     var controller = RobotControllerFactory.create(URI.create("http://eee-03300:8000"));
     System.out.println("Starting procedure...");
 
-    controller.MoveForwardAsync();
-    Color color = controller.GetColor();
+    controller.moveForwardAsync();
+    Color color = controller.getColor();
     while (color.red() < 70) {
-      if (controller.GetDistanceFront() < 30) {
+      if (controller.getDistanceFront() < 30) {
         System.out.println("possible collision recognized, aborting");
-        controller.StopMovement();
-        controller.PlayToneAsync(1200, 1000);
+        controller.stopMovement();
+        controller.playToneAsync(1200, 1000);
         System.exit(0);
       }
-      color = controller.GetColor();
+      color = controller.getColor();
       System.out.println("Waiting for red color to appear... current color: " + color);
     }
 
     System.out.println("Target detected! Stop movement.");
-    controller.Beep();
-    controller.StopMovement();
+    controller.beep();
+    controller.stopMovement();
 
     System.out.println("Picking up payload...");
-    controller.EnableMagnet();
+    controller.enableMagnet();
 
     System.out.println("Move to drop zone...");
-    controller.MoveBackward(0.5);
-    controller.RotateLeft(90);
-    controller.MoveForward(0.1);
+    controller.moveBackward(0.5);
+    controller.rotateLeft(90);
+    controller.moveForward(0.1);
 
     System.out.println("Releasing payload");
-    controller.Beep();
-    controller.DisableMagnet();
+    controller.beep();
+    controller.disableMagnet();
 
     System.out.println("Leave drop zone...");
-    controller.MoveBackward(0.1);
-    controller.RotateRight(90);
-    controller.MoveBackward(0.5);
+    controller.moveBackward(0.1);
+    controller.rotateRight(90);
+    controller.moveBackward(0.5);
 
     System.out.println("Finished!");
-    controller.PlayToneAsync(440, 500);
-    controller.PlayToneAsync(880, 500);
-    controller.PlayToneAsync(440, 500);
+    controller.playToneAsync(440, 500);
+    controller.playToneAsync(880, 500);
+    controller.playToneAsync(440, 500);
     System.exit(0);
   }
 }

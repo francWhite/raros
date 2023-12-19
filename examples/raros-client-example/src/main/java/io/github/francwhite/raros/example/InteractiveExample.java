@@ -57,7 +57,7 @@ public class InteractiveExample {
       var input = scanner.next();
       switch (input) {
         case "s":
-          var status = robotController.GetStatus();
+          var status = robotController.getStatus();
           System.out.println(MessageFormat.format("Status: {0}", status));
           break;
         case "q":
@@ -80,11 +80,11 @@ public class InteractiveExample {
       switch (input) {
         case "e":
           System.out.println("Enabling magnet...");
-          robotController.EnableMagnet();
+          robotController.enableMagnet();
           break;
         case "d":
           System.out.println("Disabling magnet...");
-          robotController.DisableMagnet();
+          robotController.disableMagnet();
           break;
         case "q":
           return;
@@ -108,13 +108,13 @@ public class InteractiveExample {
       switch (input) {
         case "b":
           System.out.println("Beeping...");
-          robotController.Beep();
+          robotController.beep();
           break;
         case "t": {
           var frequency = getFrequency(scanner);
           var duration = getDuration(scanner);
           System.out.println("Playing tone and waiting for completion...");
-          robotController.PlayTone(frequency, duration);
+          robotController.playTone(frequency, duration);
           System.out.println("Finished playing tone.");
           break;
         }
@@ -122,7 +122,7 @@ public class InteractiveExample {
           var frequency = getFrequency(scanner);
           var duration = getDuration(scanner);
           System.out.println("Playing tone...");
-          robotController.PlayToneAsync(frequency, duration);
+          robotController.playToneAsync(frequency, duration);
           break;
         }
         case "q":
@@ -144,7 +144,7 @@ public class InteractiveExample {
       var input = scanner.next();
       switch (input) {
         case "c":
-          var color = robotController.GetColor();
+          var color = robotController.getColor();
           System.out.println(MessageFormat.format("Color (R,G,B): {0}, {1}, {2}", color.red(), color.green(), color.blue()));
           break;
         case "q":
@@ -168,19 +168,19 @@ public class InteractiveExample {
       var input = scanner.next();
       switch (input) {
         case "f": {
-          var distance = robotController.GetDistanceFront();
+          var distance = robotController.getDistanceFront();
           System.out.println(MessageFormat.format("Distance to nearest obstacle in front of the robot: {0}", distance));
           break;
         }
         case "b": {
-          var distance = robotController.GetDistanceBack();
+          var distance = robotController.getDistanceBack();
           System.out.println(MessageFormat.format("Distance to nearest obstacle behind the robot: {0}", distance));
           break;
         }
         case "r": {
           System.out.print("Enter angle: ");
           var angle = scanner.nextInt();
-          robotController.RotateRangeSensor(angle);
+          robotController.rotateRangeSensor(angle);
           break;
         }
         case "q":
@@ -213,17 +213,17 @@ public class InteractiveExample {
       switch (input) {
         case "s":
           System.out.println("Stopping...");
-          robotController.StopMovement();
+          robotController.stopMovement();
           break;
         case "f": {
           var moveRequest = getMoveRequest(scanner);
           System.out.println("Moving forward and waiting for completion...");
           if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveForward(moveRequest.distance());
+            robotController.moveForward(moveRequest.distance());
           } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveForward(moveRequest.distance(), moveRequest.startSpeed().get());
+            robotController.moveForward(moveRequest.distance(), moveRequest.startSpeed().get());
           } else {
-            robotController.MoveForward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
+            robotController.moveForward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           System.out.println("Finished moving forward.");
           break;
@@ -232,11 +232,11 @@ public class InteractiveExample {
           var moveRequest = getMoveRequest(scanner);
           System.out.println("Moving forward...");
           if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveForwardAsync(moveRequest.distance());
+            robotController.moveForwardAsync(moveRequest.distance());
           } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
+            robotController.moveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
           } else {
-            robotController.MoveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
+            robotController.moveForwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           break;
         }
@@ -244,11 +244,11 @@ public class InteractiveExample {
           var moveRequest = getMoveRequest(scanner);
           System.out.println("Moving backward and waiting for completion...");
           if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveBackward(moveRequest.distance());
+            robotController.moveBackward(moveRequest.distance());
           } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveBackward(moveRequest.distance(), moveRequest.startSpeed().get());
+            robotController.moveBackward(moveRequest.distance(), moveRequest.startSpeed().get());
           } else {
-            robotController.MoveBackward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
+            robotController.moveBackward(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           System.out.println("Finished moving backward.");
           break;
@@ -257,47 +257,47 @@ public class InteractiveExample {
           var moveRequest = getMoveRequest(scanner);
           System.out.println("Moving backward...");
           if (moveRequest.startSpeed().isEmpty() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveBackwardAsync(moveRequest.distance());
+            robotController.moveBackwardAsync(moveRequest.distance());
           } else if (moveRequest.startSpeed().isPresent() && moveRequest.endSpeed().isEmpty()) {
-            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
+            robotController.moveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get());
           } else {
-            robotController.MoveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
+            robotController.moveBackwardAsync(moveRequest.distance(), moveRequest.startSpeed().get(), moveRequest.endSpeed().get());
           }
           break;
         }
         case "rl": {
           var angle = getAngle(scanner);
           System.out.println("Rotating left and waiting for completion...");
-          robotController.RotateLeft(angle);
+          robotController.rotateLeft(angle);
           System.out.println("Finished rotating");
           break;
         }
         case "rla": {
           var angle = getAngle(scanner);
           System.out.println("Rotating left...");
-          robotController.RotateLeftAsync(angle);
+          robotController.rotateLeftAsync(angle);
           break;
         }
         case "rr": {
           var angle = getAngle(scanner);
           System.out.println("Rotating right and waiting for completion...");
-          robotController.RotateRight(angle);
+          robotController.rotateRight(angle);
           System.out.println("Finished rotating");
           break;
         }
         case "rra": {
           var angle = getAngle(scanner);
           System.out.println("Rotating right...");
-          robotController.RotateRightAsync(angle);
+          robotController.rotateRightAsync(angle);
           break;
         }
         case "tl": {
           var turnRequest = getTurnRequest(scanner);
           System.out.println("Turning left and waiting for completion...");
           if (turnRequest.radius().isPresent()) {
-            robotController.TurnLeft(turnRequest.angle(), turnRequest.radius().get());
+            robotController.turnLeft(turnRequest.angle(), turnRequest.radius().get());
           } else {
-            robotController.TurnLeft(turnRequest.angle());
+            robotController.turnLeft(turnRequest.angle());
           }
           System.out.println("Finished turning");
           break;
@@ -306,9 +306,9 @@ public class InteractiveExample {
           var turnRequest = getTurnRequest(scanner);
           System.out.println("Turning right and waiting for completion...");
           if (turnRequest.radius().isPresent()) {
-            robotController.TurnRight(turnRequest.angle(), turnRequest.radius().get());
+            robotController.turnRight(turnRequest.angle(), turnRequest.radius().get());
           } else {
-            robotController.TurnRight(turnRequest.angle());
+            robotController.turnRight(turnRequest.angle());
           }
           System.out.println("Finished turning");
           break;
@@ -333,7 +333,7 @@ public class InteractiveExample {
       var input = scanner.next();
       switch (input) {
         case "c":
-          var image = robotController.CaptureImage();
+          var image = robotController.captureImage();
           System.out.println("image: ");
           System.out.println(image);
           break;
@@ -342,7 +342,7 @@ public class InteractiveExample {
           var angleHorizontal = scanner.nextInt();
           System.out.print("Enter vertical angle: ");
           var angleVertical = scanner.nextInt();
-          robotController.RotateCamera(angleHorizontal, angleVertical);
+          robotController.rotateCamera(angleHorizontal, angleVertical);
           break;
         case "q":
           return;

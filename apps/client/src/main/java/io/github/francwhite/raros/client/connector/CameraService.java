@@ -8,7 +8,7 @@ public interface CameraService {
    *
    * @return {@code CompletableFuture<String>} The captured image as a base64 encoded string.
    */
-  CompletableFuture<String> CaptureImage();
+  CompletableFuture<String> captureImage();
 
   /**
    * Rotates the camera to a given angle.
@@ -17,5 +17,5 @@ public interface CameraService {
    * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
    * @return {@code CompletableFuture<Void>}
    */
-  CompletableFuture<Void> RotateCamera(int angleHorizontal, int angleVertical);
+  CompletableFuture<Void> rotateCamera(int angleHorizontal, int angleVertical);
 }

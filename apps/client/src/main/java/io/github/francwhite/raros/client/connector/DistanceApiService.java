@@ -20,7 +20,7 @@ class DistanceApiService implements DistanceService {
   }
 
   @Override
-  public CompletableFuture<Distance> GetDistance() {
+  public CompletableFuture<Distance> getDistance() {
     var request = HttpRequest.newBuilder(apiUri)
       .GET()
       .build();
@@ -33,7 +33,7 @@ class DistanceApiService implements DistanceService {
   }
 
   @Override
-  public CompletableFuture<Void> RotateSensor(int angle) {
+  public CompletableFuture<Void> rotateSensor(int angle) {
     if (angle < -90 || angle > 90)
       throw new IllegalArgumentException("The angle must be between -90 and 90.");
 

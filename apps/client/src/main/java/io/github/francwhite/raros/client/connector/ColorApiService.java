@@ -16,7 +16,7 @@ class ColorApiService implements ColorService {
   }
 
   @Override
-  public CompletableFuture<Color> GetColor() {
+  public CompletableFuture<Color> getColor() {
     var request = HttpRequest.newBuilder(apiUri)
       .GET()
       .build();
