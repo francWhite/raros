@@ -20,6 +20,8 @@ services:
     privileged: true
     network_mode: host
     ipc: host
+    volumes:
+      - /dev:/dev
     command: serial --dev /dev/ttyACM0 -v4
 
   ros_bridge:
