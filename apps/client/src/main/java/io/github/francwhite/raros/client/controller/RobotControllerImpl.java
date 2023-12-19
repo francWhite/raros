@@ -32,7 +32,11 @@ class RobotControllerImpl implements RobotController {
 
   @Override
   public Status GetStatus() {
-    return this.statusService.GetStatus().join();
+    try {
+      return this.statusService.GetStatus().join();
+    } catch (RuntimeException e) {
+      return new Status(false, false, false, false, false);
+    }
   }
 
   @Override
