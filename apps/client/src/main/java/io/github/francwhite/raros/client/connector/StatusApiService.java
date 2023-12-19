@@ -16,7 +16,7 @@ public class StatusApiService implements StatusService {
   }
 
   @Override
-  public CompletableFuture<Status> GetStatus() {
+  public CompletableFuture<Status> getStatus() {
     var request = HttpRequest.newBuilder(apiUri)
       .GET()
       .build();

@@ -29,7 +29,7 @@ class NavigationApiService implements NavigationService {
   }
 
   @Override
-  public CompletableFuture<Void> Stop() {
+  public CompletableFuture<Void> stop() {
     var request = HttpRequest.newBuilder(apiUri.resolve("./stop"))
       .POST(HttpRequest.BodyPublishers.noBody())
       .build();
@@ -41,27 +41,27 @@ class NavigationApiService implements NavigationService {
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Move(Direction direction) {
-    return Move(new MoveRequest(Math.pow(10, 4), DEFAULT_SPEED, DEFAULT_SPEED, direction));
+  public CompletableFuture<ActionInvocationResult> move(Direction direction) {
+    return move(new MoveRequest(Math.pow(10, 4), DEFAULT_SPEED, DEFAULT_SPEED, direction));
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Move(double distance, Direction direction) {
-    return Move(new MoveRequest(distance, DEFAULT_SPEED, DEFAULT_SPEED, direction));
+  public CompletableFuture<ActionInvocationResult> move(double distance, Direction direction) {
+    return move(new MoveRequest(distance, DEFAULT_SPEED, DEFAULT_SPEED, direction));
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Move(double distance, int speed, Direction direction) {
-    return Move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(speed), ConvertSpeedPercentageToRPM(speed), direction));
+  public CompletableFuture<ActionInvocationResult> move(double distance, int speed, Direction direction) {
+    return move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(speed), ConvertSpeedPercentageToRPM(speed), direction));
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Move(double distance, int startSpeed, int endSpeed, Direction direction) {
-    return Move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(startSpeed), ConvertSpeedPercentageToRPM(endSpeed), direction));
+  public CompletableFuture<ActionInvocationResult> move(double distance, int startSpeed, int endSpeed, Direction direction) {
+    return move(new MoveRequest(distance, ConvertSpeedPercentageToRPM(startSpeed), ConvertSpeedPercentageToRPM(endSpeed), direction));
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Rotate(double angle, Direction direction) {
+  public CompletableFuture<ActionInvocationResult> rotate(double angle, Direction direction) {
     if (angle < 0 || angle > 180)
       throw new IllegalArgumentException("The angle must be between 0° and 180°.");
 
@@ -78,7 +78,7 @@ class NavigationApiService implements NavigationService {
   }
 
   @Override
-  public CompletableFuture<ActionInvocationResult> Turn(double angle, double radius, Direction direction) {
+  public CompletableFuture<ActionInvocationResult> turn(double angle, double radius, Direction direction) {
     if (angle < 0 || angle > 180)
       throw new IllegalArgumentException("The angle must be between 0° and 180°.");
 
@@ -94,7 +94,7 @@ class NavigationApiService implements NavigationService {
 
   }
 
-  private CompletableFuture<ActionInvocationResult> Move(MoveRequest moveRequest) {
+  private CompletableFuture<ActionInvocationResult> move(MoveRequest moveRequest) {
     if (moveRequest.direction != Direction.Forward && moveRequest.direction != Direction.Backward)
       throw new IllegalArgumentException("Only forward and backward are supported as directions.");
 

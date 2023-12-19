@@ -8,6 +8,6 @@ public interface StatusService {
    *
    * @return {@code CompletableFuture<Status>} The current status of the robot.
    */
-  CompletableFuture<Status> GetStatus();
+  CompletableFuture<Status> getStatus();
 }
 

@@ -8,7 +8,7 @@ public interface DistanceService {
    *
    * @return {@code CompletableFuture<Distance>} The current distance to the nearest object in front and back of the robot.
    */
-  CompletableFuture<Distance> GetDistance();
+  CompletableFuture<Distance> getDistance();
 
   /**
    * Rotates the range sensor (front) to a given angle.
@@ -16,5 +16,5 @@ public interface DistanceService {
    * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
    * @return {@code CompletableFuture<Void>}
    */
-  CompletableFuture<Void> RotateSensor(int angle);
+  CompletableFuture<Void> rotateSensor(int angle);
 }

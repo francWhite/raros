@@ -3,7 +3,6 @@ package io.github.francwhite.raros.client.controller;
 import io.github.francwhite.raros.client.connector.Color;
 import io.github.francwhite.raros.client.connector.Status;
 
-//TODO (entire project): rename methods to match the camelCase naming convention
 public interface RobotController {
 
   /**
@@ -11,22 +10,22 @@ public interface RobotController {
    *
    * @return The current status of the robot.
    */
-  Status GetStatus();
+  Status getStatus();
 
   /**
    * Enables the magnet.
    */
-  void EnableMagnet();
+  void enableMagnet();
 
   /**
    * Disables the magnet.
    */
-  void DisableMagnet();
+  void disableMagnet();
 
   /**
    * Plays a beep sound.
    */
-  void Beep();
+  void beep();
 
   /**
    * Plays a tone. This method will block until the tone is finished.
@@ -34,7 +33,7 @@ public interface RobotController {
    * @param frequency The frequency of the tone in Hz.
    * @param duration  The duration of the tone in ms.
    */
-  void PlayTone(int frequency, int duration);
+  void playTone(int frequency, int duration);
 
   /**
    * Plays a tone. This method will return immediately, additional calls to this method will queue the requested tone.
@@ -42,21 +41,21 @@ public interface RobotController {
    * @param frequency The frequency of the tone in Hz.
    * @param duration  The duration of the tone in ms.
    */
-  void PlayToneAsync(int frequency, int duration);
+  void playToneAsync(int frequency, int duration);
 
   /**
    * Reads the current color of the color sensor.
    *
    * @return The last color read from the color sensor.
    */
-  Color GetColor();
+  Color getColor();
 
   /**
    * Reads the current distance to the nearest object in front of the robot.
    *
    * @return Distance in cm. If no object is detected infinity is returned.
    */
-  float GetDistanceFront();
+  float getDistanceFront();
 
   /**
    * Reads the current distance to the nearest object in front of the robot.
@@ -64,26 +63,26 @@ public interface RobotController {
    * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
    * @return Distance in cm. If no object is detected infinity is returned.
    */
-  float GetDistanceFront(int angle);
+  float getDistanceFront(int angle);
 
   /**
    * Reads the current distance to the nearest object behind the robot.
    *
    * @return Distance in cm. If no object is detected infinity is returned.
    */
-  float GetDistanceBack();
+  float getDistanceBack();
 
   /**
    * Rotates the range sensor (front) to a given angle.
    *
    * @param angle The angle to rotate the range sensor to. The angle must be between -90 and 90.
    */
-  void RotateRangeSensor(int angle);
+  void rotateRangeSensor(int angle);
 
   /**
    * Stops any movement of the robot.
    */
-  void StopMovement();
+  void stopMovement();
 
   /**
    * Moves the robot forward by the specified distance.
@@ -91,7 +90,7 @@ public interface RobotController {
    *
    * @param distance The distance to move the robot forward in m.
    */
-  void MoveForward(double distance);
+  void moveForward(double distance);
 
   /**
    * Moves the robot forward by the specified distance.
@@ -100,7 +99,7 @@ public interface RobotController {
    * @param distance The distance to move the robot forward in m.
    * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveForward(double distance, int speed);
+  void moveForward(double distance, int speed);
 
   /**
    * Moves the robot forward by the specified distance using acceleration.
@@ -110,13 +109,13 @@ public interface RobotController {
    * @param startSpeed The speed at which the robot starts moving forward in % (0-100%).
    * @param endSpeed   The desired end speed % (0-100%).
    */
-  void MoveForward(double distance, int startSpeed, int endSpeed);
+  void moveForward(double distance, int startSpeed, int endSpeed);
 
   /**
    * Moves the robot forward indefinitely.
    * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    */
-  void MoveForwardAsync();
+  void moveForwardAsync();
 
   /**
    * Moves the robot forward by the specified distance.
@@ -124,7 +123,7 @@ public interface RobotController {
    *
    * @param distance The distance to move the robot forward in m.
    */
-  void MoveForwardAsync(double distance);
+  void moveForwardAsync(double distance);
 
   /**
    * Moves the robot forward by the specified distance.
@@ -133,7 +132,7 @@ public interface RobotController {
    * @param distance The distance to move the robot forward in m.
    * @param speed    The speed to move the robot forward in % (0-100%).
    */
-  void MoveForwardAsync(double distance, int speed);
+  void moveForwardAsync(double distance, int speed);
 
   /**
    * Moves the robot forward by the specified distance using acceleration.
@@ -143,7 +142,7 @@ public interface RobotController {
    * @param startSpeed The speed at which the robot starts moving forward in % (0-100%).
    * @param endSpeed   The desired end speed % (0-100%).
    */
-  void MoveForwardAsync(double distance, int startSpeed, int endSpeed);
+  void moveForwardAsync(double distance, int startSpeed, int endSpeed);
 
 
   /**
@@ -152,7 +151,7 @@ public interface RobotController {
    *
    * @param distance The distance to move the robot backward in m.
    */
-  void MoveBackward(double distance);
+  void moveBackward(double distance);
 
   /**
    * Moves the robot backward by the specified distance.
@@ -161,7 +160,7 @@ public interface RobotController {
    * @param distance The distance to move the robot backward in m.
    * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveBackward(double distance, int speed);
+  void moveBackward(double distance, int speed);
 
   /**
    * Moves the robot backward by the specified distance using acceleration.
@@ -171,13 +170,13 @@ public interface RobotController {
    * @param startSpeed The speed at which the robot starts moving backward in % (0-100%).
    * @param endSpeed   The desired end speed % (0-100%).
    */
-  void MoveBackward(double distance, int startSpeed, int endSpeed);
+  void moveBackward(double distance, int startSpeed, int endSpeed);
 
   /**
    * Moves the robot backward indefinitely.
    * This method will return immediately, additional calls to this method will cancel the current movement and start the requested movement.
    */
-  void MoveBackwardAsync();
+  void moveBackwardAsync();
 
   /**
    * Moves the robot backward by the specified distance.
@@ -185,7 +184,7 @@ public interface RobotController {
    *
    * @param distance The distance to move the robot backward in m.
    */
-  void MoveBackwardAsync(double distance);
+  void moveBackwardAsync(double distance);
 
   /**
    * Moves the robot backward by the specified distance.
@@ -194,7 +193,7 @@ public interface RobotController {
    * @param distance The distance to move the robot backward in m.
    * @param speed    The speed at which the robot moves forward in % (0-100%).
    */
-  void MoveBackwardAsync(double distance, int speed);
+  void moveBackwardAsync(double distance, int speed);
 
   /**
    * Moves the robot backward by the specified distance using acceleration.
@@ -204,7 +203,7 @@ public interface RobotController {
    * @param startSpeed The speed at which the robot starts moving backward in % (0-100%).
    * @param endSpeed   The desired end speed % (0-100%).
    */
-  void MoveBackwardAsync(double distance, int startSpeed, int endSpeed);
+  void moveBackwardAsync(double distance, int startSpeed, int endSpeed);
 
   /**
    * Rotates the robot to the left by the specified angle.
@@ -212,7 +211,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void RotateLeft(double angle);
+  void rotateLeft(double angle);
 
   /**
    * Rotates the robot to the left by the specified angle.
@@ -220,7 +219,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void RotateLeftAsync(double angle);
+  void rotateLeftAsync(double angle);
 
   /**
    * Rotates the robot to the right by the specified angle.
@@ -228,7 +227,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void RotateRight(double angle);
+  void rotateRight(double angle);
 
   /**
    * Rotates the robot to the right by the specified angle.
@@ -236,7 +235,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void RotateRightAsync(double angle);
+  void rotateRightAsync(double angle);
 
   /**
    * Turns the robot to the left by the specified angle.
@@ -244,7 +243,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void TurnLeft(double angle);
+  void turnLeft(double angle);
 
   /**
    * Turns the robot to the left by the specified angle.
@@ -252,7 +251,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void TurnLeftAsync(double angle);
+  void turnLeftAsync(double angle);
 
 
   /**
@@ -262,7 +261,7 @@ public interface RobotController {
    * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    * @param radius The radius of the turn in m.
    */
-  void TurnLeft(double angle, double radius);
+  void turnLeft(double angle, double radius);
 
   /**
    * Turns the robot to the left by the specified angle and radius.
@@ -271,7 +270,7 @@ public interface RobotController {
    * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    * @param radius The radius of the turn in m.
    */
-  void TurnLeftAsync(double angle, double radius);
+  void turnLeftAsync(double angle, double radius);
 
   /**
    * Turns the robot to the right by the specified angle.
@@ -279,7 +278,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void TurnRight(double angle);
+  void turnRight(double angle);
 
   /**
    * Turns the robot to the right by the specified angle.
@@ -287,7 +286,7 @@ public interface RobotController {
    *
    * @param angle The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    */
-  void TurnRightAsync(double angle);
+  void turnRightAsync(double angle);
 
   /**
    * Turns the robot to the right by the specified angle and radius.
@@ -296,7 +295,7 @@ public interface RobotController {
    * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    * @param radius The radius of the turn in m.
    */
-  void TurnRight(double angle, double radius);
+  void turnRight(double angle, double radius);
 
   /**
    * Turns the robot to the right by the specified angle and radius.
@@ -305,14 +304,14 @@ public interface RobotController {
    * @param angle  The angle to rotate the robot by in degrees. The angle must be between 0° and 180°.
    * @param radius The radius of the turn in m.
    */
-  void TurnRightAsync(double angle, double radius);
+  void turnRightAsync(double angle, double radius);
 
   /**
    * Captures an image from the camera.
    *
    * @return String The captured image as a base64 encoded string.
    */
-  String CaptureImage();
+  String captureImage();
 
   /**
    * Captures an image from the camera.
@@ -321,7 +320,7 @@ public interface RobotController {
    * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
    * @return String The captured image as a base64 encoded string.
    */
-  String CaptureImage(int angleHorizontal, int angleVertical);
+  String captureImage(int angleHorizontal, int angleVertical);
 
   /**
    * Rotates the camera to a given angle.
@@ -329,5 +328,5 @@ public interface RobotController {
    * @param angleHorizontal The horizontal angle to rotate the camera to. The angle must be between -90 and 90.
    * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
    */
-  void RotateCamera(int angleHorizontal, int angleVertical);
+  void rotateCamera(int angleHorizontal, int angleVertical);
 }

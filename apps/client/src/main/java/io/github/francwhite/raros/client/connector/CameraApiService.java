@@ -23,7 +23,7 @@ class CameraApiService implements CameraService {
   }
 
   @Override
-  public CompletableFuture<String> CaptureImage() {
+  public CompletableFuture<String> captureImage() {
     var request = HttpRequest.newBuilder(apiUri.resolve("./capture"))
       .POST(HttpRequest.BodyPublishers.noBody())
       .build();
@@ -36,7 +36,7 @@ class CameraApiService implements CameraService {
   }
 
   @Override
-  public CompletableFuture<Void> RotateCamera(int angleHorizontal, int angleVertical) {
+  public CompletableFuture<Void> rotateCamera(int angleHorizontal, int angleVertical) {
     if (angleHorizontal < -90 || angleHorizontal > 90)
       throw new IllegalArgumentException("The horizontal angle must be between -90 and 90.");
 

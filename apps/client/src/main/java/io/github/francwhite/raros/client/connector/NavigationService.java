@@ -9,7 +9,7 @@ public interface NavigationService {
    *
    * @return {@code CompletableFuture<Void>}
    */
-  CompletableFuture<Void> Stop();
+  CompletableFuture<Void> stop();
 
   /**
    * Moves the robot forward indefinitely.
@@ -17,7 +17,7 @@ public interface NavigationService {
    * @param direction The direction to move in (only forward and backward are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Move(Direction direction);
+  CompletableFuture<ActionInvocationResult> move(Direction direction);
 
   /**
    * Moves the robot forward for the given distance.
@@ -26,7 +26,7 @@ public interface NavigationService {
    * @param direction The direction to move in (only forward and backward are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Move(double distance, Direction direction);
+  CompletableFuture<ActionInvocationResult> move(double distance, Direction direction);
 
   /**
    * Moves the robot forward for the given distance.
@@ -36,7 +36,7 @@ public interface NavigationService {
    * @param direction The direction to move in (only forward and backward are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Move(double distance, int speed, Direction direction);
+  CompletableFuture<ActionInvocationResult> move(double distance, int speed, Direction direction);
 
   /**
    * Moves the robot forward for the given distance using acceleration.
@@ -47,7 +47,7 @@ public interface NavigationService {
    * @param direction  The direction to move in (only forward and backward are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Move(double distance, int startSpeed, int endSpeed, Direction direction);
+  CompletableFuture<ActionInvocationResult> move(double distance, int startSpeed, int endSpeed, Direction direction);
 
   /**
    * Rotates the robot by the given angle.
@@ -56,7 +56,7 @@ public interface NavigationService {
    * @param direction The direction to rotate in (only left and right are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Rotate(double angle, Direction direction);
+  CompletableFuture<ActionInvocationResult> rotate(double angle, Direction direction);
 
   /**
    * Turns the robot by the given angle and radius.
@@ -66,6 +66,6 @@ public interface NavigationService {
    * @param direction The direction to turn in (only left and right are possible)
    * @return {@code CompletableFuture<ActionInvocationResult>} The result of the action invocation.
    */
-  CompletableFuture<ActionInvocationResult> Turn(double angle, double radius, Direction direction);
+  CompletableFuture<ActionInvocationResult> turn(double angle, double radius, Direction direction);
 }
 

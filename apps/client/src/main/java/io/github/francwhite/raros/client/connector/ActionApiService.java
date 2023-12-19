@@ -20,7 +20,7 @@ public class ActionApiService implements ActionService {
   }
 
   @Override
-  public CompletableFuture<Boolean> IsActionCompleted(UUID goalId) {
+  public CompletableFuture<Boolean> isActionCompleted(UUID goalId) {
     var uri = apiUri.resolve(goalId.toString());
     var request = HttpRequest.newBuilder(uri)
       .GET()
