@@ -22,7 +22,11 @@ navigationRouter.post('/stop', async (req: Request<undefined, undefined, undefin
 navigationRouter.post('/move', async (req: Request<undefined, undefined, MoveRequest>, res: Response) => {
   console.log(req.originalUrl, req.body);
 
-  const requestData = { ...req.body, direction: { value: req.body.direction } };
+  const requestData = {
+    distance: req.body.distance,
+    speed: req.body.endSpeed,
+    speed_start: req.body.startSpeed,
+    direction: { value: req.body.direction } };
   rosService.callService(
     '/raros/action_api/navigation/move',
     'raros_interfaces/srv/ActionMove',
@@ -69,8 +73,8 @@ navigationRouter.post('/turn', async (req: Request<undefined, undefined, TurnReq
 
 type MoveRequest = {
   distance: number;
-  speed: number;
-  speed_start: number;
+  startSpeed: number;
+  endSpeed: number;
   direction: number;
 };
 
