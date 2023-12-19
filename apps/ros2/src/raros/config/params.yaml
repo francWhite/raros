@@ -29,8 +29,8 @@ raros:
   camera:
     ros__parameters:
       active: true
-      pwm_pin_servo_horizontal: 5
-      pwm_pin_servo_vertical: 6
+      pwm_pin_servo_horizontal: 6
+      pwm_pin_servo_vertical: 5
 
   collision_detection:
     ros__parameters:

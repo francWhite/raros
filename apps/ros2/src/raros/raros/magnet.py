@@ -19,7 +19,7 @@ class Magnet(Node):
 
     def init_params(self):
         self.declare_parameter('active', True)
-        self.declare_parameter('pin', 22)
+        self.declare_parameter('pin', 25)
         active = self.get_parameter('active').get_parameter_value().bool_value
         pin = self.get_parameter('pin').get_parameter_value().integer_value
         return active, pin
