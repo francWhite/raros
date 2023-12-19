@@ -162,6 +162,11 @@ class Calibration(Node):
                 print('Please enter a valid float value.')
 
     def get_current_params(self):
+        if not os.path.isfile(self.params_file_path):
+            print(f'No parameters file found at {self.params_file_path}. '
+                  'Please make sure that raros is installed correctly.')
+            raise SystemExit
+
         with (open(self.params_file_path, 'r') as file):
             data = yaml.load(file, Loader=yaml.FullLoader)
             try:
