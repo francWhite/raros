@@ -12,7 +12,7 @@ public class JsonSerializer {
         .writerWithDefaultPrettyPrinter()
         .writeValueAsString(object);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
   public static <T> T deserialize(String object, Class<T> classType) {
@@ -22,7 +22,7 @@ public class JsonSerializer {
         .readerFor(classType)
         .readValue(object);
     } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e.getMessage(), e);
     }
   }
 }

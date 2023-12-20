@@ -20,7 +20,7 @@ public class ActionAwaiterImpl implements ActionAwaiter {
       try {
         Thread.sleep(100);
       } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException(e.getMessage(), e);
       }
     }
   }
