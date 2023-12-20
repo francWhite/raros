@@ -23,18 +23,21 @@ class Calibration(Node):
         config_path = os.path.join(get_package_share_directory('raros'), 'config')
         self.params_file_path = os.path.join(config_path, 'params.yaml')
         self.params_calibrated_file_path = os.path.join(config_path, 'params_calibrated.yaml')
+        self.current_wheel_distance, self.current_wheel_radius, self.steps_per_revolution, self.micro_steps = 0, 0, 0, 0
         self.converter: Optional[Converter] = None
 
     def init_parameters(self):
-        current_wheel_distance, current_wheel_radius, steps_per_revolution, micro_steps = self.get_current_params()
+        (self.current_wheel_distance, self.current_wheel_radius,
+         self.steps_per_revolution, self.micro_steps) = self.get_current_params()
         print('Using the current parameter values as a base for the calibration:')
-        print(f'wheel.distance={current_wheel_distance}, wheel.radius={current_wheel_radius}, '
-              f'steps_per_revolution={steps_per_revolution}, micro_steps={micro_steps}\n')
-        self.converter = Converter(steps_per_revolution, micro_steps, current_wheel_radius, current_wheel_distance)
+        print(f'wheel.distance={self.current_wheel_distance}, wheel.radius={self.current_wheel_radius}, '
+              f'steps_per_revolution={self.steps_per_revolution}, micro_steps={self.micro_steps}\n')
+        self.converter = Converter(self.steps_per_revolution, self.micro_steps, self.current_wheel_radius,
+                                   self.current_wheel_distance)
 
         stepper_parameters = StepperParameters()
-        stepper_parameters.steps_per_revolution = steps_per_revolution
-        stepper_parameters.micro_steps = micro_steps
+        stepper_parameters.steps_per_revolution = self.steps_per_revolution
+        stepper_parameters.micro_steps = self.micro_steps
         stepper_parameters.hold_power = True
         self.parameters_publisher.publish(stepper_parameters)
 
@@ -72,6 +75,8 @@ class Calibration(Node):
 
     def calibrate_wheel_distance(self, wheel_radius):
         self.print_wheel_distance_calibration_instructions()
+        self.converter = Converter(self.steps_per_revolution, self.micro_steps, wheel_radius,
+                                   self.current_wheel_distance)
 
         print('Beginning calibration, press enter to start the first rotation.')
         input()
