@@ -71,7 +71,8 @@ class RangeSensor(Node):
 
     def rotate_callback(self, request, response: RotateRangeSensor.Response):
         self.get_logger().info(f'rotating to {request.angle}°')
-        transformed_angle = request.angle + 90  # map from [-90, 90] to [0, 180]
+        # map from [-90, 90] to [180, 0]
+        transformed_angle = 180 - (request.angle + 90)
         self.servo.angle = transformed_angle
         self.rotate_cleanup_timer = self.create_timer(1, self.rotate_cleanup_callback)
         return response
