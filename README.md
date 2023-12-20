@@ -39,7 +39,7 @@ TODO
 ## Installation
 <a name="client_library_install"></a>
 ### Client-Library
-The client library is available on [Maven Central](https://search.maven.org/artifact/io.github.francwhite/raros-client) and can be used in any Java project.
+The client library is available on [Maven Central](https://search.maven.org/artifact/io.github.francwhite/raros-client) and can be referenced in your project as follows:
 
 Maven:
 ```xml
@@ -63,6 +63,14 @@ file in the root directory of this repository.
 
 **Prerequisites**:
 - [docker](https://docs.docker.com/engine/install/) is installed
+- `./config` directory exists for the volume mount
+
+**Instructions**:
+```shell
+cd [path/to/docker-compose.yaml]    # change directory to where the docker-compose.yaml file is located
+mkdir config                        # create config directory, only required on first run
+docker-compose up -d                # start the containers in detached mode
+```
 
 <a name="microcontroller_install"></a>
 ### Microcontroller
@@ -71,13 +79,28 @@ directory of this repository. To build and flash the software onto the microcont
 
 **Prerequisites**:
 - [PlatformIO CLI](https://docs.platformio.org/en/stable/core/installation/index.html) is installed
+- Arduino is connected to the computer via USB
 
+**Instructions**:
+```shell
+git clone https://github.com/francWhite/raros.git   # clone the repository
+cd raros/apps/micro_ros                             # navigate to the micro_ros directory
+chmod +x flash.sh                                   # make the script executable
+./flash.sh                                          # build and flash the software onto the microcontroller
+```
 
 ## Usage
 
 <a name="client_library_usage"></a>
 ### Client-Library
-TODO
+Make sure that the controller and microcontroller are running and connected to the same network as the client.
+The client library can be used to control the robot over the `RobotController` interface. An instance of the controller can be created as follows:
+
+```java
+import io.github.francwhite.raros.client.controller.RobotControllerFactory;
+...
+RobotController client = RobotControllerFactory.create(URI.create("http://hostname:8000"))
+```
 
 <a name="controller_usage"></a>
 ### Controller
