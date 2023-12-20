@@ -46,13 +46,13 @@ Maven:
 <dependency>
     <groupId>io.github.francwhite</groupId>
     <artifactId>raros-client</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
 Gradle:
 ```groovy
-implementation 'io.github.francwhite:raros-client:1.0.1'
+implementation 'io.github.francwhite:raros-client:1.0.4'
 ```
 
 <a name="controller_install"></a>
