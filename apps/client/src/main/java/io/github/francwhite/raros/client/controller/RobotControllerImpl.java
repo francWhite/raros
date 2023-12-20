@@ -2,6 +2,9 @@ package io.github.francwhite.raros.client.controller;
 
 import io.github.francwhite.raros.client.connector.*;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 class RobotControllerImpl implements RobotController {
   private final ActionAwaiter actionAwaiter;
   private final MagnetService magnetService;
@@ -243,17 +246,38 @@ class RobotControllerImpl implements RobotController {
 
   @Override
   public String captureImage() {
-    return this.cameraService.captureImage().join();
+    var image = this.cameraService.captureImage().join();
+    return this.saveImage(image);
   }
 
   @Override
   public String captureImage(int angleHorizontal, int angleVertical) {
     this.cameraService.rotateCamera(angleHorizontal, angleVertical).join();
-    return this.cameraService.captureImage().join();
+    var image = this.cameraService.captureImage().join();
+    return this.saveImage(image);
   }
 
   @Override
   public void rotateCamera(int angleHorizontal, int angleVertical) {
     this.cameraService.rotateCamera(angleHorizontal, angleVertical).join();
+  }
+
+  private String saveImage(String imageBase64) {
+    var imageBytes = java.util.Base64.getDecoder().decode(imageBase64);
+    var outputDirectory = new java.io.File("images");
+    //noinspection ResultOfMethodCallIgnored
+    outputDirectory.mkdir();
+
+    var filePath = outputDirectory.getAbsolutePath()
+      + "/image-"
+      + java.time.LocalDateTime.now().toString().replace(":", "-")
+      + ".jpg";
+
+    try (FileOutputStream fos = new FileOutputStream(filePath)) {
+      fos.write(imageBytes);
+      return filePath;
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage(), e);
+    }
   }
 }

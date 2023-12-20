@@ -309,7 +309,7 @@ public interface RobotController {
   /**
    * Captures an image from the camera.
    *
-   * @return String The captured image as a base64 encoded string.
+   * @return The path to the captured image.
    */
   String captureImage();
 
@@ -318,7 +318,7 @@ public interface RobotController {
    *
    * @param angleHorizontal The horizontal angle to rotate the camera to. The angle must be between -90 and 90.
    * @param angleVertical   The vertical angle to rotate the camera to. The angle must be between -90 and 90.
-   * @return String The captured image as a base64 encoded string.
+   * @return The path to the captured image.
    */
   String captureImage(int angleHorizontal, int angleVertical);
 
