@@ -8,7 +8,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 
-public class StatusApiService implements StatusService {
+class StatusApiService implements StatusService {
   private final URI apiUri;
 
   public StatusApiService(URI apiBaseUri) {
