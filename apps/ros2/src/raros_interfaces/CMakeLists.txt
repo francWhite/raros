@@ -28,8 +28,6 @@ find_package(unique_identifier_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Num.msg"
-  "msg/MagnetState.msg"
   "msg/Distance.msg"
   "msg/StepperInstruction.msg"
   "msg/StepperMovement.msg"
@@ -38,7 +36,6 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/StepperParameters.msg"
   "msg/Direction.msg"
   "msg/Status.msg"
-  "srv/SetMagnetState.srv"
   "srv/RotateRangeSensor.srv"
   "srv/RotateCamera.srv"
   "srv/CaptureImage.srv"
