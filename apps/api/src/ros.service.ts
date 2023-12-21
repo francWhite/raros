@@ -1,4 +1,4 @@
-import { ActionClient, Goal, Message, Ros, Service, ServiceRequest, Topic } from 'roslib';
+import { Ros, Service, ServiceRequest, Topic } from 'roslib';
 import process from 'process';
 
 class RosService {
@@ -29,20 +29,6 @@ class RosService {
     this.ros.connect(url);
   }
 
-  publishToTopic(name: string, message: string) {
-    const topic = new Topic({
-      ros: this.ros,
-      name: name,
-      messageType: 'std_msgs/String',
-    });
-
-    const msg = new Message({
-      data: message,
-    });
-
-    topic.publish(msg);
-  }
-
   callService<TResponse>(
     name: string,
     serviceType: string,
@@ -62,26 +48,6 @@ class RosService {
 
     service.callService(new ServiceRequest(requestData), callback, errorCallback);
     clearTimeout(timeout);
-  }
-
-  sendGoal(serverName: string, actionName: string, goalMessage: unknown, statusCallback: (status: unknown) => void) {
-    const actionClient = new ActionClient({
-      ros: this.ros,
-      serverName: serverName,
-      actionName: actionName,
-      timeout: 10,
-      omitStatus: true,
-      omitResult: false,
-      omitFeedback: false,
-    });
-
-    const goal = new Goal({
-      actionClient: actionClient,
-      goalMessage: goalMessage,
-    });
-
-    goal.on('status', statusCallback);
-    goal.send();
   }
 
   readSingleMessageFromTopic<T>(
