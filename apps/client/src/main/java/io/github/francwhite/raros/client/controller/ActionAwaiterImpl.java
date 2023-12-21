@@ -6,7 +6,7 @@ import io.github.francwhite.raros.client.connector.ActionService;
 import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("BusyWait")
-public class ActionAwaiterImpl implements ActionAwaiter {
+class ActionAwaiterImpl implements ActionAwaiter {
   private final ActionService actionService;
 
   public ActionAwaiterImpl(ActionService actionService) {

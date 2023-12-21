@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-public class ActionApiService implements ActionService {
+class ActionApiService implements ActionService {
   private record Goal(UUID goalId, Boolean completed) {
   }
 
