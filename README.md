@@ -15,7 +15,6 @@ Ultimately, the project should be able to be used to teach students the basic co
 as they can see their work directly resulting in actions executed by the robot instead of just viewing some text in a terminal.
 
 ## Table of contents
-- [Hardware](#hardware)
 - [Architecture](#architecture)
 - [Installation](#installation)
   - [Client-Library](#client_library_install)
@@ -23,19 +22,15 @@ as they can see their work directly resulting in actions executed by the robot i
   - [Microcontroller](#microcontroller_install)
 - [Usage](#usage)
   - [Client-Library](#client_library_usage) 
-  - [Controller](#microcontroller_usage)
-  - [Microcontroller](#microcontroller_usage)
 - [Development](#development)
   - [Prerequisites](#prerequisites)
   - [Build](#build)
   - [Run](#run)
 - [License](#license)
 
-## Hardware
-TODO
-## Architecture
 
-TODO
+## Architecture
+![architecture](doc/img/system_context.svg)
 
 ## Installation
 <a name="client_library_install"></a>
@@ -102,25 +97,6 @@ import io.github.francwhite.raros.client.controller.RobotControllerFactory;
 ...
 RobotController client = RobotControllerFactory.create(URI.create("http://hostname:8000"))
 ```
-
-<a name="controller_usage"></a>
-### Controller
-TODO
-
-<a name="microcontroller_usage"></a>
-### Microcontroller
-TODO
-
-## Development
-
-### Prerequisites
-TODO
-
-### Build
-TODO
-
-### Run
-TODO
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

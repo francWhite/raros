@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="325px" preserveAspectRatio="none" style="width:836px;height:325px;background:#FFFFFF;" version="1.1" viewBox="0 0 836 325" width="836px" zoomAndPan="magnify"><defs/><g><!--MD5=[82c7bfafb0c4621b92ca619af92a819c]
+cluster Java Client--><g id="cluster_Java Client"><rect fill="none" height="100" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="341" x="53" y="7"/><path d="M141,7 L141,17.6094 L131,27.6094 L53,27.6094 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="78" x="56" y="22.5332">Java Client</text></g><!--MD5=[bcfbab6846da7ea2dad35d941572c1b3]
+cluster Roboter--><g id="cluster_Roboter"><rect fill="none" height="188" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="456" x="374" y="131"/><path d="M441,131 L441,141.6094 L431,151.6094 L374,151.6094 " fill="none" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="57" x="377" y="146.5332">Roboter</text></g><!--MD5=[937eaf8b848435717c84ebbaa6a6c94a]
+entity client_lib--><g id="elem_client_lib"><rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="124" x="254" y="43"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="358" y="48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="356" y="50"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="356" y="54"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84" x="269" y="77.5332">Client Library</text></g><!--MD5=[4a65e84059005d12693a083370a06717]
+entity client--><g id="elem_client"><rect fill="#F1F1F1" height="47.6094" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149" x="69.5" y="43"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="198.5" y="48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="196.5" y="50"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="196.5" y="54"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="84.5" y="77.5332">Client Executable</text></g><!--MD5=[caf660ac2a54b55a5c31b5515889e628]
+entity config--><g id="elem_config"><path d="M708.5,174.5 L708.5,207.1094 A2.5,2.5 0 0 0 711,209.6094 L811,209.6094 A2.5,2.5 0 0 0 813.5,207.1094 L813.5,182 L803.5,172 L711,172 A2.5,2.5 0 0 0 708.5,174.5 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><path d="M803.5,172 L803.5,179.5 A2.5,2.5 0 0 0 806,182 L813.5,182 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="718.5" y="196.5332">Configuration</text></g><!--MD5=[e2307af040e3f87d22824e7603ca28ec]
+entity api--><g id="elem_api"><polygon fill="#F1F1F1" points="390.5,177,400.5,167,493.5,167,493.5,204.6094,483.5,214.6094,390.5,214.6094,390.5,177" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="483.5" x2="493.5" y1="177" y2="167"/><line style="stroke:#181818;stroke-width:0.5;" x1="390.5" x2="483.5" y1="177" y2="177"/><line style="stroke:#181818;stroke-width:0.5;" x1="483.5" x2="483.5" y1="177" y2="214.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="405.5" y="201.5332">REST-API</text></g><!--MD5=[c05fcadc036a699206cfdfa4a4fdb889]
+entity controller--><g id="elem_controller"><polygon fill="#F1F1F1" points="529,177,539,167,673,167,673,204.6094,663,214.6094,529,214.6094,529,177" style="stroke:#181818;stroke-width:0.5;"/><line style="stroke:#181818;stroke-width:0.5;" x1="663" x2="673" y1="177" y2="167"/><line style="stroke:#181818;stroke-width:0.5;" x1="529" x2="663" y1="177" y2="177"/><line style="stroke:#181818;stroke-width:0.5;" x1="663" x2="663" y1="177" y2="214.6094"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="104" x="544" y="201.5332">ROS2 Controller</text></g><!--MD5=[866e819fedfb67f173396a1d9cc4a1b8]
+entity hardware--><g id="elem_hardware"><polygon fill="#F1F1F1" points="661,289,631,275,571,275,541,289,571,303,631,303,661,289" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="60" x="571" y="294.5332">Hardware</text></g><!--MD5=[8fc3522a43f8c7199df5e09e5bb0188e]
+entity user--><g id="elem_user"><ellipse cx="20" cy="36.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M20,44.5 L20,71.5 M7,52.5 L33,52.5 M20,71.5 L7,86.5 M20,71.5 L33,86.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28" x="6" y="102.5332">user</text></g><!--MD5=[53a7890647be042c111b8a807eed420f]
+entity internet--><g id="elem_internet"><path d="M285.1042,176.2887 C287.2939,166.7898 295.2839,164.8961 301.3036,172.7036 C305.653,163.5265 312.5592,162.801 318.1174,171.5711 C322.7261,166.4361 329.192,165.4948 331.9095,173.5488 C338.9518,165.8565 344.8135,168.0703 348.3222,177.0313 C357.5557,176.9408 361.9258,181.8851 357.754,190.9068 C361.3606,199.9745 359.4988,207.5136 347.8426,207.4208 C345.5839,215.1383 338.4423,216.7655 332.7656,211.3424 C329.6606,219.8491 323.1658,220.1713 317.1046,214.6405 C311.3229,221.4704 304.332,218.11 302.1901,210.8009 C296.0844,216.894 288.8842,215.1839 286.0404,207.0882 C276.1779,207.2716 272.9297,200.9915 277.7802,192.7177 C273.2317,184.5484 273.7902,177.3867 285.1042,176.2887 " fill="#F1F1F1" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48" x="292" y="196.5332">internet</text></g><!--MD5=[f72297d69d8e991d82df75335ee64f2c]
+link user to client--><g id="link_user_client"><path d="M34.05,67 C44.04,67 54.04,67 64.04,67 " fill="none" id="user-to-client" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="69.27,67,60.27,63,64.27,67,60.27,71,69.27,67" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[71c5260853fb2242c8340f659e6c51c4]
+link client to client_lib--><g id="link_client_client_lib"><path d="M218.58,67 C228.62,67 238.67,67 248.72,67 " fill="none" id="client-to-client_lib" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="253.97,67,244.97,63,248.97,67,244.97,71,253.97,67" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[4d4600ed952802266d1008da389c6b43]
+link client_lib to internet--><g id="link_client_lib_internet"><path d="M316,91.23 C316,111.25 316,140.2 316,161.59 " fill="none" id="client_lib-to-internet" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="316,166.85,320,157.85,316,161.85,312,157.85,316,166.85" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[9b1b1fb8a8bed462cb6f1d940d964eb8]
+link internet to api--><g id="link_internet_api"><path d="M355.38,191 C365.27,191 375.16,191 385.05,191 " fill="none" id="internet-to-api" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="390.23,191,381.23,187,385.23,191,381.23,195,390.23,191" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[21f5a3507a015f345dcc876e2df47824]
+link api to controller--><g id="link_api_controller"><path d="M493.55,191 C503.56,191 513.57,191 523.57,191 " fill="none" id="api-to-controller" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="528.81,191,519.81,187,523.81,191,519.81,195,528.81,191" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[f3cb605a030b1a1d8a4d35742868c3ab]
+link controller to hardware--><g id="link_controller_hardware"><path d="M601,215.24 C601,231.94 601,254.16 601,269.63 " fill="none" id="controller-to-hardware" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="601,275,605,266,601,270,597,266,601,275" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[a89326c57e6ac11fe8aecca0a8e9deb4]
+reverse link controller to config--><g id="link_controller_config"><path d="M678.38,191 C688.31,191 698.24,191 708.18,191 " fill="none" id="controller-backto-config" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="673.19,191,682.19,195,678.19,191,682.19,187,673.19,191" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[5ae1fa280c5d77b5d34affd3a27c8547]
+@startuml system_context
+
+actor user
+cloud internet
+
+frame "Java Client" {
+  component client_lib as "Client Library"
+  component client as "Client Executable"
+}
+
+frame "Roboter" {
+    file config as "Configuration"
+    node api as "REST-API"
+    node controller as "ROS2 Controller"
+    hexagon hardware as "Hardware"
+}
+
+user -> client
+client -> client_lib
+client_lib - -> internet
+internet -> api
+api -> controller
+controller -down-> hardware
+
+controller <-[dashed]right- config
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 19:01:30 CEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
