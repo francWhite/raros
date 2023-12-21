@@ -5,6 +5,7 @@
 [![licence](https://img.shields.io/github/license/francWhite/raros)](https://github.com/francWhite/raros/blob/main/LICENSE)
 [![maven](https://img.shields.io/maven-central/v/io.github.francwhite/raros-client?label=maven)](https://central.sonatype.com/artifact/io.github.francwhite/raros-client)
 [![docker](https://ghcr-badge.egpl.dev/francwhite/raros/latest_tag?color=%23107acb&ignore=latest&label=docker&trim=)](https://github.com/francWhite/raros/pkgs/container/raros)
+[![javadoc](https://javadoc.io/badge2/io.github.francwhite/raros-client/javadoc.svg)](https://javadoc.io/doc/io.github.francwhite/raros-client/latest/io/github/francwhite/raros/client/controller/RobotController.html)
 
 raros is an application consisting of different subsystems that can be used to control a physical robot.
 This application was developed as part of a project at the Lucerne University of Applied Sciences and Arts with the goal
