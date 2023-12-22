@@ -16,12 +16,15 @@ as they can see their work directly resulting in actions executed by the robot i
 
 ## Table of contents
 - [Architecture](#architecture)
+- [Project Structure](#project-structure)
 - [Installation](#installation)
   - [Client-Library](#client_library_install)
   - [Controller](#controller_install)
   - [Microcontroller](#microcontroller_install)
 - [Usage](#usage)
-  - [Client-Library](#client_library_usage) 
+  - [Client-Library](#client_library_usage)
+  - [Controller](#microcontroller_usage)
+  - [Microcontroller](#microcontroller_usage)
 - [Development](#development)
   - [Prerequisites](#prerequisites)
   - [Build](#build)
@@ -31,6 +34,15 @@ as they can see their work directly resulting in actions executed by the robot i
 
 ## Architecture
 ![architecture](doc/img/system_context.svg)
+
+## Project Structure
+The project is divided into four main components:
+- `apps/ros2`: ROS2 packages for the master controller (RaspberryPi)
+- `apps/micro_ros`: Code for the microcontroller (Arduino Zero)
+- `apps/api`: REST-API to access the ROS2 controller 
+- `apps/client`: Client library to control the robot
+
+Additionally, in the `examples` directory are some examples of how the client library can be used to control the robot.
 
 ## Installation
 <a name="client_library_install"></a>
@@ -58,6 +70,8 @@ The easiest way to get started is to use the [docker-compose.yml](https://github
 file in the root directory of this repository.
 
 **Prerequisites**:
+- Ubuntu 22.04 Server (other Linux distributions may work as well, but are not tested)
+- If you want to use the camera, make sure the legacy camera driver is enabled: `sudo raspi-config nonint do_camera 1`
 - [docker](https://docs.docker.com/engine/install/) is installed
 - `./config` directory exists for the volume mount
 
@@ -67,10 +81,12 @@ cd [path/to/docker-compose.yaml]    # change directory to where the docker-compo
 mkdir config                        # create config directory, only required on first run
 docker-compose up -d                # start the containers in detached mode
 ```
+Ensure that the serial port for the communication with the microcontroller is configured correctly in the `docker-compose.yaml` file.
+The default is `/dev/ttyACM0`.
 
 <a name="microcontroller_install"></a>
 ### Microcontroller
-The code for the microcontroller (arduino) is available in the [micro_ros](https://github.com/francWhite/raros/tree/main/apps/micro_ros)
+The code for the microcontroller (Arduino zero) is available in the [micro_ros](https://github.com/francWhite/raros/tree/main/apps/micro_ros)
 directory of this repository. To build and flash the software onto the microcontroller, clone the repository and use the `flash.sh` script located in root of said directory.
 
 **Prerequisites**:
@@ -97,6 +113,17 @@ import io.github.francwhite.raros.client.controller.RobotControllerFactory;
 ...
 RobotController client = RobotControllerFactory.create(URI.create("http://hostname:8000"))
 ```
+
+<a name="controller_usage"></a>
+### Controller
+Start the docker containers as described in the [installation](#controller_install) section. The controller, including its REST-API,
+is now available at `http://hostname:8000`.
+
+<a name="microcontroller_usage"></a>
+### Microcontroller
+The microcontroller is connected to the controller via a serial connection (default is `/dev/ttyACM0`). After flashing the software onto the microcontroller,
+the Arduino will automatically connect to the controller. The onboard LED will light up continuously when the connection is established.
+
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
