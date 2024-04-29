@@ -26,10 +26,24 @@ def generate_launch_description():
         parameters=[params]
     )
 
+    node_lidar = Node(
+        package='rplidar_ros',
+        executable='rplidar_composition',
+        output='screen',
+        parameters=[{
+            'serial_port': '/dev/ttyUSB0',
+            'frame_id': 'laser_frame',
+            'angle_compensate': True,
+            'scan_mode': 'Standard',
+            'serial_baudrate': 115200,
+        }]
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
             description='Use sim time if true'),
-        node_robot_state_publisher
+        node_robot_state_publisher,
+        node_lidar
     ])
