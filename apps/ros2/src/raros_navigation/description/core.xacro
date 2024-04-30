@@ -38,6 +38,12 @@
       </geometry>
       <material name="cyan"/>
     </visual>
+    <collision>
+      <geometry>
+        <box size="${base_length} ${base_width} ${base_height}"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="2" w="${base_width}" d="${base_length}" h="${base_height}"/>
   </link>
 
   <joint name="chassis_joint" type="fixed">
@@ -54,6 +60,12 @@
       </geometry>
       <material name="cyan"/>
     </visual>
+     <collision>
+      <geometry>
+        <box size="${top_length} ${top_width} ${top_height}"/>
+      </geometry>
+    </collision>
+    <xacro:box_inertia m="0.2" w="${top_width}" d="${top_length}" h="${top_height}"/>
   </link>
 
   <joint name="top_joint" type="fixed">
