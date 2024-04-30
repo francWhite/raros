@@ -1,24 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <joint name="laser_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="laser_frame"/>
-    <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
+  <xacro:property name="mount_width" value="0.06"/>
+  <xacro:property name="mount_height" value="0.07"/>
+  <xacro:property name="mount_length" value="0.09"/>
+
+  <xacro:property name="laser_height" value="0.025"/>
+  <xacro:property name="laser_radius" value="0.035"/>
+
+  <!-- LIDAR Mount -->
+  <link name="laser_mount">
+    <visual>
+      <geometry>
+        <box size="${mount_length} ${mount_width} ${mount_height}"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="laser_mount_joint" type="fixed">
+    <parent link="chassis_top"/>
+    <child link="laser_mount"/>
+    <origin xyz="${-mount_width} 0 ${top_height / 2 + mount_height / 2}" rpy="0 0 0"/>
   </joint>
 
+  <!-- LIDAR Sensor-->
   <link name="laser_frame">
     <visual>
       <geometry>
-        <cylinder radius="0.05" length="0.04"/>
+        <cylinder radius="${laser_radius}" length="${laser_height}"/>
       </geometry>
-      <material name="red"/>
+      <material name="orange"/>
     </visual>
-    <collision>
-      <geometry>
-        <cylinder radius="0.05" length="0.04"/>
-      </geometry>
-    </collision>
   </link>
+
+
+  <joint name="laser_joint" type="fixed">
+    <parent link="laser_mount"/>
+    <child link="laser_frame"/>
+    <origin xyz="0 0 ${ mount_height / 2 + laser_height / 2}" rpy="0 0 0"/>
+  </joint>
 
 </robot>
